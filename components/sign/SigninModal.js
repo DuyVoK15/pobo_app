@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Image } from "expo-image";
 import "react-native-gesture-handler";
-import { Swipeable } from "react-native-gesture-handler";
+import { Swipeable, TextInput } from "react-native-gesture-handler";
 import {
   StyleSheet,
   View,
@@ -13,71 +13,108 @@ import {
 } from "react-native";
 
 import Modal from "react-native-modal";
-import SigninContent from "./SigninContent";
+import axios from "axios";
+// import SigninContent from "./SigninContent";
+const SigninModal = () => {
+ 
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-const SigninModal = ({
-  title,
-  onPress,
-  backgroundColor,
-  textColor,
-  margin,
-  marginTop,
-  marginLeft,
-  marginRight,
-  borderRadius,
-}) => {
-  const buttonStyle = [
-    styles.button,
-    {
-      backgroundColor,
-      margin,
-      marginTop,
-      marginLeft,
-      marginRight,
-      borderRadius,
-    },
-  ];
+  const handleRegistration = () => {
+    try {
+      const userData = {
+        username: username,
+        password: password,
+      };
+      console.log(userData);
+      axios
+        .post(
+          "https://1f47-116-110-41-73.ngrok-free.app/api/v1/auth/login",
+          userData
+        )
+        .then((response) => {
+          console.log(response.data); // Xử lý dữ liệu phản hồi từ APIa
+        }); // Thay thế 'URL_API' bằng URL API Swagger hoặc API khác
 
-  const textStyle = [styles.buttonText, { color: textColor }];
+      // Chuyển hướng đến trang thành công hoặc thực hiện các tác vụ khác
+    } catch (error) {
+      console.error(error); // Xử lý lỗi
+    }
+  };
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
   return (
-    // <View>
-    //   <TouchableOpacity style={buttonStyle} onPress={toggleModal}>
-    //     <Text style={textStyle}>{title}</Text>
-    //   </TouchableOpacity>
-
-    //   <Modal
-    //     visible={isModalVisible}
-    //     animationType="slide"
-    //     transparent={true}
-    //     // onBackdropPress={toggleModal}
-    //     // onSwipeComplete={toggleModal}
-    //     // swipeDirection={["down"]}
-    //     // style={styles.modal}
-    //   >
-    //     <View style={styles.modalContent}>
-    //       <Login />
-    //       <TouchableOpacity style={buttonStyle} onPress={toggleModal}>
-    //         <Text style={textStyle}>Close</Text>
-    //       </TouchableOpacity>
-    //     </View>
-    //   </Modal>
-    // </View>
+    
     <View style={styles.container}>
-      <TouchableOpacity style={buttonStyle} onPress={toggleModal}>
-         <Text style={textStyle}>{title}</Text>
-     </TouchableOpacity>
+      <TouchableOpacity style={styles.buttonSignin} onPress={toggleModal}>
+        <Text style={styles.buttonSigninText}>Đăng nhập</Text>
+      </TouchableOpacity>
       <Modal
         isVisible={isModalVisible}
         onSwipeComplete={toggleModal}
-        swipeDirection={['down']}
+        swipeDirection={["down"]}
         style={styles.modal}
       >
         <View style={styles.modalContent}>
-          <SigninContent />
+          <View>
+            <View style={styles.underlineTop}></View>
+
+            <View style={styles.signContainer}>
+              <View style={styles.modalTextContainer}>
+                <Text style={styles.modalText1}>Đăng nhập</Text>
+                {/* <Text style={styles.modalText2}>Đăng nhập</Text> */}
+              </View>
+              <View style={styles.underlineContainer}>
+                <Text style={styles.underline1}></Text>
+                {/* <Text style={styles.underline2}></Text> */}
+              </View>
+            </View>
+
+            <View>             
+              <Text style={styles.titleText}>Tên đăng nhập</Text>
+              <TextInput
+                style={styles.containerInputText}
+                placeholder="Nhập tên đăng nhập"
+                value={username}
+                onChangeText={(text) => setUsername(text)}
+              />             
+              <Text style={styles.titleText}>Mật khẩu</Text>
+              <TextInput
+                style={styles.containerInputText}
+                placeholder="Nhập mật khẩu"
+                value={password}
+                secureTextEntry
+                onChangeText={(text) => setPassword(text)}
+              />
+            </View>
+
+            <View style={styles.listButtonContainer}>
+              <View>
+                <TouchableOpacity
+                  style={styles.buttonSignin}
+                  onPress={handleRegistration}
+                >
+                  <Text style={styles.buttonSigninText}>Đăng nhập</Text>
+                </TouchableOpacity>
+              </View>
+
+              <Text style={styles.underline}></Text>
+
+              <View>
+                <TouchableOpacity
+                  style={styles.buttonSigninGoogle}
+                  onPress={() => console.log("Bạn đăng nhập với Google")}
+                >
+                  <Text style={styles.buttonSigninGoogleText}>
+                    Đăng nhập với Google
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
         </View>
       </Modal>
     </View>
@@ -92,27 +129,11 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 30,
   },
-  button: {
-    paddingVertical: 18,
-    paddingHorizontal: 20,
-    width: 300,
-    alignSelf: "center",
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
   modal: {
     flex: 1,
     justifyContent: "flex-end",
     margin: 0,
   },
-  // modalContainer: {
-  //   flex: 1,
-  //   justifyContent: "flex-end",
-  //   backgroundColor: "rgba(0, 0, 0, 0.5)",
-  // },
   modalContent: {
     backgroundColor: "#FFFFFF",
     padding: 20,
@@ -120,9 +141,11 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
+  signContainer: {
+    marginBottom: 20,
+  },
   modalTextContainer: {
     flexDirection: "row",
-    marginBottom: 10,
   },
   modalText1: {
     fontSize: 18,
@@ -132,7 +155,9 @@ const styles = StyleSheet.create({
   modalText2: {
     fontSize: 18,
     marginBottom: 10,
-    marginLeft: 10,
+    fontWeight: "bold",
+    color: "#CBD4E1",
+    marginLeft: 11,
   },
   closeButton: {
     backgroundColor: "#FE5D26",
@@ -146,13 +171,21 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "bold",
   },
+  underlineTop: {
+    backgroundColor: "#CBD4E1",
+    height: 7,
+    width: "20%",
+    alignSelf: "center",
+    marginBottom: 30,
+    borderRadius: 30,
+  },
   underlineContainer: {
     flexDirection: "row",
   },
   underline1: {
     height: 4,
     backgroundColor: "orange",
-    width: "22%",
+    width: "25%",
     borderRadius: 30,
     zIndex: 3,
   },
@@ -161,6 +194,61 @@ const styles = StyleSheet.create({
     backgroundColor: "#CBD4E1",
     width: "22%",
     zIndex: 2,
+  },
+  containerInputText: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 17,
+    marginBottom: 10,
+    borderColor: "#CBD4E1",
+    fontSize: 16,
+  },
+  input: {},
+  titleText: {
+    fontSize: 15,
+    marginBottom: 4,
+  },
+  listButtonContainer: {
+    marginTop: 20,
+  },
+  buttonSignin: {
+    paddingVertical: 18,
+    paddingHorizontal: 20,
+    width: 300,
+    alignSelf: "center",
+    backgroundColor: "#FEEAD3",
+    borderRadius: 10,
+    marginTop: 10,
+  },
+  buttonSigninText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#FE5D26"
+  },
+  buttonSigninGoogle: {
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    width: 300,
+    alignSelf: "center",
+    backgroundColor: "#E2E8F0",
+    textColor: "#0D0D12",
+    borderRadius: 10,
+    marginTop: 10,
+  },
+  buttonSigninGoogleText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  underline: {
+    backgroundColor: "#CBD4E1",
+    height: 1,
+    width: "50%",
+    alignSelf: "center",
+    marginTop: 10,
   },
 });
 export default SigninModal;
