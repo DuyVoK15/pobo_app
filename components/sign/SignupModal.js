@@ -15,12 +15,20 @@ import Modal from "react-native-modal";
 import SignupContent from "./SignupContent";
 import CustomButton from "./CustomButton";
 import axios from "axios";
+import { useNavigation } from '@react-navigation/native';
+
 const SignupModal = () => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const GoogleLogo = require("../../assets/google.png")
+  const navigation = useNavigation();
 
+  const handleNavigation = () => {
+    navigation.navigate("SuccessSignupScreen")
+    toggleModal()
+  }
   const handleRegistration = () => {
     try {
       const userData = {
@@ -30,14 +38,29 @@ const SignupModal = () => {
         password: password,
       };
       console.log(userData);
-      axios
+      if(userData.name != "" && userData.username != "" && userData.email != "" && userData.password != ""){
+        setErrorMessage("")
+        axios
         .post(
-          "https://1f47-116-110-41-73.ngrok-free.app/api/v1/auth/register",
+          "http://192.168.1.6:8448/api/v1/auth/register",
           userData
         )
         .then((response) => {
-          console.log(response.data); // Xử lý dữ liệu phản hồi từ APIa
-        }); // Thay thế 'URL_API' bằng URL API Swagger hoặc API khác
+          if(response.data){
+            console.log("Đăng ký thành công! " + response.data.accessToken); 
+            handleNavigation()
+          } else {
+            console.log("Đăng ký thất bại"); 
+            setErrorMessage("Tài khoản đã tồn tại!")
+          }
+          
+        }).catch(
+          setErrorMessage("Tài khoản đã tồn tại!")
+        ); // Thay thế 'URL_API' bằng URL API Swagger hoặc API khác
+      } else {
+        setErrorMessage("Vui lòng nhập đầy đủ thông tin!")
+      }
+      
 
       // Chuyển hướng đến trang thành công hoặc thực hiện các tác vụ khác
     } catch (error) {
@@ -45,6 +68,7 @@ const SignupModal = () => {
     }
   };
 
+  const [errorMessage, setErrorMessage] = useState('')
   const [isModalVisible, setIsModalVisible] = useState(false);
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -107,6 +131,8 @@ const SignupModal = () => {
               />
             </View>
 
+            <Text style={styles.errorMessageText}>{errorMessage}</Text>
+
             <View style={styles.listButtonContainer}>
               <View>
                 <TouchableOpacity
@@ -122,8 +148,9 @@ const SignupModal = () => {
               <View>
                 <TouchableOpacity
                   style={styles.buttonSignupGoogle}
-                  onPress={() => console.log("Bạn đăng nhập với Google")}
+                  onPress={""}
                 >
+                  <Image style={{width: 32, height:32}} source={GoogleLogo}/>
                   <Text style={styles.buttonSignupGoogleText}>
                     Đăng nhập với Google
                   </Text>
@@ -230,7 +257,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   buttonSignup: {
-    paddingVertical: 18,
+    paddingVertical: 21,
     paddingHorizontal: 20,
     width: 300,
     alignSelf: "center",
@@ -245,6 +272,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   buttonSignupGoogle: {
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 15,
     paddingHorizontal: 20,
     width: 300,
@@ -258,6 +287,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
+    marginLeft: 18
   },
   underline: {
     backgroundColor: "#CBD4E1",
@@ -265,6 +295,11 @@ const styles = StyleSheet.create({
     width: "50%",
     alignSelf: "center",
     marginTop: 10,
+  },
+  errorMessageText: {
+    color: "red",
+    marginTop: 10,
+    textAlign: "center",
   },
 });
 export default SignupModal;

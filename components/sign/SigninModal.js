@@ -8,17 +8,17 @@ import {
   Text,
   Pressable,
   Button,
-  
   TouchableOpacity,
 } from "react-native";
 
 import Modal from "react-native-modal";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 // import SigninContent from "./SigninContent";
 const SigninModal = () => {
- 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const GoogleLogo = require("../../assets/google.png");
 
   const handleRegistration = () => {
     try {
@@ -27,27 +27,49 @@ const SigninModal = () => {
         password: password,
       };
       console.log(userData);
-      axios
-        .post(
-          "https://1f47-116-110-41-73.ngrok-free.app/api/v1/auth/login",
-          userData
-        )
-        .then((response) => {
-          console.log(response.data); // Xử lý dữ liệu phản hồi từ APIa
-        }); // Thay thế 'URL_API' bằng URL API Swagger hoặc API khác
-
+      if (userData.username != "" && userData.password != "") {
+        setErrorMessage("")
+        axios
+          .post("http://192.168.1.6:8448/api/v1/auth/login", userData)
+          .then((response) => {
+            if (response.data) {
+              console.log("Đăng nhập thành công! " + response.data.accessToken); // Xử lý dữ liệu phản hồi từ APIa
+              setErrorMessage("")
+              handleNavigation();
+            } else {
+              setErrorMessage("Tài khoản hoặc mật khẩu không đúng!");
+            }
+          }).catch(
+            setErrorMessage("Tài khoản hoặc mật khẩu không đúng!")
+          ); // Thay thế 'URL_API' bằng URL API Swagger hoặc API khác
+      } else {
+        setErrorMessage("Vui lòng nhập thông tin tài khoản!")
+      }
       // Chuyển hướng đến trang thành công hoặc thực hiện các tác vụ khác
     } catch (error) {
-      console.error(error); // Xử lý lỗi
+      console.error(error);
+      setErrorMessage("Tài khoản hoặc mật khẩu không đúng!"); // Xử lý lỗi
     }
   };
 
+  const navigation = useNavigation();
+  const handleNavigation = () => {
+    navigation.navigate("HomeScreen");
+    toggleModal();
+  };
+
+  const [errorMessage, setErrorMessage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
+    setInfoToNull()
   };
+  const setInfoToNull = () => {
+    setUsername("")
+    setPassword("")
+    setErrorMessage("")
+  }
   return (
-    
     <View style={styles.container}>
       <TouchableOpacity style={styles.buttonSignin} onPress={toggleModal}>
         <Text style={styles.buttonSigninText}>Đăng nhập</Text>
@@ -73,14 +95,14 @@ const SigninModal = () => {
               </View>
             </View>
 
-            <View>             
+            <View>
               <Text style={styles.titleText}>Tên đăng nhập</Text>
               <TextInput
                 style={styles.containerInputText}
                 placeholder="Nhập tên đăng nhập"
                 value={username}
                 onChangeText={(text) => setUsername(text)}
-              />             
+              />
               <Text style={styles.titleText}>Mật khẩu</Text>
               <TextInput
                 style={styles.containerInputText}
@@ -90,7 +112,7 @@ const SigninModal = () => {
                 onChangeText={(text) => setPassword(text)}
               />
             </View>
-
+            <Text style={styles.errorMessageText}>{errorMessage}</Text>
             <View style={styles.listButtonContainer}>
               <View>
                 <TouchableOpacity
@@ -106,8 +128,12 @@ const SigninModal = () => {
               <View>
                 <TouchableOpacity
                   style={styles.buttonSigninGoogle}
-                  onPress={() => console.log("Bạn đăng nhập với Google")}
+                  onPress={""}
                 >
+                  <Image
+                    style={{ width: 32, height: 32 }}
+                    source={GoogleLogo}
+                  />
                   <Text style={styles.buttonSigninGoogleText}>
                     Đăng nhập với Google
                   </Text>
@@ -214,7 +240,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   buttonSignin: {
-    paddingVertical: 18,
+    paddingVertical: 21,
     paddingHorizontal: 20,
     width: 300,
     alignSelf: "center",
@@ -226,9 +252,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
-    color: "#FE5D26"
+    color: "#FE5D26",
   },
   buttonSigninGoogle: {
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 15,
     paddingHorizontal: 20,
     width: 300,
@@ -242,6 +270,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
+    marginLeft: 18,
   },
   underline: {
     backgroundColor: "#CBD4E1",
@@ -249,6 +278,11 @@ const styles = StyleSheet.create({
     width: "50%",
     alignSelf: "center",
     marginTop: 10,
+  },
+  errorMessageText: {
+    color: "red",
+    marginTop: 10,
+    textAlign: "center",
   },
 });
 export default SigninModal;

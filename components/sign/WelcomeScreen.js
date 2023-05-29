@@ -26,8 +26,8 @@ const WelcomeScreen = () => {
   // const navigation = useNavigation();
 
   return (
-    <>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <View>
         <Image
           source={require("../../assets/logo/logo.png")}
           style={styles.logo}
@@ -41,7 +41,7 @@ const WelcomeScreen = () => {
       </View>
       <View style={styles.buttonContainer}>
         <SignupModal
-        
+          
           title="Đăng ký"
           backgroundColor="#FE5D26"
           textColor="#0D0D12"
@@ -59,11 +59,12 @@ const WelcomeScreen = () => {
           borderRadius={10}
         />
       </View>
-    </>
+    </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
