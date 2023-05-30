@@ -39,7 +39,7 @@ const SignupModal = () => {
         setErrorMessage("")
         axios
         .post(
-          "http://192.168.1.6:8448/api/v1/auth/register",
+          "http://192.168.2.2:8448/api/v1/auth/register",
           userData
         )
         .then((response) => {

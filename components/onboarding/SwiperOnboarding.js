@@ -31,14 +31,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.2)', // Màu chấm chuyển slide
     width: 12,
     height: 12,
-    borderRadius: "50%",
+    // borderRadius: "50%",
     marginBottom: 30
   },
   activeDot: {
     backgroundColor: '#FE5D26', // Màu chấm chuyển slide hiện tại
     width: 12,
     height: 12,
-    borderRadius: "50%",
+    // borderRadius: "50%",
     marginBottom: 30
   },
 });

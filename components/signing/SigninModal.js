@@ -30,7 +30,7 @@ const SigninModal = () => {
       if (userData.username != "" && userData.password != "") {
         setErrorMessage("")
         axios
-          .post("http://192.168.1.6:8448/api/v1/auth/login", userData)
+          .post("http://192.168.2.2:8448/api/v1/auth/login", userData)
           .then((response) => {
             if (response.data) {
               console.log("Đăng nhập thành công! " + response.data.accessToken); // Xử lý dữ liệu phản hồi từ APIa
