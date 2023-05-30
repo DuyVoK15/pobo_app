@@ -2,11 +2,11 @@ import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, View, Text, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-const SuccessSignupScreen = () => {
+const SuccessPassword = () => {
   const SuccessIcon = require("../../assets/Success.png");
   const CircleSuccess = require("../../assets/CircleSuccess.png");
   const SuccessIcon2 = require("../../assets/SuccessIcon.png");
-  const navigation = useNavigation()
+//   const navigation = useNavigation()
   return (
     <View style={styles.container}>
       {/* <View style={styles.imageContainer}>
@@ -14,13 +14,13 @@ const SuccessSignupScreen = () => {
         <Image style={styles.successIcon} source={SuccessIcon} />
       </View> */}
       <Image style={styles.successIcon2} source={SuccessIcon2} />
-      <Text style={styles.text1}>Đăng ký thành công</Text>
-      <Text style={styles.text2}>Bạn đã đăng kí thành công</Text>
+      <Text style={styles.text1}>Thành công</Text>
+      <Text style={styles.text2}>Bạn đã đổi mật khẩu thành công</Text>
 
       <View>
         <TouchableOpacity
           style={styles.buttonSignin}
-          onPress={() => navigation.navigate("WelcomeScreen")}
+          onPress={""}
         >
           <Text style={styles.buttonSigninText}>Đăng nhập</Text>
         </TouchableOpacity>
@@ -76,4 +76,4 @@ const styles = StyleSheet.create({
     color: "#0D0D12",
   },
 });
-export default SuccessSignupScreen;
+export default SuccessPassword;

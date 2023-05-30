@@ -14,7 +14,7 @@ import {
 import Modal from "react-native-modal";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
-// import SigninContent from "./SigninContent";
+
 const SigninModal = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -57,7 +57,10 @@ const SigninModal = () => {
     navigation.navigate("HomeScreen");
     toggleModal();
   };
-
+  const handleNavigateToForgetPassword = () => {
+    navigation.navigate("SendOTP")
+    toggleModal();
+  }
   const [errorMessage, setErrorMessage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const toggleModal = () => {
@@ -112,6 +115,9 @@ const SigninModal = () => {
                 onChangeText={(text) => setPassword(text)}
               />
             </View>
+            <TouchableOpacity style={styles.buttonForget} onPress={handleNavigateToForgetPassword}>
+              <Text style={styles.titleForget}>Quên mật khẩu?</Text>
+            </TouchableOpacity>
             <Text style={styles.errorMessageText}>{errorMessage}</Text>
             <View style={styles.listButtonContainer}>
               <View>
@@ -278,6 +284,13 @@ const styles = StyleSheet.create({
     width: "50%",
     alignSelf: "center",
     marginTop: 10,
+  },
+  buttonForget: {
+    alignItems: 'flex-end',
+  },
+  titleForget: {
+    fontWeight: "bold",
+    color: "#FE5D26"
   },
   errorMessageText: {
     color: "red",

@@ -13,14 +13,6 @@ import {
 
 import SignupModal from "./SignupModal";
 import SigninModal from "./SigninModal";
-// import { useNavigation } from "@react-navigation/native";
-// import {
-//   FontFamily,
-//   FontSize,
-//   Color,
-//   Padding,
-//   Border,
-// } from "../../GlobalStyles";
 
 const WelcomeScreen = () => {
   // const navigation = useNavigation();

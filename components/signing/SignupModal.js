@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Image } from "expo-image";
 import "react-native-gesture-handler";
-import { Swipeable } from "react-native-gesture-handler";
 import {
   StyleSheet,
   View,
@@ -12,8 +11,6 @@ import {
   TextInput,
 } from "react-native";
 import Modal from "react-native-modal";
-import SignupContent from "./SignupContent";
-import CustomButton from "./CustomButton";
 import axios from "axios";
 import { useNavigation } from '@react-navigation/native';
 
