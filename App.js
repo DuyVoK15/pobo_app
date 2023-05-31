@@ -14,6 +14,7 @@ import SendOTP from "./components/forgeting/SendOTP";
 import VerifyOTP from "./components/forgeting/VerifyOTP";
 import NewPassword from "./components/forgeting/NewPassword";
 import SuccessPassword from "./components/forgeting/SuccessPassword";
+import BottomNavigator from "./components/navigation/bottomTabNavigator";
 
 
 const Stack = createNativeStackNavigator();
@@ -39,8 +40,8 @@ export default function App() {
           />
           <Stack.Screen
             options={{ headerShown: false }}
-            name="HomeScreen"
-            component={HomeScreen}
+            name="HomeScreen" 
+            component={BottomNavigator}
           />
           <Stack.Screen name="SendOTP" component={SendOTP} />
         </Stack.Navigator>
