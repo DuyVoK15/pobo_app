@@ -9,26 +9,35 @@ export const AuthProvider = ({ children }) => {
   const [userTokenRegister, setUserTokenRegister] = useState({});
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [isLogin, setIsLogin] = useState(false)
-
+  const [isLogin, setIsLogin] = useState(false);
 
   const getUserInfo = async (userToken) => {
     // setIsLoading(true);
     try {
-      const response = await axios.get("http://192.168.1.5:8448/api/v1/auth/info", {
-      headers: {Authorization: `Bearer ${userToken.accessToken}`,
-      'Cache-Control': 'no-cache',
-      'Pragma': 'no-cache'},
-    })
+      const response = await axios.get(
+        "http://192.168.1.5:8448/api/v1/auth/info",
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.accessToken}`,
+            "Cache-Control": "no-cache",
+            Pragma: "no-cache",
+          },
+        }
+      );
 
-      let userInfo = response.data
-      console.log("Thông tin user: "+ response.data)
-      setUserInfo(userInfo)
+      let userInfo = response.data;
+      console.log("Thông tin user: " + JSON.stringify(userInfo));
+      setUserInfo(userInfo);
+      AsyncStorage.setItem(
+        "userInfo",
+        JSON.stringify(userInfo)
+      );
+      
+      
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-    
-  }
+  };
 
   const register = (name, username, email, password) => {
     // console.log(name + username + email + password)
@@ -43,7 +52,10 @@ export const AuthProvider = ({ children }) => {
       .then((response) => {
         let userTokenRegister = response.data;
         setUserTokenRegister(userTokenRegister);
-        AsyncStorage.setItem("userTokenRegister", JSON.stringify(userTokenRegister));
+        AsyncStorage.setItem(
+          "userTokenRegister",
+          JSON.stringify(userTokenRegister)
+        );
         setIsLoading(false);
         console.log(userInfoRegisger);
       })
@@ -67,25 +79,36 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(false);
         console.log(userToken);
         getUserInfo(userToken);
-        console.log("User Info: "+userInfo);
-        setIsLogin(true);
+        // setIsLogin(true);
       })
       .catch((error) => {
         console.log(error);
         setIsLoading(false);
-        setIsLogin(false)
+        // setIsLogin(false);
       });
-  }
-  
+  };
+
   const logout = () => {
-    
-    AsyncStorage.removeItem("userToken")
-    setUserToken({})
-   
-  }
+    AsyncStorage.removeItem("userToken");
+    AsyncStorage.removeItem("userTokenRegister");
+    AsyncStorage.removeItem("userInfo");
+    setUserToken({});
+    setUserInfo({});
+    setUserTokenRegister({})
+  };
 
   return (
-    <AuthContext.Provider value={{ isLoading, userToken, userTokenRegister, register, login, logout, isLogin }}>
+    <AuthContext.Provider
+      value={{
+        isLoading,
+        userToken,
+        userTokenRegister,
+        register,
+        login,
+        logout,
+        isLogin,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

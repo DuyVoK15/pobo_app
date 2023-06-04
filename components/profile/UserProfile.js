@@ -8,13 +8,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const UserProfile = () => {
 
   const {logout, getUserInfo} = useContext(AuthContext)
-
+  const value = AsyncStorage.getItem("userToken")
+  const parsedResponse = JSON.parse(value._j);
   return (
     <View style={styles.container}>
       <TouchableOpacity style={ButtonStyle.buttonSignup} onPress={() => logout()}>
         <Text style={ButtonStyle.buttonSignupText}>Đăng xuất</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={ButtonStyle.buttonSignup} onPress={() => console.log(JSON.parse(AsyncStorage.getItem("userToken")))}>
+      <TouchableOpacity style={ButtonStyle.buttonSignup} onPress={() => console.log(JSON.parse(parsedResponse))}>
         <Text style={ButtonStyle.buttonSignupText}>Lấy thông tin</Text>
       </TouchableOpacity>
     </View>
