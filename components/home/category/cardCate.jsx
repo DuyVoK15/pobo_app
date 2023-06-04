@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF'
   },
   rating: {
-    fontFamily: 'Poppins',
+    // fontFamily: 'Poppins',
     fontWeight: '600',
     fontSize: 14,
     lineHeight: 20,
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     // height: 22,
     left: 0,
     top: 192,
-    fontFamily: 'SVN-Gilroy',
+    // fontFamily: 'SVN-Gilroy',
     fontStyle: 'normal',
     fontWeight: '800',
     fontSize: 16,

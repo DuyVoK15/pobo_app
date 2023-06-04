@@ -17,12 +17,12 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: SIZES.large,
-    fontFamily: FONT.medium,
+    // fontFamily: FONT.medium,
     color: COLORS.primary,
   },
   headerBtn: {
     fontSize: SIZES.medium,
-    fontFamily: FONT.medium,
+    // fontFamily: FONT.medium,
     color: COLORS.gray,
   },
   cardsContainer: {
@@ -30,9 +30,9 @@ const styles = StyleSheet.create({
     gap: SIZES.small,
   },
   welcomeText: {
-    fontFamily: FONT.bold,
+    // fontFamily: FONT.bold,
     fontSize: SIZES.xLarge,
-    fontFamily :'SVN-Gilroy'
+    // fontFamily :'SVN-Gilroy'
     // marginTop: 2, 
     // paddingRight : 70
     

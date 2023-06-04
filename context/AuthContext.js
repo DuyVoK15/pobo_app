@@ -5,10 +5,31 @@ import React, { createContext, useState } from "react";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const [userToken, setUserToken] = useState({});
+  const [userTokenRegister, setUserTokenRegister] = useState({});
   const [userInfo, setUserInfo] = useState({});
-  const [userInfoRegisger, setUserInfoRegisger] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(false)
+
+
+  const getUserInfo = async (userToken) => {
+    // setIsLoading(true);
+    try {
+      const response = await axios.get("http://192.168.1.5:8448/api/v1/auth/info", {
+      headers: {Authorization: `Bearer ${userToken.accessToken}`,
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache'},
+    })
+
+      let userInfo = response.data
+      console.log("Thông tin user: "+ response.data)
+      setUserInfo(userInfo)
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
+
   const register = (name, username, email, password) => {
     // console.log(name + username + email + password)
     setIsLoading(true);
@@ -20,9 +41,9 @@ export const AuthProvider = ({ children }) => {
         password,
       })
       .then((response) => {
-        let userInfoRegisger = response.data;
-        setUserInfoRegisger(userInfoRegisger);
-        AsyncStorage.setItem("userInfoRegisger", JSON.stringify(userInfoRegisger));
+        let userTokenRegister = response.data;
+        setUserTokenRegister(userTokenRegister);
+        AsyncStorage.setItem("userTokenRegister", JSON.stringify(userTokenRegister));
         setIsLoading(false);
         console.log(userInfoRegisger);
       })
@@ -40,12 +61,14 @@ export const AuthProvider = ({ children }) => {
         password,
       })
       .then((response) => {
-        let userInfo = response.data;
-        setUserInfo(userInfo);
-        AsyncStorage.setItem("userInfo", JSON.stringify(userInfo));
+        let userToken = response.data;
+        setUserToken(userToken);
+        AsyncStorage.setItem("userToken", JSON.stringify(userToken));
         setIsLoading(false);
-        console.log(userInfo);
-        setIsLogin(true)
+        console.log(userToken);
+        getUserInfo(userToken);
+        console.log("User Info: "+userInfo);
+        setIsLogin(true);
       })
       .catch((error) => {
         console.log(error);
@@ -54,8 +77,15 @@ export const AuthProvider = ({ children }) => {
       });
   }
   
+  const logout = () => {
+    
+    AsyncStorage.removeItem("userToken")
+    setUserToken({})
+   
+  }
+
   return (
-    <AuthContext.Provider value={{ isLoading, userInfo, userInfoRegisger, register, login, isLogin }}>
+    <AuthContext.Provider value={{ isLoading, userToken, userTokenRegister, register, login, logout, isLogin }}>
       {children}
     </AuthContext.Provider>
   );

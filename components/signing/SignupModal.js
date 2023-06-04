@@ -15,13 +15,10 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay/lib";
+const GoogleLogo = require("../../assets/google.png");
 
 const SignupModal = ({ navigation }) => {
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const GoogleLogo = require("../../assets/google.png");
+  
   // const navigation = useNavigation();
 
   // const handleRegistration = () => {
@@ -61,18 +58,22 @@ const SignupModal = ({ navigation }) => {
   //     console.error(error); // Xử lý lỗi
   //   }
   // };
-
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
 
   // -----------------------------------------
-  const { register, isLoading, userInfoRegisger } = useContext(AuthContext);
+  const { register, isLoading, userTokenRegister } = useContext(AuthContext);
   const handleRegister = () => {
     register(name, username, email, password);
-    if (userInfoRegisger.accessToken) {
+    if (userTokenRegister.accessToken) {
       navigation.push("SuccessSignupScreen");
     }
   };

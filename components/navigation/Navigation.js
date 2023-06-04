@@ -66,12 +66,12 @@ const HomeStackScreen = () => {
 };
 
 const Navigation = () => {
-  const { userInfo } = useContext(AuthContext);
+  const { userToken } = useContext(AuthContext);
 
   return (
     <NavigationContainer>
       
-      {userInfo.accessToken ? <HomeStackScreen /> : <AuthStackScreen />}
+      {userToken.accessToken ? <HomeStackScreen /> : <AuthStackScreen />}
     </NavigationContainer>
   );
 };

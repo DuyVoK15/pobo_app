@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   textContent: {
     width: 142,
     height: 56,
-    fontFamily: 'Mulish',
+    // fontFamily: 'Mulish',
     fontStyle: 'normal',
     fontWeight: '800',
     fontSize: 20,
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   name: {
     marginTop: 8,
     // height: 15,
-    fontFamily: 'Mulish',
+    // fontFamily: 'Mulish',
     fontStyle: 'normal',
     fontWeight: '600',
     fontSize: 12,

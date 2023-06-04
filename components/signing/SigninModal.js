@@ -81,7 +81,7 @@ const SigninModal = ({ navigation }) => {
   const { login, isLoading, isLogin } = useContext(AuthContext);
   const handleLogin = () => {
     login(username, password);
-    navigation.push('HomeScreen');
+    // navigation.push('HomeScreen');
   };
 
   return (

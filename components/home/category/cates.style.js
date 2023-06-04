@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   discoverTitle: {
     width: 95,
     height: 28,
-    fontFamily: 'SVN-Gilroy',
+    // fontFamily: 'SVN-Gilroy',
     fontStyle: 'normal',
     fontWeight: '800',
     fontSize: 20,
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     // width: 59,
     // height: 13,
     marginRight :30,
-    fontFamily: 'SVN-Gilroy',
+    // fontFamily: 'SVN-Gilroy',
     fontStyle: 'normal',
     fontWeight: '700',
     fontSize: 12,

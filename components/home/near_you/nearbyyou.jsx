@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   text:{
     width: 231,
     height: 28,
-    fontFamily: 'SVN-Gilroy',
+    // fontFamily: 'SVN-Gilroy',
     fontStyle: 'normal',
     fontWeight: '800',
     fontSize: 20,

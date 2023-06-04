@@ -10,6 +10,7 @@ import { NavigationContainer } from "@react-navigation/native";
 // import Icon from 'react-native-vector-icons/MaterialIcons'
 // import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from '@expo/vector-icons';
+import UserProfile from "../profile/UserProfile";
 
 export default function BottomNavigator() {
     
@@ -33,7 +34,7 @@ export default function BottomNavigator() {
                 else if (route.name === 'Chat' ){
                     iconName = focused ? 'chatbubble' : 'chatbubble-outline';
                 }
-                else if (route.name === 'Info' ){
+                else if (route.name === 'UserProfile' ){
                     iconName = focused ? 'person' : 'person-outline';
                 }
 
@@ -53,7 +54,7 @@ export default function BottomNavigator() {
       <Tab.Screen name="Map" component={HomeScreen} />
       <Tab.Screen name="Schedule" component={HomeScreen} />
       <Tab.Screen name="Chat" component={HomeScreen} />
-      <Tab.Screen name="Info" component={HomeScreen} />
+      <Tab.Screen name="UserProfile" component={UserProfile} />
 
     </Tab.Navigator>
     // </NavigationContainer>
