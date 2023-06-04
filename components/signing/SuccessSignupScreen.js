@@ -2,14 +2,14 @@ import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, View, Text, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-const SuccessSignupScreen = () => {
+const SuccessSignupScreen = ({navigation}) => {
   const SuccessIcon = require("../../assets/Success.png");
   const CircleSuccess = require("../../assets/CircleSuccess.png");
   const SuccessIcon2 = require("../../assets/SuccessIcon.png");
-  const navigation = useNavigation()
-  const handleNavigation = () => {
-    navigation.navigate("WelcomeScreen")
-  }
+  // const navigation = useNavigation()
+  // const handleNavigation = () => {
+  //   navigation.navigate("WelcomeScreen")
+  // }
 
 
   return (
@@ -25,7 +25,7 @@ const SuccessSignupScreen = () => {
       <View>
         <TouchableOpacity
           style={styles.buttonSignin}
-          onPress={handleNavigation}
+          onPress={""}
         >
           <Text style={styles.buttonSigninText}>Đăng nhập</Text>
         </TouchableOpacity>

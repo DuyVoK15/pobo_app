@@ -14,7 +14,7 @@ import {
 import SignupModal from "./SignupModal";
 import SigninModal from "./SigninModal";
 
-const WelcomeScreen = () => {
+const WelcomeScreen = ({ navigation }) => {
   // const navigation = useNavigation();
 
   return (
@@ -32,24 +32,8 @@ const WelcomeScreen = () => {
         </Text>
       </View>
       <View style={styles.buttonContainer}>
-        <SignupModal
-          
-          title="Đăng ký"
-          backgroundColor="#FE5D26"
-          textColor="#0D0D12"
-          accessibilityLabel="Đăng ký"
-          marginTop={20}
-          borderRadius={10}
-        />
-        <SigninModal
-          
-          title="Đăng nhập"
-          backgroundColor="#FEEAD3"
-          textColor="#FE5D26"
-          accessibilityLabel="Đăng nhập"
-          marginTop={15}
-          borderRadius={10}
-        />
+        <SignupModal navigation={navigation} />
+        <SigninModal navigation={navigation} />
       </View>
     </View>
   );
@@ -62,7 +46,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   buttonContainer: {
-    marginTop: 30,
+    marginTop: 100,
   },
   button: {
     paddingVertical: 15,
@@ -95,8 +79,5 @@ const styles = StyleSheet.create({
     height: 250,
     alignSelf: "center", // Căn giữa theo chiều ngang
   },
- 
-  
-  
 });
 export default WelcomeScreen;

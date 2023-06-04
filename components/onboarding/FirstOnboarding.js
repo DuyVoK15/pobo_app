@@ -1,12 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, View, Text, Image } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, View, Text, Image,TouchableOpacity } from "react-native";
+// import { TouchableOpacity } from "react-native-gesture-handler";
 
-const FirstOnboarding = () => {
+const FirstOnboarding = ({navigation}) => {
   const FirstOnboarding = require("../../assets/FirstOnboarding.png");
-  const navigation = useNavigation()
+  // const navigation = useNavigation()
   const handleNavigation = () => {
-    navigation.navigate("WelcomeScreen")
+    navigation.push("WelcomeScreen")
   }
   return (
     <View style={styles.container}>
@@ -24,6 +24,7 @@ const FirstOnboarding = () => {
         <TouchableOpacity
           style={styles.buttonSignin}
           onPress={handleNavigation}
+          
         >
           <Text style={styles.buttonSigninText}>Bỏ qua</Text>
         </TouchableOpacity>
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     width: 300,
-    marginTop: 50
+    marginTop: 0
   },
   text1: {
     fontSize: 28,

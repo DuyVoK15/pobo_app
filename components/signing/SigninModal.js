@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Image } from "expo-image";
 import "react-native-gesture-handler";
 import { Swipeable, TextInput } from "react-native-gesture-handler";
@@ -9,69 +9,81 @@ import {
   Pressable,
   Button,
   TouchableOpacity,
+  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 
 import Modal from "react-native-modal";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../context/AuthContext";
+import Spinner from "react-native-loading-spinner-overlay";
 
-const SigninModal = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const GoogleLogo = require("../../assets/google.png");
+const SigninModal = ({ navigation }) => {
+  // const handleRegistration = () => {
+  //   try {
+  //     const userData = {
+  //       username: username,
+  //       password: password,
+  //     };
+  //     console.log(userData);
+  //     if (userData.username != "" && userData.password != "") {
+  //       setErrorMessage("");
+  //       axios
+  //         .post("http://192.168.1.5:8448/api/v1/auth/login", userData)
+  //         .then((response) => {
+  //           if (response.data) {
+  //             console.log("Đăng nhập thành công! " + response.data.accessToken); // Xử lý dữ liệu phản hồi từ APIa
+  //             setErrorMessage("");
+  //             handleNavigation();
+  //           }
+  //         })
+  //         .catch(
+  //           setErrorMessage("Tài khoản hoặc mật khẩu không đúng!"),
+  //           console.log("c")
+  //         ); // Thay thế 'URL_API' bằng URL API Swagger hoặc API khác
+  //     } else {
+  //       setErrorMessage("Vui lòng nhập thông tin tài khoản!");
+  //     }
+  //     // Chuyển hướng đến trang thành công hoặc thực hiện các tác vụ khác
+  //   } catch (error) {
+  //     console.error(error);
+  //     setErrorMessage("Đã xảy ra lỗi!"); // Xử lý lỗi
+  //   }
+  // };
 
-  const handleRegistration = () => {
-    try {
-      const userData = {
-        username: username,
-        password: password,
-      };
-      console.log(userData);
-      if (userData.username != "" && userData.password != "") {
-        setErrorMessage("")
-        axios
-          .post("http://192.168.2.2:8448/api/v1/auth/login", userData)
-          .then((response) => {
-            if (response.data) {
-              console.log("Đăng nhập thành công! " + response.data.accessToken); // Xử lý dữ liệu phản hồi từ APIa
-              setErrorMessage("")
-              handleNavigation();
-            } else {
-              setErrorMessage("Tài khoản hoặc mật khẩu không đúng!");
-            }
-          }).catch(
-            setErrorMessage("Tài khoản hoặc mật khẩu không đúng!")
-          ); // Thay thế 'URL_API' bằng URL API Swagger hoặc API khác
-      } else {
-        setErrorMessage("Vui lòng nhập thông tin tài khoản!")
-      }
-      // Chuyển hướng đến trang thành công hoặc thực hiện các tác vụ khác
-    } catch (error) {
-      console.error(error);
-      setErrorMessage("Tài khoản hoặc mật khẩu không đúng!"); // Xử lý lỗi
-    }
-  };
-
-  const navigation = useNavigation();
-  const handleNavigation = () => {
-    navigation.navigate("HomeScreen");
-    toggleModal();
-  };
+  // const navigation = useNavigation();
+  // const handleNavigation = () => {
+  //   navigation.navigate("HomeScreen");
+  //   toggleModal();
+  // };
   const handleNavigateToForgetPassword = () => {
-    navigation.navigate("SendOTP")
+    navigation.push("SendOTP");
     toggleModal();
-  }
+  };
   const [errorMessage, setErrorMessage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
-    setInfoToNull()
+    setInfoToNull();
   };
   const setInfoToNull = () => {
-    setUsername("")
-    setPassword("")
-    setErrorMessage("")
-  }
+    setUsername("");
+    setPassword("");
+    setErrorMessage("");
+  };
+
+  // -----------------------------------------------
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const GoogleLogo = require("../../assets/google.png");
+  const { login, isLoading, isLogin } = useContext(AuthContext);
+  const handleLogin = () => {
+    login(username, password);
+    navigation.push('HomeScreen');
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.buttonSignin} onPress={toggleModal}>
@@ -84,6 +96,7 @@ const SigninModal = () => {
         style={styles.modal}
       >
         <View style={styles.modalContent}>
+          <Spinner visible={isLoading} />
           <View>
             <View style={styles.underlineTop}></View>
 
@@ -97,33 +110,44 @@ const SigninModal = () => {
                 {/* <Text style={styles.underline2}></Text> */}
               </View>
             </View>
-
+            <TouchableWithoutFeedback
+              onPress={Keyboard.dismiss}
+              accessible={false}
+            >
+              <View>
+                <Text style={styles.titleText}>Tên đăng nhập</Text>
+                <TextInput
+                  style={styles.containerInputText}
+                  placeholder="Nhập tên đăng nhập"
+                  value={username}
+                  onChangeText={(text) => setUsername(text)}
+                />
+                <Text style={styles.titleText}>Mật khẩu</Text>
+                <TextInput
+                  style={styles.containerInputText}
+                  placeholder="Nhập mật khẩu"
+                  value={password}
+                  secureTextEntry
+                  onChangeText={(text) => setPassword(text)}
+                />
+              </View>
+            </TouchableWithoutFeedback>
             <View>
-              <Text style={styles.titleText}>Tên đăng nhập</Text>
-              <TextInput
-                style={styles.containerInputText}
-                placeholder="Nhập tên đăng nhập"
-                value={username}
-                onChangeText={(text) => setUsername(text)}
-              />
-              <Text style={styles.titleText}>Mật khẩu</Text>
-              <TextInput
-                style={styles.containerInputText}
-                placeholder="Nhập mật khẩu"
-                value={password}
-                secureTextEntry
-                onChangeText={(text) => setPassword(text)}
-              />
+              <TouchableOpacity
+                style={styles.buttonForget}
+                onPress={handleNavigateToForgetPassword}
+                activeOpacity={1}
+              >
+                <Text style={styles.titleForget}>Quên mật khẩu?</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.buttonForget} onPress={handleNavigateToForgetPassword}>
-              <Text style={styles.titleForget}>Quên mật khẩu?</Text>
-            </TouchableOpacity>
+
             <Text style={styles.errorMessageText}>{errorMessage}</Text>
             <View style={styles.listButtonContainer}>
               <View>
                 <TouchableOpacity
                   style={styles.buttonSignin}
-                  onPress={handleRegistration}
+                  onPress={handleLogin}
                 >
                   <Text style={styles.buttonSigninText}>Đăng nhập</Text>
                 </TouchableOpacity>
@@ -286,11 +310,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonForget: {
-    alignItems: 'flex-end',
+    alignSelf: "flex-end",
   },
   titleForget: {
     fontWeight: "bold",
-    color: "#FE5D26"
+    color: "#FE5D26",
   },
   errorMessageText: {
     color: "red",

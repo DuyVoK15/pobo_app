@@ -41,6 +41,13 @@ export default function BottomNavigator() {
                 return <Ionicons name={iconName} size ={20} color={COLORS.orange50} />
             },
             })}
+            tabBarOptions={{
+                showLabel: false,
+                style: {
+                  borderTopLeftRadius: 40,
+                  borderTopRightRadius: 40,
+                },
+              }}
             >
       <Tab.Screen name={ROUTES.HOME_TAB} component={HomeScreen} />
       <Tab.Screen name="Map" component={HomeScreen} />

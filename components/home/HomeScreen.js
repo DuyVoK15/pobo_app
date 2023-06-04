@@ -2,19 +2,17 @@
 // import { StyleSheet, View, Text, Image } from "react-native";
 // import { TouchableOpacity } from "react-native-gesture-handler";
 
-
-
 import { useState } from "react";
-import { SafeAreaView, ScrollView, View,StyleSheet } from "react-native";
+import { SafeAreaView, ScrollView, View, StyleSheet } from "react-native";
 import Welcome from "./welcome/Welcome";
 import { COLORS, icons, images, SIZES } from "../constants";
-import * as Font from 'expo-font';
-import  SearchBar from "./welcome/searchBar";
+import * as Font from "expo-font";
+import SearchBar from "./welcome/searchBar";
 import Cate from "./category/cate";
 import NearYou from "./near_you/nearbyyou";
 import JustView from "./justview/just_view";
-import PhotographerList from "./hot_photographer/photographer"
-const HomeScreen = () => {
+import PhotographerList from "./hot_photographer/photographer";
+const HomeScreen = ({ navigation }) => {
   // const avatarDuy = require("../../assets/avatarDuy.jpg");
 
   // const navigation = useNavigation();
@@ -43,32 +41,31 @@ const HomeScreen = () => {
     //   </View>
     // </View>
     <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            flex: 1,
-            padding: SIZES.medium,
-            // paddingLeft: 5,
-            paddingTop: 44,
-            backgroundColor:'#FFFFFF'
-          }}
-        > 
-          <SearchBar />
-          <Welcome
-            // searchTerm={searchTerm}
-            // setSearchTerm={setSearchTerm}
-            // handleClick={() => {
-            //   if (searchTerm) {
-            //     router.push(`/search/${searchTerm}`)
-            //   }
-            // }}
-          />
-          <Cate />
-          <NearYou />
-          <JustView />
-          <PhotographerList />
-        </View>
-        
-      </ScrollView>
+      <View
+        style={{
+          flex: 1,
+          padding: SIZES.medium,
+          // paddingLeft: 5,
+          paddingTop: 44,
+          backgroundColor: "#FFFFFF",
+        }}
+      >
+        <SearchBar />
+        <Welcome
+        // searchTerm={searchTerm}
+        // setSearchTerm={setSearchTerm}
+        // handleClick={() => {
+        //   if (searchTerm) {
+        //     router.push(`/search/${searchTerm}`)
+        //   }
+        // }}
+        />
+        <Cate />
+        <NearYou />
+        <JustView />
+        <PhotographerList />
+      </View>
+    </ScrollView>
   );
 };
 

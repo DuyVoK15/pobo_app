@@ -1,12 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, View, Text, Image } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, View, Text, Image, TouchableOpacity} from "react-native";
+// import { TouchableOpacity } from "react-native-gesture-handler";
 
-const SecondOnboarding = () => {
+const SecondOnboarding = ({navigation}) => {
   const SecondOnboarding = require("../../assets/SecondOnboarding.png");
-  const navigation = useNavigation()
+  // const navigation = useNavigation()
   const handleNavigation = () => {
-    navigation.navigate("WelcomeScreen")
+    navigation.push("WelcomeScreen")
   }
   return (
     <View style={styles.container}>

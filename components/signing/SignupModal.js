@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Image } from "expo-image";
 import "react-native-gesture-handler";
 import {
@@ -12,64 +12,71 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 import axios from "axios";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../context/AuthContext";
+import Spinner from "react-native-loading-spinner-overlay/lib";
 
-const SignupModal = () => {
+const SignupModal = ({ navigation }) => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const GoogleLogo = require("../../assets/google.png")
-  const navigation = useNavigation();
+  const GoogleLogo = require("../../assets/google.png");
+  // const navigation = useNavigation();
 
-  const handleNavigation = () => {
-    navigation.navigate("SuccessSignupScreen")
-    toggleModal()
-  }
-  const handleRegistration = () => {
-    try {
-      const userData = {
-        name: name,
-        username: username,
-        email: email,
-        password: password,
-      };
-      console.log(userData);
-      if(userData.name != "" && userData.username != "" && userData.email != "" && userData.password != ""){
-        setErrorMessage("")
-        axios
-        .post(
-          "http://192.168.2.2:8448/api/v1/auth/register",
-          userData
-        )
-        .then((response) => {
-          if(response.data){
-            console.log("Đăng ký thành công! " + response.data.accessToken); 
-            handleNavigation()
-          } else {
-            console.log("Đăng ký thất bại"); 
-            setErrorMessage("Tài khoản đã tồn tại!")
-          }
-          
-        }).catch(
-          setErrorMessage("Tài khoản đã tồn tại!")
-        ); // Thay thế 'URL_API' bằng URL API Swagger hoặc API khác
-      } else {
-        setErrorMessage("Vui lòng nhập đầy đủ thông tin!")
-      }
-      
+  // const handleRegistration = () => {
+  //   try {
+  //     const userData = {
+  //       name: name,
+  //       username: username,
+  //       email: email,
+  //       password: password,
+  //     };
+  //     console.log(userData);
+  //     if(userData.name != "" && userData.username != "" && userData.email != "" && userData.password != ""){
+  //       setErrorMessage("")
+  //       axios
+  //       .post(
+  //         "http://192.168.2.2:8448/api/v1/auth/register",
+  //         userData
+  //       )
+  //       .then((response) => {
+  //         if(response.data){
+  //           console.log("Đăng ký thành công! " + response.data.accessToken);
+  //           handleNavigation()
+  //         } else {
+  //           console.log("Đăng ký thất bại");
+  //           setErrorMessage("Tài khoản đã tồn tại!")
+  //         }
 
-      // Chuyển hướng đến trang thành công hoặc thực hiện các tác vụ khác
-    } catch (error) {
-      console.error(error); // Xử lý lỗi
-    }
-  };
+  //       }).catch(
+  //         setErrorMessage("Tài khoản đã tồn tại!")
+  //       ); // Thay thế 'URL_API' bằng URL API Swagger hoặc API khác
+  //     } else {
+  //       setErrorMessage("Vui lòng nhập đầy đủ thông tin!")
+  //     }
 
-  const [errorMessage, setErrorMessage] = useState('')
+  //     // Chuyển hướng đến trang thành công hoặc thực hiện các tác vụ khác
+  //   } catch (error) {
+  //     console.error(error); // Xử lý lỗi
+  //   }
+  // };
+
+  const [errorMessage, setErrorMessage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
+
+  // -----------------------------------------
+  const { register, isLoading, userInfoRegisger } = useContext(AuthContext);
+  const handleRegister = () => {
+    register(name, username, email, password);
+    if (userInfoRegisger.accessToken) {
+      navigation.push("SuccessSignupScreen");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.buttonSignup} onPress={toggleModal}>
@@ -82,6 +89,7 @@ const SignupModal = () => {
         style={styles.modal}
       >
         <View style={styles.modalContent}>
+          <Spinner visible={isLoading} />
           <View>
             <View style={styles.underlineTop}></View>
 
@@ -134,7 +142,7 @@ const SignupModal = () => {
               <View>
                 <TouchableOpacity
                   style={styles.buttonSignup}
-                  onPress={handleRegistration}
+                  onPress={handleRegister}
                 >
                   <Text style={styles.buttonSignupText}>Đăng ký</Text>
                 </TouchableOpacity>
@@ -147,7 +155,10 @@ const SignupModal = () => {
                   style={styles.buttonSignupGoogle}
                   onPress={""}
                 >
-                  <Image style={{width: 32, height:32}} source={GoogleLogo}/>
+                  <Image
+                    style={{ width: 32, height: 32 }}
+                    source={GoogleLogo}
+                  />
                   <Text style={styles.buttonSignupGoogleText}>
                     Đăng nhập với Google
                   </Text>
@@ -284,7 +295,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
-    marginLeft: 18
+    marginLeft: 18,
   },
   underline: {
     backgroundColor: "#CBD4E1",

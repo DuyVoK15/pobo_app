@@ -6,18 +6,18 @@ import SecondOnboarding from './SecondOnboarding';
 import ThirdOnboarding from './ThirdOnboarding';
 import { useNavigation } from '@react-navigation/native';
 
-const SwiperOnboarding = () => {
+const SwiperOnboarding = ({navigation}) => {
   // const navigation = useNavigation()
   return (
     <Swiper dotStyle={styles.dot} activeDotStyle={styles.activeDot}>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <FirstOnboarding />
+        <FirstOnboarding navigation={navigation} />
       </View>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <SecondOnboarding />
+        <SecondOnboarding navigation={navigation}  />
       </View>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ThirdOnboarding />
+        <ThirdOnboarding navigation={navigation}  />
       </View>
     </Swiper>
   );
