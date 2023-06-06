@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import React, { createContext, useState } from "react";
-
+import { saveDataToStorage } from "./AsyncStorage";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
     // setIsLoading(true);
     try {
       const response = await axios.get(
-        "http://192.168.1.5:8448/api/v1/auth/info",
+        "http://192.168.1.7:8448/api/v1/auth/info",
         {
           headers: {
             Authorization: `Bearer ${userToken.accessToken}`,
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     // console.log(name + username + email + password)
     setIsLoading(true);
     axios
-      .post("http://192.168.1.5:8448/api/v1/auth/register", {
+      .post("http://192.168.1.7:8448/api/v1/auth/register", {
         name,
         username,
         email,
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
           JSON.stringify(userTokenRegister)
         );
         setIsLoading(false);
-        console.log(userInfoRegisger);
+        console.log(userTokenRegister);
       })
       .catch((error) => {
         console.log(error);
@@ -65,17 +65,17 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
-  const login = (username, password) => {
+  const login = async (username, password) => {
     setIsLoading(true);
     axios
-      .post("http://192.168.1.5:8448/api/v1/auth/login", {
+      .post("http://192.168.1.7:8448/api/v1/auth/login", {
         username,
         password,
       })
       .then((response) => {
         let userToken = response.data;
         setUserToken(userToken);
-        AsyncStorage.setItem("userToken", JSON.stringify(userToken));
+        saveDataToStorage("userToken", JSON.stringify(userToken))
         setIsLoading(false);
         console.log(userToken);
         getUserInfo(userToken);

@@ -7,9 +7,9 @@ const SuccessSignupScreen = ({navigation}) => {
   const CircleSuccess = require("../../assets/CircleSuccess.png");
   const SuccessIcon2 = require("../../assets/SuccessIcon.png");
   // const navigation = useNavigation()
-  // const handleNavigation = () => {
-  //   navigation.navigate("WelcomeScreen")
-  // }
+  const handleNavigate = () => {
+    navigation.push("WelcomeScreen")
+  }
 
 
   return (
@@ -25,7 +25,7 @@ const SuccessSignupScreen = ({navigation}) => {
       <View>
         <TouchableOpacity
           style={styles.buttonSignin}
-          onPress={""}
+          onPress={handleNavigate}
         >
           <Text style={styles.buttonSigninText}>Đăng nhập</Text>
         </TouchableOpacity>

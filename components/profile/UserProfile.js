@@ -4,18 +4,27 @@ import { ScrollView } from 'react-native-gesture-handler'
 import ButtonStyle from '../../styles/ButtonStyle'
 import { AuthContext } from '../../context/AuthContext'
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getDataFromStorage } from '../../context/AsyncStorage';
 
 const UserProfile = () => {
 
   const {logout, getUserInfo} = useContext(AuthContext)
-  const value = AsyncStorage.getItem("userToken")
-  const parsedResponse = JSON.parse(value._j);
+  const [userInfo, setUserInfo] = useState({})
+  const handle = async () => {
+    const value = await AsyncStorage.getItem("userInfo")
+    const parseValue = JSON.parse(value)
+    setUserInfo(parseValue)
+    // console.log(parseValue)
+  }
+  
+   handle()
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={ButtonStyle.buttonSignup} onPress={() => logout()}>
         <Text style={ButtonStyle.buttonSignupText}>Đăng xuất</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={ButtonStyle.buttonSignup} onPress={() => console.log(JSON.parse(parsedResponse))}>
+      <TouchableOpacity style={ButtonStyle.buttonSignup} onPress={() => console.log(userInfo)}>
         <Text style={ButtonStyle.buttonSignupText}>Lấy thông tin</Text>
       </TouchableOpacity>
     </View>
