@@ -99,7 +99,7 @@ const data = [
 
 ];
 
-const PhotographerList = () => {
+const PhotographerList = ({photographerList}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.textContent}>Nhiếp ảnh gia hot tuần này</Text>
@@ -111,6 +111,7 @@ const PhotographerList = () => {
           </View>
         ))}
       </View>
+      
     </View>
   );
 };

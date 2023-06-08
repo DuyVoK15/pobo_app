@@ -23,6 +23,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { formatDateToAPI, formatDateToYYYYMMDD } from "../../utils/FormatDate";
 import { AuthContext } from "../../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
+import { BASE_URL } from "../../utils/config";
 // import RNPickerSelect from "react-native-picker-select";
 // import { Dropdown } from "react-native-paper";
 // import RadioButtonsGroup from "react-native-radio-buttons-group";
@@ -30,7 +31,7 @@ const SettingsAccountPersonal = ({ navigation }) => {
   // BẮT ĐẦU khai báo biến Image
   const imageIcon = require("../../assets/logo/logo.png");
   const imageVoDien =
-    "http://192.168.1.7:8448/api/image/48A71B21-5855-47F5-B1EA-F27855314F76-1686222292698.png";
+  `${BASE_URL}/api/image/48A71B21-5855-47F5-B1EA-F27855314F76-1686222292698.png`;
   // KẾT THÚC khai báo biến Image
 
   // BẮT ĐẦU xử lí useEffect

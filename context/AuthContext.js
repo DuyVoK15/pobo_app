@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import React, { createContext, useState } from "react";
 import { saveDataToStorage } from "./AsyncStorage";
+import { BASE_URL } from "../utils/config";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -15,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     // setIsLoading(true);
     try {
       const response = await axios.get(
-        "http://192.168.1.7:8448/api/v1/auth/info",
+        `${BASE_URL}/api/v1/auth/info`,
         {
           headers: {
             Authorization: `Bearer ${userToken.accessToken}`,
@@ -43,7 +44,7 @@ export const AuthProvider = ({ children }) => {
     // console.log(name + username + email + password)
     setIsLoading(true);
     axios
-      .post("http://192.168.1.7:8448/api/v1/auth/register", {
+      .post(`${BASE_URL}/api/v1/auth/register`, {
         name,
         username,
         email,
@@ -68,7 +69,7 @@ export const AuthProvider = ({ children }) => {
   const login = (username, password) => {
     setIsLoading(true);
     axios
-      .post("http://192.168.1.7:8448/api/v1/auth/login", {
+      .post(`${BASE_URL}/api/v1/auth/login`, {
         username,
         password,
       })
@@ -100,7 +101,7 @@ export const AuthProvider = ({ children }) => {
   const updateProfile = async (name, phone, email, gender, dob, avatarUrl, userToken) => {
     setIsLoading(true);
     await axios
-      .put("http://192.168.1.7:8448/api/v1/user/profile", {
+      .put(`${BASE_URL}/api/v1/user/profile`, {
         name,
         phone,
         email,
