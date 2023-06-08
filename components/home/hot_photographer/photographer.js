@@ -88,25 +88,29 @@
 // export default PhotographerList;
 
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 
-const data = [
-  { name: 'John Doe', avatar: require('../../../assets/images/anhCuoi1.png') },
-  { name: 'Jane Smith', avatar: require('../../../assets/images/anhCuoi1.png') },
-  { name: 'Alex Johnson', avatar: require('../../../assets/images/anhCuoi1.png') },
-  { name: 'javis', avatar: require('../../../assets/images/anhCuoi1.png') },
+// const data = [
+//   { name: 'John Doe', avatar: require('../../../assets/images/anhCuoi1.png') },
+//   { name: 'Jane Smith', avatar: require('../../../assets/images/anhCuoi1.png') },
+//   { name: 'Alex Johnson', avatar: require('../../../assets/images/anhCuoi1.png') },
+//   { name: 'javis', avatar: require('../../../assets/images/anhCuoi1.png') },
 
-];
+// ];
 
 const PhotographerList = ({photographerList}) => {
+  const data = photographerList
+  useEffect(()=> {
+    console.log(data)
+  })
   return (
     <View style={styles.container}>
       <Text style={styles.textContent}>Nhiếp ảnh gia hot tuần này</Text>
       <View style={styles.wrapcard}>
         {data.map((photographer, index) => (
           <View key={index} style={styles.rowContainer}>
-            <Image source={photographer.avatar} style={styles.avatar} />
+            <Image source={{uri: photographer.avatarUrl}} style={styles.avatar} />
             <Text style={styles.name}>{photographer.name}</Text>
           </View>
         ))}

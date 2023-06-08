@@ -34,7 +34,7 @@ const HomeScreen = ({ navigation }) => {
           { params }
         );
         console.log("Whats: " + res.data);
-        setPhotographerList(res.data);
+        setPhotographerList(res.data.row);
       } catch (error) {
         console.error(error);
       }
