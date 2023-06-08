@@ -3,7 +3,7 @@ import React from 'react'
 
 const ButtonStyle = StyleSheet.create({
     buttonContainer: {
-        marginTop: 120
+        marginTop: 40
     },
     buttonSignup: {
         paddingVertical: 21,

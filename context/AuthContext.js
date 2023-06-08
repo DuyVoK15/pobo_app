@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
       let userInfo = response.data;
       console.log("Thông tin user: " + JSON.stringify(userInfo));
       setUserInfo(userInfo);
-      AsyncStorage.setItem(
+      saveDataToStorage(
         "userInfo",
         JSON.stringify(userInfo)
       );
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
       .then((response) => {
         let userTokenRegister = response.data;
         setUserTokenRegister(userTokenRegister);
-        AsyncStorage.setItem(
+        saveDataToStorage(
           "userTokenRegister",
           JSON.stringify(userTokenRegister)
         );
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
-  const login = async (username, password) => {
+  const login = (username, password) => {
     setIsLoading(true);
     axios
       .post("http://192.168.1.7:8448/api/v1/auth/login", {
@@ -97,6 +97,38 @@ export const AuthProvider = ({ children }) => {
     setUserTokenRegister({})
   };
 
+  const updateProfile = async (name, phone, email, gender, dob, avatarUrl, userToken) => {
+    setIsLoading(true);
+    await axios
+      .put("http://192.168.1.7:8448/api/v1/user/profile", {
+        name,
+        phone,
+        email,
+        gender,
+        dob,
+        avatarUrl,
+      }, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+        },
+      })
+      .then((response) => {
+        setIsLoading(false);
+        saveDataToStorage(
+          "userInfo",
+          JSON.stringify(response.data)
+        );
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.error(error);
+        setIsLoading(false);
+        // setIsLogin(false);
+      });
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -106,6 +138,7 @@ export const AuthProvider = ({ children }) => {
         register,
         login,
         logout,
+        updateProfile,
         isLogin,
       }}
     >

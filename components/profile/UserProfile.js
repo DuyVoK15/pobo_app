@@ -6,7 +6,7 @@ import { AuthContext } from '../../context/AuthContext'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDataFromStorage } from '../../context/AsyncStorage';
 
-const UserProfile = () => {
+const UserProfile = ({navigation}) => {
 
   const {logout, getUserInfo} = useContext(AuthContext)
   const [userInfo, setUserInfo] = useState({})
@@ -26,6 +26,9 @@ const UserProfile = () => {
       </TouchableOpacity>
       <TouchableOpacity style={ButtonStyle.buttonSignup} onPress={() => console.log(userInfo)}>
         <Text style={ButtonStyle.buttonSignupText}>Lấy thông tin</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={ButtonStyle.buttonSignup} onPress={() => navigation.push("SettingsAccountPersonal")}>
+        <Text style={ButtonStyle.buttonSignupText}>Tài khoản</Text>
       </TouchableOpacity>
     </View>
   )

@@ -42,6 +42,16 @@ const AuthStackScreen = () => {
         component={SuccessSignupScreen}
       />
       <AuthStack.Screen name="SendOTP" component={SendOTP} />
+      <AuthStack.Screen
+        options={{ headerShown: false }}
+        name="UserProfile"
+        component={BottomNavigator}
+      />
+      <AuthStack.Screen
+        options={{ headerShown: false }}
+        name="SettingsAccountPersonal"
+        component={SettingsAccountPersonal}
+      />
     </AuthStack.Navigator>
   );
 };
@@ -60,6 +70,12 @@ const HomeStackScreen = () => {
         options={{ headerShown: false }}
         name="SettingsAccountPersonal"
         component={SettingsAccountPersonal}
+      />
+
+<HomeStack.Screen
+        options={{ headerShown: false }}
+        name="UserProfile"
+        component={BottomNavigator}
       />
     </HomeStack.Navigator>
   );

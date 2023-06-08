@@ -158,7 +158,7 @@ const SigninModal = ({ navigation }) => {
               <View>
                 <TouchableOpacity
                   style={styles.buttonSigninGoogle}
-                  onPress={""}
+                  onPress={() => navigation.push("UserProfile")}
                 >
                   <Image
                     style={{ width: 32, height: 32 }}
