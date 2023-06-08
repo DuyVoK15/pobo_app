@@ -66,14 +66,14 @@ const HomeScreen = ({ navigation }) => {
         <NearYou />
         <JustView />
         <PhotographerList photographerList={photographerList} />
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={ButtonStyle.buttonSignup}
           onPress={() => console.log(photographerList.row[0].id)}
         >
           <Text style={ButtonStyle.buttonSignupText}>
             Lấy thông tin Photographer
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </ScrollView>
   );
