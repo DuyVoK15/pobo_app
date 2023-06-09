@@ -19,18 +19,16 @@ export const AuthProvider = ({ children }) => {
   const getUserInfo = async (userToken) => {
     // setIsLoading(true);
     try {
-      const response = await axios.get(`http://${IPv4}:8448/api/v1/auth/info`, {
+      const res = await axios.get(`http://${IPv4}:8448/api/v1/auth/info`, {
         headers: {
           Authorization: `Bearer ${userToken.accessToken}`,
-          "Cache-Control": "no-cache",
-          Pragma: "no-cache",
+          
         },
       });
 
-      let userInfo = response.data;
-      console.log("Thông tin user: " + JSON.stringify(userInfo));
-      setUserInfo(userInfo);
-      saveDataToStorage("userInfo", JSON.stringify(userInfo));
+      console.log("Thông tin user: " + JSON.stringify(res.data));
+      setUserInfo(await res.data);
+      saveDataToStorage("userInfo", JSON.stringify(res.data));
     } catch (error) {
       console.log(error);
     }
@@ -237,6 +235,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         isLoading,
         userToken,
+        userInfo,
         userTokenRegister,
         bookingList,
         photographerList,
@@ -245,6 +244,7 @@ export const AuthProvider = ({ children }) => {
         register,
         login,
         logout,
+        getUserInfo,
         updateProfile,
         getListBooking,
         getListBookingByStatus,

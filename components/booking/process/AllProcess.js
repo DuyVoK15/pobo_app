@@ -15,17 +15,11 @@ const AllProcess = () => {
   };
   
   useEffect(() => {
-    
-    
-    const interval = setInterval(fetchData, 30000); // Gọi fetchData mỗi 5 giây
+    const interval = setInterval(fetchData, 10000000000); // Gọi fetchData mỗi 5 giây
 
     return () => {
       clearInterval(interval); // Hủy bỏ interval khi component bị unmount
     };
-
-  
-    
-    
   }, []);
   
   useEffect(() => {

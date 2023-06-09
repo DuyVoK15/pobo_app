@@ -22,7 +22,7 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       getAllPhotographer()
-    } , 30000);
+    } , 10000000000);
     return () => {
       clearInterval(interval);
     };
