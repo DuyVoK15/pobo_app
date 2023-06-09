@@ -11,6 +11,7 @@ import { NavigationContainer } from "@react-navigation/native";
 // import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from '@expo/vector-icons';
 import UserProfile from "../profile/UserProfile";
+import BookingManagement from "../booking/BookingManagement";
 
 export default function BottomNavigator() {
     
@@ -28,7 +29,7 @@ export default function BottomNavigator() {
                  else if (route.name === 'Map' ){
                     iconName = focused ? 'map' : 'map-outline';
                 }
-                else if (route.name === 'Schedule' ){
+                else if (route.name === 'BookingManagement' ){
                     iconName = focused ? 'reader' : 'reader-outline';
                 }
                 else if (route.name === 'Chat' ){
@@ -52,7 +53,7 @@ export default function BottomNavigator() {
             >
       <Tab.Screen name={ROUTES.HOME_TAB} component={HomeScreen} />
       <Tab.Screen name="Map" component={HomeScreen} />
-      <Tab.Screen name="Schedule" component={HomeScreen} />
+      <Tab.Screen name="BookingManagement" component={BookingManagement} />
       <Tab.Screen name="Chat" component={HomeScreen} />
       <Tab.Screen name="UserProfile" component={UserProfile} />
 
