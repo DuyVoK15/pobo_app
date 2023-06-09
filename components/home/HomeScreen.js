@@ -2,7 +2,7 @@
 // import { StyleSheet, View, Text, Image } from "react-native";
 // import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, View, StyleSheet, Text } from "react-native";
 import Welcome from "./welcome/Welcome";
 import { COLORS, icons, images, SIZES } from "../constants";
@@ -16,29 +16,36 @@ import axios from "axios";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import ButtonStyle from "../../styles/ButtonStyle";
 import { BASE_URL, IPv4 } from "../../utils/config";
+import { AuthContext } from "../../context/AuthContext";
 const HomeScreen = ({ navigation }) => {
-  const [photographerList, setPhotographerList] = useState([]);
+  const {photographerList, getAllPhotographer} = useContext(AuthContext)
   useEffect(() => {
-    const params = {
-      hl: "en",
-      select: '["$all"]',
-      where: "{}",
-      limit: "unlimited",
-      page: 1,
-      order: "[]",
+    const interval = setInterval(() => {
+      getAllPhotographer()
+    } , 30000);
+    return () => {
+      clearInterval(interval);
     };
-    (async () => {
-      try {
-        const res = await axios.get(
-          `http://${IPv4}:8448/api/v1/photographer`,
-          { params }
-        );
-        console.log("Whats: " + res.data);
-        setPhotographerList(res.data.row);
-      } catch (error) {
-        console.error(error);
-      }
-    })();
+    // const params = {
+    //   hl: "en",
+    //   select: '["$all"]',
+    //   where: "{}",
+    //   limit: "unlimited",
+    //   page: 1,
+    //   order: "[]",
+    // };
+    // (async () => {
+    //   try {
+    //     const res = await axios.get(
+    //       `http://${IPv4}:8448/api/v1/photographer`,
+    //       { params }
+    //     );
+    //     console.log("Whats: " + res.data);
+    //     setPhotographerList(res.data.row);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // })();
   }, []);
 
   return (

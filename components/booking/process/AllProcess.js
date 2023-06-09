@@ -6,29 +6,32 @@ import { COLORS, SIZES } from "../../constants";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 const AllProcess = () => {
-  const {userToken, getListBooking, bookingList, getPhotographerById } = useContext(AuthContext);
-  const [bookingData, setBookingData] = useState([]);
+  const {userToken, getListBooking, bookingList, getPhotographerById, bookingData } = useContext(AuthContext);
+  // const [bookingData, setBookingData] = useState([]);
+  
+  const fetchData = async () => {
+    await getListBooking(userToken.accessToken);
+   
+  };
+  
   useEffect(() => {
-    getListBooking(userToken.accessToken);
     
-    const fetchData = async () => {
-      const data = await Promise.all(
-        bookingList.map(async (booking) => {
-          const photographerData = await getPhotographerById(booking.photographerId);
-          return {
-            ...booking,
-            photographerData
-          };
-        })
-      );
-      setBookingData(data);
+    
+    const interval = setInterval(fetchData, 30000); // Gọi fetchData mỗi 5 giây
+
+    return () => {
+      clearInterval(interval); // Hủy bỏ interval khi component bị unmount
     };
 
-    fetchData();
+  
     
     
   }, []);
   
+  useEffect(() => {
+    fetchData(); // Lấy dữ liệu ban đầu khi component được render
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.textHeader}>Hiện có tất cả 0 lịch hẹn </Text>
@@ -36,7 +39,7 @@ const AllProcess = () => {
         <View key={index} style={styles.containerRow}>
           <View style={{ flex: 1 }}>
             <Image
-              source={require("../../../assets/logo/logo.png")}
+              source={{uri: booking.photographerData.avatarUrl}}
               style={styles.avatar}
             />
           </View>
@@ -46,7 +49,7 @@ const AllProcess = () => {
           </View>
           <View style={{ flex: 1.4 }}>
             <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Sắp đến giờ</Text>
+              <Text style={styles.buttonText}>{booking.bookingStatus}</Text>
             </TouchableOpacity>
           </View>
         </View>

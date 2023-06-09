@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   textBill:{
-    fontFamily: 'SVN-Gilroy',
+    // fontFamily: 'SVN-Gilroy',
     fontStyle: 'normal',
     fontWeight: '700',
     fontSize: 14,
@@ -282,14 +282,14 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   sectionTitle: {
-    fontFamily: 'SVN-Gilroy',
+    // fontFamily: 'SVN-Gilroy',
     fontStyle: 'normal',
     fontWeight: '400',
     fontSize: 14,
     lineHeight: 21,
   },
   sectionContent: {
-    fontFamily: 'SVN-Gilroy',
+    // fontFamily: 'SVN-Gilroy',
     fontStyle: 'normal',
     fontWeight: '700',
     fontSize: 14,

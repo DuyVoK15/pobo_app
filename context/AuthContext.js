@@ -9,6 +9,9 @@ export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState({});
   const [userTokenRegister, setUserTokenRegister] = useState({});
   const [bookingList, setBookingList] = useState([])
+  const [bookingListByStatus, setBookingListByStatus] = useState([])
+  const [photographerList, setPhotographerList] = useState([]);
+  const [bookingData, setBookingData] = useState([]);
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
@@ -153,7 +156,44 @@ export const AuthProvider = ({ children }) => {
       );
       console.log("AccessToken: " + accessToken)
       console.log("List Booking: " + JSON.stringify(res.data.row));
-      setBookingList(res.data.row)
+      
+      const data = await Promise.all(
+        res.data.row.map(async (booking) => {
+          const photographerData = await getPhotographerById(booking.photographerId);
+          return {
+            ...booking,
+            photographerData
+          };
+        })
+      );
+      setBookingData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getListBookingByStatus = async (status, accessToken) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        hl: "en",
+        select: '["$all"]',
+        where: `{"bookingStatus": ${status}}`,
+        limit: "unlimited",
+        page: 1,
+        order: "[]",
+      },
+    };
+    try {
+      const res = await axios.get(
+        `http://${IPv4}:8448/api/v1/user/booking`,
+        config
+      );
+      console.log("AccessToken: " + accessToken)
+      console.log("List Booking By Status: " + JSON.stringify(res.data.row));
+      setBookingListByStatus(res.data.row)
     } catch (error) {
       console.error(error);
     }
@@ -171,6 +211,27 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const getAllPhotographer = async () => {
+    const params = {
+      hl: "en",
+      select: '["$all"]',
+      where: "{}",
+      limit: "unlimited",
+      page: 1,
+      order: "[]",
+    };
+    try {
+      const res = await axios.get(
+        `http://${IPv4}:8448/api/v1/photographer`,
+        { params }
+      );
+      console.log("Whats: " + res.data);
+      setPhotographerList(res.data.row);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -178,11 +239,16 @@ export const AuthProvider = ({ children }) => {
         userToken,
         userTokenRegister,
         bookingList,
+        photographerList,
+        bookingListByStatus,
+        bookingData,
         register,
         login,
         logout,
         updateProfile,
         getListBooking,
+        getListBookingByStatus,
+        getAllPhotographer,
         getPhotographerById,
         isLogin,
       }}

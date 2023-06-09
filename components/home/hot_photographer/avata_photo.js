@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
       ,
       Price_modal:{
         // position: 'absolute',
-        fontFamily: 'Inter',
+        // fontFamily: 'Inter',
         fontStyle: 'normal',
         fontWeight: '700',
         fontSize: 28,
