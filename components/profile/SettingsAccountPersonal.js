@@ -23,7 +23,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { formatDateToAPI, formatDateToYYYYMMDD } from "../../utils/FormatDate";
 import { AuthContext } from "../../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
-import { BASE_URL } from "../../utils/config";
+import { BASE_URL, IPv4 } from "../../utils/config";
 // import RNPickerSelect from "react-native-picker-select";
 // import { Dropdown } from "react-native-paper";
 // import RadioButtonsGroup from "react-native-radio-buttons-group";
@@ -121,7 +121,7 @@ const SettingsAccountPersonal = ({ navigation }) => {
       });
 
       const res = await axios.post(
-        "http://192.168.1.7:8448/api/image",
+        `http://${IPv4}:8448/api/image`,
         formData,
         {
           headers: {
@@ -132,7 +132,7 @@ const SettingsAccountPersonal = ({ navigation }) => {
       );
 
       console.log("Upload successful:", res.data["0"]);
-      setAvatar(res.data["0"].replace("localhost", "192.168.1.7"));
+      setAvatar(res.data["0"].replace("localhost", `${IPv4}`));
     } catch (error) {
       console.error("Upload failed:", error);
     }
@@ -274,7 +274,7 @@ const SettingsAccountPersonal = ({ navigation }) => {
               <View style={styles.modalView}>
                 <DatePicker
                   mode="calendar"
-                  minimumDate={startDate}
+                  // minimumDate={startDate}
                   selected={date}
                   onDateChange={handleChange}
                 />

@@ -15,7 +15,7 @@ import PhotographerList from "./hot_photographer/photographer";
 import axios from "axios";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import ButtonStyle from "../../styles/ButtonStyle";
-import { BASE_URL } from "../../utils/config";
+import { BASE_URL, IPv4 } from "../../utils/config";
 const HomeScreen = ({ navigation }) => {
   const [photographerList, setPhotographerList] = useState([]);
   useEffect(() => {
@@ -30,7 +30,7 @@ const HomeScreen = ({ navigation }) => {
     (async () => {
       try {
         const res = await axios.get(
-          `${BASE_URL}/api/v1/photographer`,
+          `http://${IPv4}:8448/api/v1/photographer`,
           { params }
         );
         console.log("Whats: " + res.data);
