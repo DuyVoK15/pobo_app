@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
   },
   containerTextHeader: {
     marginVertical: 20,
-    width: 350,
+    width: 380,
   },
   textHeader: {
     fontSize: SIZES.xxLarge,
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
   },
   containerTextTitles: {
     marginVertical: 20,
-    width: 350,
+    width: 380,
   },
   containerButton: {
     marginVertical: 30,
