@@ -7,7 +7,7 @@ import data from './dataCardCate';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { COLORS, FONT, SIZES } from "../../constants";
 
-const Cate = () =>{
+const Cate = ({ navigation }) =>{
     return (
       <View style={styles.discoverWrapper}>
         
@@ -36,6 +36,8 @@ const Cate = () =>{
               title={card.title}
               authorAvatar={card.authorAvatar}
               authorName={card.authorName}
+              navigation = {navigation}
+
             />
           ))}
         {/* </TouchableOpacity> */}

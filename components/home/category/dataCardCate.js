@@ -1,7 +1,7 @@
 const data = [
     {
       id: 1,
-      image: require('../../../assets/images/anhCuoi1.png'),
+      image: require('../../../assets/images/anh4k.jpg'),
       rating: 4.5,
       title: 'Card 1 Title',
       authorAvatar: require('../../../assets/images/avata.png'),

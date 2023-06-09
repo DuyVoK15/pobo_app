@@ -48,7 +48,7 @@ const HomeScreen = ({ navigation }) => {
           flex: 1,
           padding: SIZES.medium,
           // paddingLeft: 5,
-          paddingTop: 44,
+          paddingTop: 70,
           backgroundColor: "#FFFFFF",
         }}
       >
@@ -62,7 +62,7 @@ const HomeScreen = ({ navigation }) => {
         //   }
         // }}
         />
-        <Cate />
+        <Cate navigation={navigation}/>
         <NearYou />
         <JustView />
         <PhotographerList photographerList={photographerList} />
@@ -76,6 +76,7 @@ const HomeScreen = ({ navigation }) => {
         </TouchableOpacity> */}
       </View>
     </ScrollView>
+    
   );
 };
 

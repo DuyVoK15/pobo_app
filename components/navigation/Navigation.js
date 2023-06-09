@@ -12,6 +12,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { createStackNavigator } from "@react-navigation/stack";
 import SigninModal from "../signing/SigninModal";
 import FirstOnboarding from "../onboarding/FirstOnboarding";
+import Booking from "../home/category/booking";
 
 
 const IntroStack = createStackNavigator();
@@ -72,14 +73,21 @@ const HomeStackScreen = () => {
         component={SettingsAccountPersonal}
       />
 
-<HomeStack.Screen
+      <HomeStack.Screen
         options={{ headerShown: false }}
         name="UserProfile"
         component={BottomNavigator}
       />
+      <HomeStack.Screen
+        options={{ headerShown: false }}
+        name="Booking"
+        component={Booking}
+      />
     </HomeStack.Navigator>
   );
 };
+
+
 
 const Navigation = () => {
   const { userToken } = useContext(AuthContext);
