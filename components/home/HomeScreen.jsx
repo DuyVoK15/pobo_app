@@ -2,7 +2,7 @@
 // import { StyleSheet, View, Text, Image } from "react-native";
 // import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, View, StyleSheet, Text } from "react-native";
 import Welcome from "./welcome/Welcome";
 import { COLORS, icons, images, SIZES } from "../constants";
@@ -17,39 +17,38 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import ButtonStyle from "../../styles/ButtonStyle";
 import { BASE_URL, IPv4 } from "../../utils/config";
 import { AuthContext } from "../../context/AuthContext";
+import { RefreshControl } from "react-native";
 const HomeScreen = ({ navigation }) => {
   const {photographerList, getAllPhotographer} = useContext(AuthContext)
+  const [refreshing, setRefreshing] = useState(false);
+  
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchData();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  });
+
+  const fetchData = async () => {
+    await getAllPhotographer();
+  }
+
+  
   useEffect(() => {
-    const interval = setInterval(() => {
-      getAllPhotographer()
-    } , 10000000000);
+    const interval = setInterval(fetchData, 10000000000);
     return () => {
       clearInterval(interval);
     };
-    // const params = {
-    //   hl: "en",
-    //   select: '["$all"]',
-    //   where: "{}",
-    //   limit: "unlimited",
-    //   page: 1,
-    //   order: "[]",
-    // };
-    // (async () => {
-    //   try {
-    //     const res = await axios.get(
-    //       `http://${IPv4}:8448/api/v1/photographer`,
-    //       { params }
-    //     );
-    //     console.log("Whats: " + res.data);
-    //     setPhotographerList(res.data.row);
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // })();
   }, []);
-
+  useEffect(() => {  
+    fetchData();
+  }, []);
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView showsVerticalScrollIndicator={false}
+    refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    } >
       <View
         style={{
           flex: 1,
@@ -70,8 +69,8 @@ const HomeScreen = ({ navigation }) => {
         // }}
         />
         <Cate navigation={navigation}/>
-        <NearYou />
-        <JustView />
+        <NearYou navigation={navigation} photographerList={photographerList} />
+        <JustView navigation={navigation}/>
         <PhotographerList photographerList={photographerList} />
         {/* <TouchableOpacity
           style={ButtonStyle.buttonSignup}

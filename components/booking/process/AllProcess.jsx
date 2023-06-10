@@ -1,19 +1,32 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import { Image, RefreshControl, ScrollView, StyleSheet, Text, View, TouchableOpacity, Animated } from "react-native";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import BookingEmptyScreen from "../BookingEmptyScreen";
 import { AuthContext } from "../../../context/AuthContext";
 import { COLORS, SIZES } from "../../constants";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const AllProcess = () => {
-  const {userToken, getListBooking, bookingList, getPhotographerById, bookingData } = useContext(AuthContext);
+  const {
+    userToken,
+    getListBooking,
+    bookingList,
+    getPhotographerById,
+    bookingData,
+  } = useContext(AuthContext);
   // const [bookingData, setBookingData] = useState([]);
-  
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchData();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  });
+
   const fetchData = async () => {
     await getListBooking(userToken.accessToken);
-   
   };
-  
+
   useEffect(() => {
     const interval = setInterval(fetchData, 10000000000); // Gọi fetchData mỗi 5 giây
 
@@ -21,34 +34,43 @@ const AllProcess = () => {
       clearInterval(interval); // Hủy bỏ interval khi component bị unmount
     };
   }, []);
-  
+
   useEffect(() => {
     fetchData(); // Lấy dữ liệu ban đầu khi component được render
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.textHeader}>Hiện có tất cả 0 lịch hẹn </Text>
-      {bookingData.map((booking, index) => (
-        <View key={index} style={styles.containerRow}>
-          <View style={{ flex: 1 }}>
-            <Image
-              source={{uri: booking.photographerData.avatarUrl}}
-              style={styles.avatar}
-            />
+    <Animated.ScrollView
+    
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      <View style={styles.container}>
+        <Text style={styles.textHeader}>Hiện có tất cả 0 lịch hẹn </Text>
+        {bookingData.map((booking, index) => (
+          <View key={index} style={styles.containerRow}>
+            <View style={{ flex: 1 }}>
+              <Image
+                source={{ uri: booking.photographerData.avatarUrl }}
+                style={styles.avatar}
+              />
+            </View>
+            <View style={{ flex: 1.8 }}>
+              <Text style={styles.title}>{booking.photographerData.name}</Text>
+              <Text style={styles.title2}>Nghiệp dư</Text>
+            </View>
+            <View style={{ flex: 1.4 }}>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>{booking.bookingStatus}</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={{ flex: 1.8 }}>
-            <Text style={styles.title}>{booking.photographerData.name}</Text>
-            <Text style={styles.title2}>Nghiệp dư</Text>
-          </View>
-          <View style={{ flex: 1.4 }}>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>{booking.bookingStatus}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ))}
-    </View>
+        ))}
+      </View>
+      
+    </Animated.ScrollView>
   );
 };
 

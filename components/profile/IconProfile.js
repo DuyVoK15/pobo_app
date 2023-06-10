@@ -7,5 +7,6 @@ export const Icon = {
     PrivacyPolicyIcon: require("../../assets/PrivacyPolicyIcon.png"),
     TermConditionIcon: require("../../assets/TermConditionIcon.png"),
     AboutPoBoIcon: require("../../assets/PayIcon.png"),
+    PoBoIcon: require("../../assets/PoBoIcon.png"),
 
 }

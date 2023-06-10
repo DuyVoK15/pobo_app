@@ -13,6 +13,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import SigninModal from "../signing/SigninModal";
 import FirstOnboarding from "../onboarding/FirstOnboarding";
 import Booking from "../home/category/booking";
+import PhotographerProfile from "../booking/create/PhotographerProfile";
 
 
 const IntroStack = createStackNavigator();
@@ -60,7 +61,7 @@ const AuthStackScreen = () => {
 const HomeStack = createStackNavigator();
 const HomeStackScreen = () => {
   return (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator screenOptions={{cardStyle: {backgroundColor: "white",height: 100, borderTopLeftRadius: 35, borderTopRightRadius: 35}}}>
       <HomeStack.Screen
         options={{ headerShown: false }}
         name="HomeScreen"
@@ -83,6 +84,11 @@ const HomeStackScreen = () => {
         name="Booking"
         component={Booking}
       />
+      <HomeStack.Screen
+        options={{ headerShown: false }}
+        name="PhotographerProfile"
+        component={PhotographerProfile}
+      />
     </HomeStack.Navigator>
   );
 };
@@ -93,7 +99,7 @@ const Navigation = () => {
   const { userToken } = useContext(AuthContext);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer >
       
       {userToken.accessToken ? <HomeStackScreen /> : <AuthStackScreen />}
     </NavigationContainer>

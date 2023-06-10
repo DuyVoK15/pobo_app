@@ -1,34 +1,51 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image,ScrollView } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, { useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+
 import { COLORS, FONT, SIZES } from "../../constants";
-import PhotographercCard from './photographer.card';
-import data from './data_near_you';
-const NearYou = () =>{
-    return (
-      <View style={styles.wrap}>
-        <Text style={styles.text}>Nhiếp ảnh gia ở gần bạn</Text>
-        <ScrollView horizontal 
-        contentContainerStyle={styles.cardsContainer}   
-        showsHorizontalScrollIndicator={false}>
-        {data.map((item) => (
-          <PhotographercCard
-            key={item.id}
-            imageSource={item.imageSource}
-            photographerName={item.photographerName}
-            location={item.location}
+import PhotographercCard from "./photographer.card";
+import data from "./data_near_you";
+const NearYou = ({ photographerList, navigation }) => {
+  const handleNavigate = (id) => {
+    navigation.navigate("PhotographerProfile", { paramValue: id });
+  };
 
-          />
-          
+  useEffect(()=> {
+    
+  })
+
+  return (
+    <View style={styles.wrap}>
+      <Text style={styles.text}>Nhiếp ảnh gia ở gần bạn</Text>
+      <ScrollView
+        horizontal
+        contentContainerStyle={styles.cardsContainer}
+        showsHorizontalScrollIndicator={false}
+      >
+        {photographerList.map((item) => (
+          <TouchableOpacity onPress={() => handleNavigate(item.id)}>
+            <PhotographercCard
+               key={item.id}
+              imageSource={{ uri: item.avatarUrl }}
+              photographerName={item.name}
+              location="TP. HCM"
+            />
+          </TouchableOpacity>
         ))}
-        </ScrollView>
-      </View>)
-
+      </ScrollView>
+    </View>
+  );
 };
-export default NearYou
+export default NearYou;
 
 const styles = StyleSheet.create({
-  wrap:{
+  wrap: {
     // display: 'flex',
     // flexDirection: 'column',
     // alignItems: 'flex-start',
@@ -40,25 +57,22 @@ const styles = StyleSheet.create({
     // // order: 1,
     // // flexGrow: 0,
     paddingTop: 30,
-    
-
   },
   cardsContainer: {
     marginTop: SIZES.medium,
     gap: SIZES.small,
-
   },
-  text:{
+  text: {
     width: 231,
     height: 28,
     // fontFamily: 'SVN-Gilroy',
-    fontStyle: 'normal',
-    fontWeight: '800',
+    fontStyle: "normal",
+    fontWeight: "800",
     fontSize: 20,
     lineHeight: 28,
-    color: '#181818',
+    color: "#181818",
     // flex: 0,
     // order: 0,
     // flexGrow: 0,
-}
-  })
+  },
+});

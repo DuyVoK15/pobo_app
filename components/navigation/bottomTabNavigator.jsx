@@ -20,6 +20,12 @@ export default function BottomNavigator() {
     // <NavigationContainer>
     <Tab.Navigator
         screenOptions={({route}) => ({
+          tabBarStyle: { backgroundColor: "white", height: 100, borderTopLeftRadius: 35, borderTopRightRadius: 35, shadowColor: 'black',
+          shadowOpacity: 0.2,
+          shadowOffset: { width: 0, height: -4 },
+          shadowRadius: 6,
+          elevation: 4, },
+          
             headerShown : false,
             tabBarIcon: ({color, size, focused})=> {
                 let iconName;

@@ -1,19 +1,35 @@
-import { StyleSheet, Text, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import React, { useContext, useEffect, useState } from "react";
-// import { ScrollView } from "react-native-gesture-handler";
+import {
+  StyleSheet,
+  Text,
+  View,
+  RefreshControl,
+  TouchableOpacity,
+} from "react-native";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import ButtonStyle from "../../styles/ButtonStyle";
 import { AuthContext } from "../../context/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getDataFromStorage } from "../../context/AsyncStorage";
 import { COLORS, SIZES } from "../constants";
 import { Image } from "react-native";
 import { ScrollView } from "react-native";
 import { Icon } from "./IconProfile";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const UserProfile = ({ navigation }) => {
-  const { logout, userInfo, userToken } = useContext(AuthContext);
+  const imageVoDien =
+    "https://toigingiuvedep.vn/wp-content/uploads/2022/04/hinh-avatar-anh-vo-dien-cute.jpg";
+  const { logout, userInfo, userToken, isLoading } = useContext(AuthContext);
   const [info, setInfo] = useState({});
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchData();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  });
+
   const fetchData = async () => {
     const value = await AsyncStorage.getItem("userInfo");
     const parseValue = JSON.parse(value);
@@ -35,7 +51,13 @@ const UserProfile = ({ navigation }) => {
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      <Spinner visible={isLoading} />
       <View style={styles.container}>
         <View style={styles.containerTextHeader}>
           <Text style={styles.textHeader}>Trang cá nhân</Text>
@@ -45,21 +67,23 @@ const UserProfile = ({ navigation }) => {
           <View style={styles.avatarStyle}>
             <Image
               source={{
-                uri: info.avatarUrl,
+                uri: info.avatarUrl ? info.avatarUrl : imageVoDien,
               }}
               style={{ width: 70, height: 70, borderRadius: 100 }}
             />
           </View>
           <View style={styles.column2}>
             <TouchableOpacity onPress={handleNavigateToSetting}>
-              <Text style={styles.textName}> {info.name}</Text>
+              <Text style={styles.textName}> {info.name?info.name:"Vui lòng đăng nhập"}</Text>
             </TouchableOpacity>
           </View>
         </View>
-              <View style={styles.containerPoBo}>
-                <Text style={styles.textPoBo1}>Trở thành thợ chụp ảnh của POBO</Text>
-                <Text style={styles.textPoBo2}>Thiết lập và bắt đầu kiếm tiền thật đơn giản.</Text>
-              </View>
+        <View style={styles.containerPoBo}>
+          <Text style={styles.textPoBo1}>Trở thành thợ chụp ảnh của POBO</Text>
+          <Text style={styles.textPoBo2}>
+            Thiết lập và bắt đầu kiếm tiền thật đơn giản.
+          </Text>
+        </View>
         <View style={styles.containerTextTitles}>
           <Text style={styles.textTitle}>Cài đặt</Text>
         </View>
@@ -253,7 +277,7 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: COLORS.orange50,
     padding: 1,
-    marginRight: 10
+    marginRight: 10,
   },
   textName: {
     fontSize: SIZES.large,
@@ -270,15 +294,14 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     marginLeft: 15,
   },
-  containerPoBo:{
-    
+  containerPoBo: {
     justifyContent: "space-around",
     borderWidth: 1,
     borderColor: COLORS.boder40,
     borderRadius: 10,
     width: 380,
     paddingVertical: 40,
-    backgroundColor: COLORS.orange50 
+    backgroundColor: COLORS.orange50,
   },
   containerColumn: {
     flexDirection: "column",

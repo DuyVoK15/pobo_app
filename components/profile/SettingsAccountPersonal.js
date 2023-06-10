@@ -31,7 +31,7 @@ const SettingsAccountPersonal = ({ navigation }) => {
   // BẮT ĐẦU khai báo biến Image
   const imageIcon = require("../../assets/logo/logo.png");
   const imageVoDien =
-  `${BASE_URL}/api/image/48A71B21-5855-47F5-B1EA-F27855314F76-1686222292698.png`;
+    "https://toigingiuvedep.vn/wp-content/uploads/2022/04/hinh-avatar-anh-vo-dien-cute.jpg";
   // KẾT THÚC khai báo biến Image
 
   // BẮT ĐẦU xử lí useEffect
@@ -76,8 +76,8 @@ const SettingsAccountPersonal = ({ navigation }) => {
       avatar,
       userToken.accessToken
     );
-    console.log("date: " + typeof date)
-    console.log("formatDate: " + formatDateToAPI("2022/12/12"))
+    console.log("date: " + typeof date);
+    console.log("formatDate: " + formatDateToAPI("2022/12/12"));
   }; // KẾT THÚC xử lí handle update profile
 
   // BẮT ĐẦU xử lí hình ảnh Upload
@@ -117,19 +117,15 @@ const SettingsAccountPersonal = ({ navigation }) => {
       formData.append("files", {
         uri,
         type,
-        name,       
+        name,
       });
 
-      const res = await axios.post(
-        `http://${IPv4}:8448/api/image`,
-        formData,
-        {
-          headers: {
-            Accept: "*/*",
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const res = await axios.post(`http://${IPv4}:8448/api/image`, formData, {
+        headers: {
+          Accept: "*/*",
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       console.log("Upload successful:", res.data["0"]);
       setAvatar(res.data["0"].replace("localhost", `${IPv4}`));
@@ -141,7 +137,7 @@ const SettingsAccountPersonal = ({ navigation }) => {
   if (hasGalleryPermission === false) {
     return <Text>No access to Internal Storage</Text>;
   } // KẾT THÚC xử lí hình ảnh Upload
-  
+
   // BẮT ĐẦU khai báo biến state cho InputText
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

@@ -8,8 +8,8 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState({});
   const [userTokenRegister, setUserTokenRegister] = useState({});
-  const [bookingList, setBookingList] = useState([])
-  const [bookingListByStatus, setBookingListByStatus] = useState([])
+  const [bookingList, setBookingList] = useState([]);
+  const [bookingListByStatus, setBookingListByStatus] = useState([]);
   const [photographerList, setPhotographerList] = useState([]);
   const [bookingData, setBookingData] = useState([]);
   const [userInfo, setUserInfo] = useState({});
@@ -22,7 +22,6 @@ export const AuthProvider = ({ children }) => {
       const res = await axios.get(`http://${IPv4}:8448/api/v1/auth/info`, {
         headers: {
           Authorization: `Bearer ${userToken.accessToken}`,
-          
         },
       });
 
@@ -77,19 +76,26 @@ export const AuthProvider = ({ children }) => {
         // setIsLogin(true);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         setIsLoading(false);
         // setIsLogin(false);
       });
   };
 
   const logout = () => {
-    AsyncStorage.removeItem("userToken");
-    AsyncStorage.removeItem("userTokenRegister");
-    AsyncStorage.removeItem("userInfo");
-    setUserToken({});
-    setUserInfo({});
-    setUserTokenRegister({});
+    setIsLoading(true);
+    try {
+      AsyncStorage.removeItem("userToken");
+      AsyncStorage.removeItem("userTokenRegister");
+      AsyncStorage.removeItem("userInfo");
+      setUserToken({});
+      setUserInfo({});
+      setUserTokenRegister({});
+      setIsLoading(false)
+    } catch (error) {
+      setIsLoading(false)
+      console.error(error)
+    }
   };
 
   const updateProfile = async (
@@ -152,15 +158,17 @@ export const AuthProvider = ({ children }) => {
         `http://${IPv4}:8448/api/v1/user/booking`,
         config
       );
-      console.log("AccessToken: " + accessToken)
+      console.log("AccessToken: " + accessToken);
       console.log("List Booking: " + JSON.stringify(res.data.row));
-      
+
       const data = await Promise.all(
         res.data.row.map(async (booking) => {
-          const photographerData = await getPhotographerById(booking.photographerId);
+          const photographerData = await getPhotographerById(
+            booking.photographerId
+          );
           return {
             ...booking,
-            photographerData
+            photographerData,
           };
         })
       );
@@ -189,9 +197,9 @@ export const AuthProvider = ({ children }) => {
         `http://${IPv4}:8448/api/v1/user/booking`,
         config
       );
-      console.log("AccessToken: " + accessToken)
+      console.log("AccessToken: " + accessToken);
       console.log("List Booking By Status: " + JSON.stringify(res.data.row));
-      setBookingListByStatus(res.data.row)
+      setBookingListByStatus(res.data.row);
     } catch (error) {
       console.error(error);
     }
@@ -200,14 +208,14 @@ export const AuthProvider = ({ children }) => {
   const getPhotographerById = async (id) => {
     try {
       const res = await axios.get(
-        `http://${IPv4}:8448/api/v1/photographer/${id}`   
-      );      
+        `http://${IPv4}:8448/api/v1/photographer/${id}`
+      );
       console.log("Photographer: " + JSON.stringify(res.data));
-      return res.data
+      return res.data;
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const getAllPhotographer = async () => {
     const params = {
@@ -219,16 +227,15 @@ export const AuthProvider = ({ children }) => {
       order: "[]",
     };
     try {
-      const res = await axios.get(
-        `http://${IPv4}:8448/api/v1/photographer`,
-        { params }
-      );
+      const res = await axios.get(`http://${IPv4}:8448/api/v1/photographer`, {
+        params,
+      });
       console.log("Whats: " + res.data);
       setPhotographerList(res.data.row);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <AuthContext.Provider
