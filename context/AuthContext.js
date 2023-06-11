@@ -9,9 +9,12 @@ export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState({});
   const [userTokenRegister, setUserTokenRegister] = useState({});
   const [bookingList, setBookingList] = useState([]);
+  const [countAllBooking, setCountAllBooking] = useState('')
   const [bookingListByStatus, setBookingListByStatus] = useState([]);
   const [photographerList, setPhotographerList] = useState([]);
   const [bookingData, setBookingData] = useState([]);
+  const [bookingAfterCreating, setBookingAfterCreating] = useState([])
+  const [bookingSuccess, setBookingSuccess] = useState(false)
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
@@ -142,7 +145,7 @@ export const AuthProvider = ({ children }) => {
   const getListBooking = async (accessToken) => {
     const config = {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${userToken.accessToken}`,
       },
       params: {
         hl: "en",
@@ -172,7 +175,10 @@ export const AuthProvider = ({ children }) => {
           };
         })
       );
+      setBookingList(res.data.row)
       setBookingData(data);
+      setCountAllBooking(res.data.count)
+      console.log("[COUNT] " + res.data.count)
     } catch (error) {
       console.error(error);
     }
@@ -237,6 +243,32 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const createBookingById = async (startTime, endTime, address, photographerId) => {
+    setIsLoading(true);
+    try {
+      const res = await axios.post(`http://${IPv4}:8448/api/v1/booking`,
+      {
+        startTime,
+        endTime,
+        address,
+        photographerId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${userToken.accessToken}`,
+        },
+      });
+
+      console.log("Tạo lịch thành công: \n" + JSON.stringify(res.data));
+      setIsLoading(false);
+      setBookingAfterCreating(res.data)
+      setBookingSuccess(true)
+    } catch (error) {
+      console.error(error);
+      console.log("Tạo lịch thất bại!");
+      setIsLoading(false);
+      setBookingSuccess(false)
+    }
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -248,6 +280,9 @@ export const AuthProvider = ({ children }) => {
         photographerList,
         bookingListByStatus,
         bookingData,
+        countAllBooking,
+        bookingAfterCreating,
+        bookingSuccess,
         register,
         login,
         logout,
@@ -257,6 +292,7 @@ export const AuthProvider = ({ children }) => {
         getListBookingByStatus,
         getAllPhotographer,
         getPhotographerById,
+        createBookingById,
         isLogin,
       }}
     >

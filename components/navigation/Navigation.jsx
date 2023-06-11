@@ -14,6 +14,7 @@ import SigninModal from "../signing/SigninModal";
 import FirstOnboarding from "../onboarding/FirstOnboarding";
 import Booking from "../home/category/booking";
 import PhotographerProfile from "../booking/create/PhotographerProfile";
+import BookingCreate from "../booking/create/BookingCreate";
 
 
 const IntroStack = createStackNavigator();
@@ -88,6 +89,11 @@ const HomeStackScreen = () => {
         options={{ headerShown: false }}
         name="PhotographerProfile"
         component={PhotographerProfile}
+      />
+      <HomeStack.Screen
+        options={{ headerShown: false }}
+        name="BookingCreate"
+        component={BookingCreate}
       />
     </HomeStack.Navigator>
   );

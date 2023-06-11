@@ -19,7 +19,9 @@ const BookingManagement = () => {
     )
   }
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={() => ({
+      tabBarStyle: { backgroundColor: "white" }
+    })}>
       <Stack.Screen name="BookingManagement" options={{headerLeft: false, headerTitle: headerTitle}}>
         {() => (
           <Tab.Navigator

@@ -1,8 +1,18 @@
-import { Image, RefreshControl, ScrollView, StyleSheet, Text, View, TouchableOpacity, Animated } from "react-native";
+import {
+  Image,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Animated,
+} from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import BookingEmptyScreen from "../BookingEmptyScreen";
 import { AuthContext } from "../../../context/AuthContext";
 import { COLORS, SIZES } from "../../constants";
+import { formatDateToVN } from "../../../utils/FormatDate";
 
 const AllProcess = () => {
   const {
@@ -11,6 +21,7 @@ const AllProcess = () => {
     bookingList,
     getPhotographerById,
     bookingData,
+    countAllBooking,
   } = useContext(AuthContext);
   // const [bookingData, setBookingData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -41,35 +52,53 @@ const AllProcess = () => {
 
   return (
     <Animated.ScrollView
-    
       showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
       <View style={styles.container}>
-        <Text style={styles.textHeader}>Hiện có tất cả 0 lịch hẹn </Text>
-        {bookingData.map((booking, index) => (
-          <View key={index} style={styles.containerRow}>
-            <View style={{ flex: 1 }}>
-              <Image
-                source={{ uri: booking.photographerData.avatarUrl }}
-                style={styles.avatar}
-              />
-            </View>
-            <View style={{ flex: 1.8 }}>
-              <Text style={styles.title}>{booking.photographerData.name}</Text>
-              <Text style={styles.title2}>Nghiệp dư</Text>
-            </View>
-            <View style={{ flex: 1.4 }}>
-              <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>{booking.bookingStatus}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))}
+        <Text style={styles.textHeader}>
+          Hiện có tất cả {countAllBooking} lịch hẹn{" "}
+        </Text>
+        {countAllBooking!==0 ? (
+          <>
+            {bookingData.map((booking, index) => (
+              <View key={index} style={styles.containerRow}>
+                <View style={{ flex: 1 }}>
+                  <Image
+                    source={{ uri: booking.photographerData.avatarUrl }}
+                    style={styles.avatar}
+                  />
+                </View>
+                <View style={{ flex: 1.8 }}>
+                  <Text style={styles.title}>
+                    {booking.photographerData.name}
+                  </Text>
+                  <Text style={styles.title2}>{formatDateToVN(booking.startTime)}</Text>
+                </View>
+                <View style={{ flex: 1.4 }}>
+                  <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>
+                      {booking.bookingStatus === "PENDING"
+                        ? "Chờ"
+                        : booking.bookingStatus === "CANCEL"
+                        ? "Hủy"
+                        : booking.bookingStatus === "DONE"
+                        ? "Xong"
+                        : booking.bookingStatus === "ACCEPT"
+                        ? "Hẹn"
+                        : ""}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+          </>
+        ) : (
+          <BookingEmptyScreen />
+        )}
       </View>
-      
     </Animated.ScrollView>
   );
 };
