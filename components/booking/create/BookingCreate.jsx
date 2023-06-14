@@ -51,9 +51,8 @@ const BookingCreate = ({ navigation, route }) => {
   }
 
   return (
-   
     <View style={styles.container}>
-       <Spinner visible={isLoading} />
+      <Spinner visible={isLoading} />
       <View style={styles.header}>
         <View style={styles.wrapText}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -84,35 +83,43 @@ const BookingCreate = ({ navigation, route }) => {
             <Text style={styles.price}>VND 1.000.000</Text>
           </View>
         </View>
-        <View style={styles.wrapbill}>
-          <Text style={styles.textBill}>Đơn hẹn của bạn</Text>
+        <View style={styles.wrapSection}>
+          <Text style={styles.text}>Đơn hẹn của bạn</Text>
 
           <View style={styles.card}>
             <View style={styles.wrapcard}>
               <View style={styles.section}>
-                <Ionicons name="camera" size={24} color={COLORS.boder50} />
-                <View style={styles.sectionText}>
-                  {/* <Text style={styles.sectionTitle}>Section 1</Text> */}
-                  <Text style={styles.sectionTitle}>Vị trí chụp</Text>
-                  <TextInput
-                    style={styles.sectionContent}
-                    placeholder="Nhập vị trí chụp"
-                    value={location}
-                    onChangeText={(text) => setLocation(text)}
-                  />
+                <View style={styles.wrapLocation}>
+                  <Ionicons name="camera" size={24} color={COLORS.boder50} />
+                  <View style={styles.sectionText}>
+                    {/* <Text style={styles.sectionTitle}>Section 1</Text> */}
+                    <Text style={styles.sectionTitle}>Vị trí chụp</Text>
+                    <TextInput
+                      style={styles.sectionContent}
+                      placeholder="Nhập vị trí chụp"
+                      value={location}
+                      onChangeText={(text) => setLocation(text)}
+                    />
+                  </View>
                 </View>
               </View>
               <View style={styles.underline} />
 
               <TouchableOpacity onPress={handleOnPress}>
                 <View style={styles.section}>
-                  <Ionicons name="calendar" size={24} color={COLORS.boder50} />
-                  <View style={styles.sectionText}>
-                    {/* <Text style={styles.sectionTitle}>Section 2</Text> */}
-                    <Text style={styles.sectionTitle}>Ngày và giờ chụp</Text>
-                    <Text style={styles.sectionContent}>
-                      {date} {time}
-                    </Text>
+                  <View style={styles.wrapDate_icon}>
+                    <Ionicons
+                      name="calendar"
+                      size={24}
+                      color={COLORS.boder50}
+                    />
+                    <View style={styles.sectionText}>
+                      {/* <Text style={styles.sectionTitle}>Section 2</Text> */}
+                      <Text style={styles.sectionTitle}>Ngày và giờ chụp</Text>
+                      <Text style={styles.sectionContent}>
+                        {date} {time}
+                      </Text>
+                    </View>
                   </View>
                 </View>
                 <Modal animationType="slide" transparent={true} visible={open}>
@@ -164,7 +171,7 @@ const BookingCreate = ({ navigation, route }) => {
                 </View>
               </View> */}
 
-              {/* <View style={styles.underline} />
+              <View style={styles.underline} />
 
               <View style={styles.section}>
                 <View style={styles.listitem}>
@@ -186,16 +193,114 @@ const BookingCreate = ({ navigation, route }) => {
                     <Text style={styles.sectionContent}>Chụp tốt nghiệp</Text>
                   </View>
                 </View>
-              </View> */}
+              </View>
+            </View>
+          </View>
+          <TouchableOpacity>
+            <View style={styles.discountCard}>
+              <View style={styles.wrapDiscount}>
+              <Image source={require('../../../assets/icons/sale.png')} size={20} />
+                <Text>Áp dụng mã giảm giá</Text>
+              </View>
+              <View style={styles.iconchevron}>
+                <Ionicons
+                  name="chevron-forward"
+                  size={24}
+                  style={styles.icon_insize_Discount}
+                />
+              </View>
+            </View>
+          </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => handleCreateBooking()}
-                style={ButtonStyle.buttonSignup}
-              >
-                <Text style={ButtonStyle.buttonSignupText}>Xác nhận đặt lịch</Text>
+          <Text style={styles.text}>Chi Tiết giá</Text>
+
+          <View style={styles.card}>
+            <View style={styles.wrapcard}>
+              <View style={styles.SectionDetailPrice}>
+                <View style={styles.wrapPackage}>
+                  <Text style={styles.sectionTitle}>Gói chụp hình</Text>
+                  <Text style={styles.sectionTitle}>1.000.000 VND</Text>
+                </View>
+                <Text style={styles.sectionContent}>Gói chụp tốt nghiệp </Text>
+              </View>
+              <View style={styles.underline} />
+
+              <View style={styles.SectionDetailPrice}>
+                <View style={styles.wrapPackage}>
+                  <Text style={styles.sectionTitle}>Thuế</Text>
+                  <Text style={styles.sectionTitle}>100.000 VND</Text>
+                </View>
+              </View>
+              <View style={styles.underline} />
+
+              <View style={styles.SectionDetailPrice}>
+                <View style={styles.wrapPackage}>
+                  <Text style={styles.textSale}>Khuyến mãi</Text>
+                  <Text style={styles.textSale}>100.000 VND</Text>
+                </View>
+              </View>
+              <View style={styles.underline} />
+
+              <View style={styles.SectionDetailPrice}>
+                <View style={styles.wrapPackage}>
+                  <Text style={styles.sectionTitle}>Tổng</Text>
+                  <Text style={styles.sectionTitle}>1.000.000 VND</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+
+          <Text style={styles.text}>Thanh toán bằng</Text>
+          <View style={styles.card}>
+            <View style={styles.wrapcard}>
+            <TouchableOpacity>
+              <View style={styles.SectionPaymentBy}>
+                <View style={styles.wrapPayment}>
+                  <Ionicons name="card-outline" size={20}/>
+                  <Text style={styles.sectionTitle}>Thẻ tín dụng và ghi nợ</Text>
+                </View>
+              </View>
+              </TouchableOpacity>
+              <View style={styles.underline} />
+              
+              <TouchableOpacity>
+              <View style={styles.SectionPaymentBy}>
+                <View style={styles.wrapPayment}>
+                <Image source={require('../../../assets/icons/momo.png')} size={20} />
+                <Text>Momo</Text>
+                </View>
+              </View>
+              </TouchableOpacity>
+              <View style={styles.underline} />
+              
+              <TouchableOpacity>
+              <View style={styles.SectionPaymentBy}>
+                <View style={styles.wrapPayment}>
+                <Ionicons name="wallet-outline" size={20}/>
+                  <Text style={styles.sectionTitle}>Tiền mặt</Text>
+                </View>
+                
+              </View>
               </TouchableOpacity>
             </View>
           </View>
+          <Text style={styles.text}>Chính sách hủy</Text>
+          <View style={styles.card}>
+            <View style={styles.wrapcard}>
+              <View style={styles.wrapTextCacel}>
+                <Text style={styles.textcancel}>Bạn được hoàn tiền một phần nếu hủy trong vòng 24 giờ sau khi đặt. Sau 24 giờ, bạn sẽ không được hoàn tiền cho đơn đặt lịch chụp hình này.</Text>
+                <Text style={styles.underlinedText}> Tìm hiểu thêm</Text>
+              </View>
+              </View>
+              </View>
+
+          <TouchableOpacity
+            onPress={() => handleCreateBooking()}
+            style={ButtonStyle.buttonSignup}
+          >
+            <Text style={ButtonStyle.buttonSignupText}>Xác nhận đặt lịch</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>
@@ -207,6 +312,7 @@ export default BookingCreate;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:'#F5F5FA'
   },
   header: {
     paddingTop: 30,
@@ -309,7 +415,7 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
     marginBottom: 8,
   },
-  textBill: {
+  text: {
     // fontFamily: 'SVN-Gilroy',
     fontStyle: "normal",
     fontWeight: "700",
@@ -317,7 +423,7 @@ const styles = StyleSheet.create({
     lineHeight: 15,
     color: "#000000",
   },
-  wrapbill: {
+  wrapSection: {
     display: "flex",
     flexDirection: "column",
     gap: 16,
@@ -325,9 +431,11 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: "#FFFFFF",
+    borderColor: "#F5F5F5",
+
     borderRadius: 8,
-    paddingRight: 23,
-    paddingLeft: 13,
+    // paddingRight: 23,
+    // paddingLeft: 13,
     display: "flex",
     flexDirection: "column",
     gap: 0,
@@ -344,19 +452,34 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 16,
+    justifyContent:'space-between',
+    paddingHorizontal:12
   },
   listitem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingRight: 25,
+    gap:8
   },
   sectionText: {
-    marginLeft: 8,
+    display:'flex',
+    flexDirection:'column'
+  },
+  wrapDate_icon:{
+    display:'flex',
+    flexDirection:'row',
+    gap:8
+  },
+  wrapLocation:{
+    display:'flex',
+    flexDirection:'row',
+    overflow:'hidden',
+    paddingRight:100,
+    gap:8
   },
   sectionTitle: {
     // fontFamily: 'SVN-Gilroy',
     fontStyle: "normal",
-    fontWeight: "400",
+    fontWeight: 400,
     fontSize: 14,
     lineHeight: 21,
   },
@@ -366,12 +489,98 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 14,
     lineHeight: 21,
+    // width:250,
+    overflow:'hidden'
   },
   underline: {
     borderWidth: 1,
     borderColor: "#EBEBF0",
     borderStyle: "solid",
     marginBottom: 16,
+    
+    // paddingHorizontal: 25
+  },
+  discountCard:{
+    display:'flex',
+    flexDirection:'row',
+    paddingHorizontal: 20,
+    paddingTop:18,
+    paddingBottom:16,
+    backgroundColor:'#FFFFFF',
+    justifyContent: 'space-between',    
+    
+  },
+  wrapDiscount:{
+    display:'flex',
+    flexDirection:'row',
+    alignItems:'flex-start',
+    gap:8,
+    
+  },
+  iconchevron:{
+    display:'flex',
+    alignItems:'flex-end'
+  },
+  icon_insize_Discount:{
+    // display:'flex',
+    // alignItems:'flex-end'
+    // alignItems: 'flex-end'
+  },
+  SectionDetailPrice:{
+    display:'flex',
+    flexDirection:'column',
+    gap:8,
+    // alignItems:'center',
+    justifyContent:'center',
+    paddingBottom: 15,
+    paddingHorizontal:12
+
+  },
+  wrapPackage:{
+    display:'flex',
+    flexDirection:'row',
+    justifyContent:'space-between'
+    
+  },
+  textSale:{
+    fontStyle: "normal",
+    fontWeight: 400,
+    fontSize: 14,
+    lineHeight: 21,
+    color:COLORS.orange50
+  },
+  SectionPaymentBy:{
+    display:'flex',
+    flexDirection:'column',
+    gap:8,
+    // alignItems:'center',
+    justifyContent:'center',
+    paddingBottom: 15,
+    paddingHorizontal:12
+
+  },
+  wrapPayment:{
+    display:'flex',
+    flexDirection:'row',
+    gap:15
+  },
+  wrapTextCacel:{
+    paddingLeft:14,
+    paddingRight:13
+
+  },
+  textcancel:{
+    fontStyle: 'normal',
+    fontWeight: '400',
+    fontSize: 14,
+    lineHeight: 21,
+  },
+  underlinedText: {
+    textDecorationLine: 'underline',
+    fontStyle: 'normal',
+    fontWeight: '400',
+    fontSize: 14,
+    lineHeight: 21,
   },
   centeredView: {
     flex: 1,
