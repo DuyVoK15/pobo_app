@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     width: 14,
     height: 20,
     flex: 0,
-    order: 0,
+    // order: 0,
     // flexGrow:0
   },
   star: {
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     flexGrow: 0,
     flexShrink: 0,
     flexBasis: 'auto',
-    order: 1
+    // order: 1
   },
   title: {
     // fontSize: 18,
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     lineHeight: 13,
     color: '#C1C1C1',
     flex: 0,
-    order: 1,
+    // order: 1,
     flexGrow: 0,
   },
   modal: {

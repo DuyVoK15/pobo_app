@@ -24,6 +24,7 @@ import { formatDateToAPI, formatDateToYYYYMMDD } from "../../utils/FormatDate";
 import { AuthContext } from "../../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
 import { BASE_URL, IPv4 } from "../../utils/config";
+import { SHADOWS, SIZES } from "../constants";
 // import RNPickerSelect from "react-native-picker-select";
 // import { Dropdown } from "react-native-paper";
 // import RadioButtonsGroup from "react-native-radio-buttons-group";
@@ -178,121 +179,117 @@ const SettingsAccountPersonal = ({ navigation }) => {
 
   // ----------------------------------------------RETURN-----------------------------------------------------
   return (
-    <View style={styles.container}>
-      <Spinner visible={isLoading} />
-      {/* Avatar */}
-      <View style={styles.imageStyle}>
-        <Image
-          source={{ uri: avatar ? avatar : imageVoDien }}
-          style={styles.avatar}
-        />
-      </View>
-      <TouchableOpacity onPress={() => pickImage()}>
-        <Text>Choose photo</Text>
-      </TouchableOpacity>
-
-      <View style={styles.containerInputText}>
-        <Text style={InputTextStyle.titleText}>Tên</Text>
-        <TextInput
-          style={[
-            InputTextStyle.inputText,
-            { backgroundColor: "white", borderColor: "#FE5D26" },
-          ]}
-          placeholder="Nhập tên"
-          value={name}
-          onChangeText={(text) => setName(text)}
-        />
-
-        <Text style={InputTextStyle.titleText}>Số điện thoại</Text>
-        <TextInput
-          style={[
-            InputTextStyle.inputText,
-            { backgroundColor: "white", borderColor: "#FE5D26" },
-          ]}
-          placeholder="Nhập số điện thoại"
-          value={phone}
-          onChangeText={(text) => setPhone(text)}
-        />
-        <Text style={InputTextStyle.titleText}>Email</Text>
-        <TextInput
-          style={[
-            InputTextStyle.inputText,
-            { backgroundColor: "white", borderColor: "#FE5D26" },
-          ]}
-          placeholder="Nhập Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-        />
-        {/* Form giới tính */}
-        <Text style={InputTextStyle.titleText}>Giới tính</Text>
-        <View style={styles.genderContainer}>
-          <Controller
-            name="gender"
-            defaultValue=""
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <View style={styles.dropdownGender}>
-                <DropDownPicker
-                  style={styles.dropdown}
-                  dropDownContainerStyle={{ borderColor: "#FE5D26" }}
-                  textStyle={{ marginLeft: 10, fontSize: 16 }}
-                  open={genderOpen}
-                  value={genderValue} //genderValue
-                  items={gender}
-                  setOpen={setGenderOpen}
-                  setValue={setGenderValue}
-                  setItems={setGender}
-                  placeholder="Chọn giới tính"
-                  placeholderStyle={styles.placeholderStyles}
-                  // onOpen={onGenderOpen}
-                  onChangeValue={onChange}
-                  zIndex={8888}
-                  zIndexInverse={9999}
-                />
-              </View>
-            )}
+    
+      <View style={styles.container}>
+        <Spinner visible={isLoading} />
+        {/* Avatar */}
+        <TouchableOpacity onPress={() => pickImage()}>
+          <View style={styles.imageStyle}>
+            <Image
+              source={{ uri: avatar ? avatar : imageVoDien }}
+              style={styles.avatar}
+            />
+          </View>
+        </TouchableOpacity>
+        <Text style={styles.avatarName}>Võ Thanh Duy</Text>
+        <View style={styles.containerInputText}>
+          <Text style={InputTextStyle.titleText}>Tên</Text>
+          <TextInput
+            style={[InputTextStyle.inputText, { backgroundColor: "white" }]}
+            placeholder="Nhập tên"
+            value={name}
+            onChangeText={(text) => setName(text)}
           />
-        </View>
-        {/* Form ngày sinh */}
-        <Text style={InputTextStyle.titleText}>Ngày sinh</Text>
-        <View style={styles.dateContainer}>
-          <TouchableOpacity
-            style={styles.dateTouchable}
-            onPress={handleOnPress}
-          >
-            <Text style={styles.dateText}>
-              {date ? date : "Chọn ngày sinh"}
-            </Text>
-          </TouchableOpacity>
 
-          <Modal visible={open} transparent={true} animationType="slide">
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <DatePicker
-                  mode="calendar"
-                  // minimumDate={startDate}
-                  selected={date}
-                  onDateChange={handleChange}
-                />
+          <Text style={InputTextStyle.titleText}>Số điện thoại</Text>
+          <TextInput
+            style={[InputTextStyle.inputText, { backgroundColor: "white" }]}
+            placeholder="Nhập số điện thoại"
+            value={phone}
+            onChangeText={(text) => setPhone(text)}
+          />
+          <Text style={InputTextStyle.titleText}>Email</Text>
+          <TextInput
+            style={[InputTextStyle.inputText, { backgroundColor: "white" }]}
+            placeholder="Nhập Email"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+          />
+          {/* Form giới tính */}
+          <Text style={InputTextStyle.titleText}>Giới tính</Text>
+          <View style={styles.genderContainer}>
+            <Controller
+              name="gender"
+              defaultValue=""
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <View style={styles.dropdownGender}>
+                  <DropDownPicker
+                    style={styles.dropdown}
+                    dropDownContainerStyle={{
+                      borderWidth: 0,
+                      ...SHADOWS.medium,
+                      elevation: 2,
+                    }}
+                    textStyle={{ marginLeft: 10, fontSize: 16 }}
+                    open={genderOpen}
+                    value={genderValue} //genderValue
+                    items={gender}
+                    setOpen={setGenderOpen}
+                    setValue={setGenderValue}
+                    setItems={setGender}
+                    placeholder="Chọn giới tính"
+                    placeholderStyle={styles.placeholderStyles}
+                    // onOpen={onGenderOpen}
+                    onChangeValue={onChange}
+                    zIndex={8888}
+                    zIndexInverse={9999}
+                  />
+                </View>
+              )}
+            />
+          </View>
+          {/* Form ngày sinh */}
+          <Text style={InputTextStyle.titleText}>Ngày sinh</Text>
+          <View style={styles.dateContainer}>
+            <TouchableOpacity
+              style={styles.dateTouchable}
+              onPress={handleOnPress}
+            >
+              <Text style={styles.dateText}>
+                {date ? date : "Chọn ngày sinh"}
+              </Text>
+            </TouchableOpacity>
 
-                <TouchableOpacity onPress={handleOnPress}>
-                  <Text>Xác nhận</Text>
-                </TouchableOpacity>
+            <Modal visible={open} transparent={true} animationType="slide">
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <DatePicker
+                    mode="calendar"
+                    // minimumDate={startDate}
+                    selected={date}
+                    onDateChange={handleChange}
+                  />
+
+                  <TouchableOpacity onPress={handleOnPress}>
+                    <Text>Xác nhận</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          </Modal>
-        </View>
+            </Modal>
+          </View>
 
-        <View style={ButtonStyle.buttonContainer}>
-          <TouchableOpacity
-            style={ButtonStyle.buttonSignup}
-            onPress={handleUpdateProfile}
-          >
-            <Text style={ButtonStyle.buttonSignupText}>Lưu</Text>
-          </TouchableOpacity>
+          <View style={[ButtonStyle.buttonContainer, {marginBottom: 20}]}>
+            <TouchableOpacity
+              style={ButtonStyle.buttonSignup}
+              onPress={handleUpdateProfile}
+            >
+              <Text style={ButtonStyle.buttonSignupText}>Lưu</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+   
   );
 };
 
@@ -328,34 +325,38 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   avatar: {
-    width: 120,
-    height: 120,
+    width: 80,
+    height: 80,
     borderRadius: 100,
+  },
+  avatarName: {
+    marginTop: 10,
+    fontSize: SIZES.medium,
+    fontWeight: "bold",
   },
   genderContainer: {
     zIndex: 9999,
-    borderColor: "#CBD4E1",
     marginBottom: 10,
   },
   placeholderStyles: {
     marginLeft: 10,
-    borderColor: "#CBD4E1",
   },
   dropdownGender: {
     // marginBottom: 15,
   },
   dropdown: {
-    borderColor: "#FE5D26",
-    paddingVertical: 21,
+    borderWidth: 0,
+    paddingVertical: 20,
     borderRadius: 10,
     backgroundColor: "white",
+    ...SHADOWS.beauty,
+    elevation: 2,
   },
   dateContainer: {
-    borderColor: "#FE5D26",
-    borderWidth: 1,
     borderRadius: 10,
     justifyContent: "center",
-    // marginBottom: 10,
+    // ...SHADOWS.beauty,
+    // elevation: 2,
   },
   dateTouchable: {
     paddingVertical: 21,
@@ -364,6 +365,8 @@ const styles = StyleSheet.create({
     borderColor: "#CBD4E1",
     borderRadius: 10,
     backgroundColor: "white",
+    ...SHADOWS.beauty,
+    elevation: 2,
   },
   dateText: {
     justifyContent: "center",

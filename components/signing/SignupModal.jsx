@@ -9,62 +9,27 @@ import {
   Button,
   TouchableOpacity,
   TextInput,
+  KeyboardAvoidingView,
+  Keyboard,
+  TouchableWithoutFeedback,
+  StatusBar,
 } from "react-native";
 import Modal from "react-native-modal";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay/lib";
+import { COLORS } from "../constants";
 const GoogleLogo = require("../../assets/google.png");
 
-const SignupModal = ({ navigation }) => {
-  
-  // const navigation = useNavigation();
-
-  // const handleRegistration = () => {
-  //   try {
-  //     const userData = {
-  //       name: name,
-  //       username: username,
-  //       email: email,
-  //       password: password,
-  //     };
-  //     console.log(userData);
-  //     if(userData.name != "" && userData.username != "" && userData.email != "" && userData.password != ""){
-  //       setErrorMessage("")
-  //       axios
-  //       .post(
-  //         "http://192.168.2.2:8448/api/v1/auth/register",
-  //         userData
-  //       )
-  //       .then((response) => {
-  //         if(response.data){
-  //           console.log("Đăng ký thành công! " + response.data.accessToken);
-  //           handleNavigation()
-  //         } else {
-  //           console.log("Đăng ký thất bại");
-  //           setErrorMessage("Tài khoản đã tồn tại!")
-  //         }
-
-  //       }).catch(
-  //         setErrorMessage("Tài khoản đã tồn tại!")
-  //       ); // Thay thế 'URL_API' bằng URL API Swagger hoặc API khác
-  //     } else {
-  //       setErrorMessage("Vui lòng nhập đầy đủ thông tin!")
-  //     }
-
-  //     // Chuyển hướng đến trang thành công hoặc thực hiện các tác vụ khác
-  //   } catch (error) {
-  //     console.error(error); // Xử lý lỗi
-  //   }
-  // };
+const SignupModal = ({ navigation, onClose }) => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
-  
+
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
@@ -78,8 +43,14 @@ const SignupModal = ({ navigation }) => {
     }
   };
 
+  const handlePressOutside = () => {
+    Keyboard.dismiss();
+    // onClose();
+  };
+
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor={COLORS.orange50} />
       <TouchableOpacity style={styles.buttonSignup} onPress={toggleModal}>
         <Text style={styles.buttonSignupText}>Đăng ký tài khoản</Text>
       </TouchableOpacity>
@@ -89,85 +60,93 @@ const SignupModal = ({ navigation }) => {
         swipeDirection={["down"]}
         style={styles.modal}
       >
-        <View style={styles.modalContent}>
-          <Spinner visible={isLoading} />
-          <View>
-            <View style={styles.underlineTop}></View>
-
-            <View style={styles.signContainer}>
-              <View style={styles.modalTextContainer}>
-                <Text style={styles.modalText1}>Đăng ký</Text>
-                {/* <Text style={styles.modalText2}>Đăng nhập</Text> */}
-              </View>
-              <View style={styles.underlineContainer}>
-                <Text style={styles.underline1}></Text>
-                {/* <Text style={styles.underline2}></Text> */}
-              </View>
-            </View>
-
-            <View>
-              <Text style={styles.titleText}>Tên đầy đủ</Text>
-              <TextInput
-                style={styles.containerInputText}
-                placeholder="Nhập tên đầy đủ"
-                value={name}
-                onChangeText={(text) => setName(text)}
-              />
-              <Text style={styles.titleText}>Tên đăng nhập</Text>
-              <TextInput
-                style={styles.containerInputText}
-                placeholder="Nhập tên đăng nhập"
-                value={username}
-                onChangeText={(text) => setUsername(text)}
-              />
-              <Text style={styles.titleText}>Email</Text>
-              <TextInput
-                style={styles.containerInputText}
-                placeholder="Nhập email"
-                value={email}
-                onChangeText={(text) => setEmail(text)}
-              />
-              <Text style={styles.titleText}>Mật khẩu</Text>
-              <TextInput
-                style={styles.containerInputText}
-                placeholder="Nhập mật khẩu"
-                value={password}
-                secureTextEntry
-                onChangeText={(text) => setPassword(text)}
-              />
-            </View>
-
-            <Text style={styles.errorMessageText}>{errorMessage}</Text>
-
-            <View style={styles.listButtonContainer}>
+        <TouchableWithoutFeedback onPress={handlePressOutside}>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : null}
+            enabled
+          >
+            <View style={styles.modalContent}>
+              <Spinner visible={isLoading} />
               <View>
-                <TouchableOpacity
-                  style={styles.buttonSignup}
-                  onPress={handleRegister}
-                >
-                  <Text style={styles.buttonSignupText}>Đăng ký</Text>
-                </TouchableOpacity>
-              </View>
+                <View style={styles.underlineTop}></View>
 
-              <Text style={styles.underline}></Text>
+                <View style={styles.signContainer}>
+                  <View style={styles.modalTextContainer}>
+                    <Text style={styles.modalText1}>Đăng ký</Text>
+                    {/* <Text style={styles.modalText2}>Đăng nhập</Text> */}
+                  </View>
+                  <View style={styles.underlineContainer}>
+                    <Text style={styles.underline1}></Text>
+                    {/* <Text style={styles.underline2}></Text> */}
+                  </View>
+                </View>
 
-              <View>
-                <TouchableOpacity
-                  style={styles.buttonSignupGoogle}
-                  onPress={""}
-                >
-                  <Image
-                    style={{ width: 32, height: 32 }}
-                    source={GoogleLogo}
+                <View>
+                  <Text style={styles.titleText}>Tên đầy đủ</Text>
+                  <TextInput
+                    style={styles.containerInputText}
+                    placeholder="Nhập tên đầy đủ"
+                    value={name}
+                    onChangeText={(text) => setName(text)}
                   />
-                  <Text style={styles.buttonSignupGoogleText}>
-                    Đăng nhập với Google
-                  </Text>
-                </TouchableOpacity>
+                  <Text style={styles.titleText}>Tên đăng nhập</Text>
+                  <TextInput
+                    style={styles.containerInputText}
+                    placeholder="Nhập tên đăng nhập"
+                    value={username}
+                    onChangeText={(text) => setUsername(text)}
+                  />
+                  <Text style={styles.titleText}>Email</Text>
+                  <TextInput
+                    style={styles.containerInputText}
+                    placeholder="Nhập email"
+                    value={email}
+                    onChangeText={(text) => setEmail(text)}
+                  />
+                  <Text style={styles.titleText}>Mật khẩu</Text>
+                  <TextInput
+                    style={styles.containerInputText}
+                    placeholder="Nhập mật khẩu"
+                    value={password}
+                    secureTextEntry
+                    onChangeText={(text) => setPassword(text)}
+                  />
+                </View>
+
+                <Text style={styles.errorMessageText}>{errorMessage}</Text>
+
+                <View style={styles.listButtonContainer}>
+                  <View>
+                    <TouchableOpacity
+                      style={styles.buttonSignup}
+                      onPress={handleRegister}
+                    >
+                      <Text style={styles.buttonSignupText}>Đăng ký</Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  <Text style={styles.underline}></Text>
+
+                  <View>
+                    <TouchableOpacity
+                      style={styles.buttonSignupGoogle}
+                      onPress={""}
+                    >
+                      <Image
+                        style={{ width: 32, height: 32 }}
+                        source={GoogleLogo}
+                      />
+                      <Text style={styles.buttonSignupGoogleText}>
+                        Đăng nhập với Google
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
               </View>
             </View>
-          </View>
-        </View>
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );
@@ -187,9 +166,10 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   modalContent: {
+    flex: 1,
     backgroundColor: "#FFFFFF",
     padding: 20,
-    height: 750,
+    marginTop: 60,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },

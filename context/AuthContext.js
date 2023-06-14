@@ -4,6 +4,7 @@ import React, { createContext, useState } from "react";
 import { saveDataToStorage } from "./AsyncStorage";
 import { BASE_URL, IPv4 } from "../utils/config";
 export const AuthContext = createContext();
+import ApiService from './ApiService';
 
 export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState({});
@@ -142,6 +143,24 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
+  const sendOtp = async (username) => {
+    try {
+      const res = await ApiService.sendOtp(username)
+      console.log(res)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const verifyOtp = async (username, otp, newPassword) => {
+    try {
+      const res = await ApiService.verifyOtp(username, otp, newPassword)
+      console.log(res)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const getListBooking = async (accessToken) => {
     const config = {
       headers: {
@@ -269,6 +288,29 @@ export const AuthProvider = ({ children }) => {
       setBookingSuccess(false)
     }
   }
+
+  const getAllListPackageShooting = async () => {
+    try {
+      const res = await ApiService.getAllListPackageShooting();
+      console.log("Dữ liệu gói chụp tổng: \n" + JSON.stringify(res.data));
+      
+      const data = await Promise.all(
+        res.data.row.map(async (packageShooting) => {
+          const photographerData = await getPhotographerById(
+            packageShooting.photographerId
+          );
+          return {
+            ...packageShooting,
+            photographerData,
+          };
+        })
+      );
+
+      return data;
+    } catch (error) {
+      console.error(error)
+    }
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -293,6 +335,9 @@ export const AuthProvider = ({ children }) => {
         getAllPhotographer,
         getPhotographerById,
         createBookingById,
+        sendOtp,
+        verifyOtp,
+        getAllListPackageShooting,
         isLogin,
       }}
     >

@@ -9,7 +9,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import ButtonStyle from "../../styles/ButtonStyle";
 import { AuthContext } from "../../context/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { COLORS, SIZES } from "../constants";
+import { COLORS, SHADOWS, SIZES } from "../constants";
 import { Image } from "react-native";
 import { ScrollView } from "react-native";
 import { Icon } from "./IconProfile";
@@ -75,6 +75,9 @@ const UserProfile = ({ navigation }) => {
           <View style={styles.column2}>
             <TouchableOpacity onPress={handleNavigateToSetting}>
               <Text style={styles.textName}> {info.name?info.name:"Vui lòng đăng nhập"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => console.log("alo")}>
+              <Text style={styles.textName2}> Đăng kí POBO Premium  {">"}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -246,7 +249,7 @@ const UserProfile = ({ navigation }) => {
             style={ButtonStyle.buttonSignup}
             onPress={() => logout()}
           >
-            <Text style={ButtonStyle.buttonSignupText}>Đăng xuất</Text>
+            <Text style={[ButtonStyle.buttonSignupText, {color: "#FFF"}]}>Đăng xuất</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -282,6 +285,10 @@ const styles = StyleSheet.create({
   textName: {
     fontSize: SIZES.large,
     fontWeight: "bold",
+    marginBottom: 5
+  },
+  textName2: {
+    fontSize: SIZES.small
   },
   textPoBo1: {
     fontSize: SIZES.large,
@@ -302,12 +309,16 @@ const styles = StyleSheet.create({
     width: 380,
     paddingVertical: 40,
     backgroundColor: COLORS.orange50,
+    ...SHADOWS.beauty,
+    elevation: 2
   },
   containerColumn: {
     flexDirection: "column",
     backgroundColor: "#FFFFFF",
     paddingTop: 30,
     borderRadius: 10,
+    ...SHADOWS.beauty,
+    elevation: 2
   },
   containerRow: {
     flexDirection: "row",

@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { Image } from "expo-image";
-import "react-native-gesture-handler";
 import { Swipeable, TextInput } from "react-native-gesture-handler";
 import {
   StyleSheet,
@@ -12,6 +11,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
+  KeyboardAvoidingView,
 } from "react-native";
 
 import Modal from "react-native-modal";
@@ -19,45 +19,10 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
+import { StatusBar } from "react-native";
+import { COLORS } from "../constants";
 
 const SigninModal = ({ navigation }) => {
-  // const handleRegistration = () => {
-  //   try {
-  //     const userData = {
-  //       username: username,
-  //       password: password,
-  //     };
-  //     console.log(userData);
-  //     if (userData.username != "" && userData.password != "") {
-  //       setErrorMessage("");
-  //       axios
-  //         .post("http://192.168.1.5:8448/api/v1/auth/login", userData)
-  //         .then((response) => {
-  //           if (response.data) {
-  //             console.log("Đăng nhập thành công! " + response.data.accessToken); // Xử lý dữ liệu phản hồi từ APIa
-  //             setErrorMessage("");
-  //             handleNavigation();
-  //           }
-  //         })
-  //         .catch(
-  //           setErrorMessage("Tài khoản hoặc mật khẩu không đúng!"),
-  //           console.log("c")
-  //         ); // Thay thế 'URL_API' bằng URL API Swagger hoặc API khác
-  //     } else {
-  //       setErrorMessage("Vui lòng nhập thông tin tài khoản!");
-  //     }
-  //     // Chuyển hướng đến trang thành công hoặc thực hiện các tác vụ khác
-  //   } catch (error) {
-  //     console.error(error);
-  //     setErrorMessage("Đã xảy ra lỗi!"); // Xử lý lỗi
-  //   }
-  // };
-
-  // const navigation = useNavigation();
-  // const handleNavigation = () => {
-  //   navigation.navigate("HomeScreen");
-  //   toggleModal();
-  // };
   const handleNavigateToForgetPassword = () => {
     navigation.push("SendOTP");
     toggleModal();
@@ -84,8 +49,14 @@ const SigninModal = ({ navigation }) => {
     // navigation.push('HomeScreen');
   };
 
+  const handlePressOutside = () => {
+    Keyboard.dismiss();
+    // onClose();
+  };
+
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor={COLORS.orange50} />
       <TouchableOpacity style={styles.buttonSignin} onPress={toggleModal}>
         <Text style={styles.buttonSigninText}>Đăng nhập</Text>
       </TouchableOpacity>
@@ -95,83 +66,88 @@ const SigninModal = ({ navigation }) => {
         swipeDirection={["down"]}
         style={styles.modal}
       >
-        <View style={styles.modalContent}>
-          <Spinner visible={isLoading} />
-          <View>
-            <View style={styles.underlineTop}></View>
-
-            <View style={styles.signContainer}>
-              <View style={styles.modalTextContainer}>
-                <Text style={styles.modalText1}>Đăng nhập</Text>
-                {/* <Text style={styles.modalText2}>Đăng nhập</Text> */}
-              </View>
-              <View style={styles.underlineContainer}>
-                <Text style={styles.underline1}></Text>
-                {/* <Text style={styles.underline2}></Text> */}
-              </View>
-            </View>
-            <TouchableWithoutFeedback
-              onPress={Keyboard.dismiss}
-              accessible={false}
-            >
+        <TouchableWithoutFeedback onPress={handlePressOutside}>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : null}
+            enabled
+          >
+            <View style={styles.modalContent}>
+              <Spinner visible={isLoading} />
               <View>
-                <Text style={styles.titleText}>Tên đăng nhập</Text>
-                <TextInput
-                  style={styles.containerInputText}
-                  placeholder="Nhập tên đăng nhập"
-                  value={username}
-                  onChangeText={(text) => setUsername(text)}
-                />
-                <Text style={styles.titleText}>Mật khẩu</Text>
-                <TextInput
-                  style={styles.containerInputText}
-                  placeholder="Nhập mật khẩu"
-                  value={password}
-                  secureTextEntry
-                  onChangeText={(text) => setPassword(text)}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-            <View>
-              <TouchableOpacity
-                style={styles.buttonForget}
-                onPress={handleNavigateToForgetPassword}
-                activeOpacity={1}
-              >
-                <Text style={styles.titleForget}>Quên mật khẩu?</Text>
-              </TouchableOpacity>
-            </View>
+                <View style={styles.underlineTop}></View>
 
-            <Text style={styles.errorMessageText}>{errorMessage}</Text>
-            <View style={styles.listButtonContainer}>
-              <View>
-                <TouchableOpacity
-                  style={styles.buttonSignin}
-                  onPress={handleLogin}
-                >
-                  <Text style={styles.buttonSigninText}>Đăng nhập</Text>
-                </TouchableOpacity>
-              </View>
+                <View style={styles.signContainer}>
+                  <View style={styles.modalTextContainer}>
+                    <Text style={styles.modalText1}>Đăng nhập</Text>
+                    {/* <Text style={styles.modalText2}>Đăng nhập</Text> */}
+                  </View>
+                  <View style={styles.underlineContainer}>
+                    <Text style={styles.underline1}></Text>
+                    {/* <Text style={styles.underline2}></Text> */}
+                  </View>
+                </View>
 
-              <Text style={styles.underline}></Text>
-
-              <View>
-                <TouchableOpacity
-                  style={styles.buttonSigninGoogle}
-                  onPress={() => navigation.push("UserProfile")}
-                >
-                  <Image
-                    style={{ width: 32, height: 32 }}
-                    source={GoogleLogo}
+                <View>
+                  <Text style={styles.titleText}>Tên đăng nhập</Text>
+                  <TextInput
+                    style={styles.containerInputText}
+                    placeholder="Nhập tên đăng nhập"
+                    value={username}
+                    onChangeText={(text) => setUsername(text)}
                   />
-                  <Text style={styles.buttonSigninGoogleText}>
-                    Đăng nhập với Google
-                  </Text>
-                </TouchableOpacity>
+                  <Text style={styles.titleText}>Mật khẩu</Text>
+                  <TextInput
+                    style={styles.containerInputText}
+                    placeholder="Nhập mật khẩu"
+                    value={password}
+                    secureTextEntry
+                    onChangeText={(text) => setPassword(text)}
+                  />
+                </View>
+
+                <View>
+                  <TouchableOpacity
+                    style={styles.buttonForget}
+                    onPress={handleNavigateToForgetPassword}
+                    activeOpacity={1}
+                  >
+                    <Text style={styles.titleForget}>Quên mật khẩu?</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <Text style={styles.errorMessageText}>{errorMessage}</Text>
+                <View style={styles.listButtonContainer}>
+                  <View>
+                    <TouchableOpacity
+                      style={styles.buttonSignin}
+                      onPress={handleLogin}
+                    >
+                      <Text style={styles.buttonSigninText}>Đăng nhập</Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  <Text style={styles.underline}></Text>
+
+                  <View>
+                    <TouchableOpacity
+                      style={styles.buttonSigninGoogle}
+                      onPress={() => navigation.push("UserProfile")}
+                    >
+                      <Image
+                        style={{ width: 32, height: 32 }}
+                        source={GoogleLogo}
+                      />
+                      <Text style={styles.buttonSigninGoogleText}>
+                        Đăng nhập với Google
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
               </View>
             </View>
-          </View>
-        </View>
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );
@@ -186,16 +162,16 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   modal: {
-    flex: 1,
     justifyContent: "flex-end",
     margin: 0,
   },
   modalContent: {
+    flex: 1,
     backgroundColor: "#FFFFFF",
     padding: 20,
-    height: 750,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    marginTop: 60,
   },
   signContainer: {
     marginBottom: 20,

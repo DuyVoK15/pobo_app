@@ -3,15 +3,14 @@ import React from 'react'
 
 const ButtonStyle = StyleSheet.create({
     buttonContainer: {
-        marginTop: 40
+        marginTop: 30
     },
     buttonSignup: {
-        paddingVertical: 21,
+        paddingVertical: 20,
         paddingHorizontal: 20,
         width: 350,
         alignSelf: "center",
         backgroundColor: "#FE5D26",
-        textColor: "#0D0D12",
         borderRadius: 10,
         marginTop: 10,
       },
@@ -19,6 +18,7 @@ const ButtonStyle = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         textAlign: "center",
+        color: "#FFF"
       },
 })
 

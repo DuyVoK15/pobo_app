@@ -9,6 +9,7 @@ import {
   Pressable,
   Button,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 
 import SignupModal from "./SignupModal";
@@ -19,22 +20,27 @@ const WelcomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View>
-        <Image
-          source={require("../../assets/logo/logo.png")}
-          style={styles.logo}
-        ></Image>
-      </View>
-      <View style={styles.textContainer}>
-        <Text style={styles.text1}>Chào mừng</Text>
-        <Text style={styles.text2}>
-          Để sử dụng ứng dụng đặt nhiếp ảnh gia, xin hãy kí tài khoản trước
-        </Text>
-      </View>
-      <View style={styles.buttonContainer}>
-        <SignupModal navigation={navigation} />
-        <SigninModal navigation={navigation} />
-      </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : null}
+        enabled
+      >
+        <View>
+          <Image
+            source={require("../../assets/logo/logo.png")}
+            style={styles.logo}
+          ></Image>
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.text1}>Chào mừng</Text>
+          <Text style={styles.text2}>
+            Để sử dụng ứng dụng đặt nhiếp ảnh gia, xin hãy kí tài khoản trước
+          </Text>
+        </View>
+        <View style={styles.buttonContainer}>
+          <SignupModal navigation={navigation} />
+          <SigninModal navigation={navigation} />
+        </View>
+      </KeyboardAvoidingView>
     </View>
   );
 };

@@ -16,10 +16,10 @@ import {
       // }
     return (
       <View style={styles.container}>
-        <Text style={styles.text1}>Đổi mật khẩu</Text>
-        <Text style={styles.text2}>Thay đổi mật khẩu mới</Text>
-        <View style={styles.inputText}>
-          {/* <Text style={styles.titleText}>Email</Text> */}
+        <Text style={styles.text1}>Thành Công</Text>
+        <Text style={styles.text2}>Thay đổi mật khẩu mới thành công</Text>
+        {/* <View style={styles.inputText}>
+         
           <TextInput
             style={styles.containerInputText}
             placeholder="Nhập mật khẩu mới"
@@ -39,7 +39,7 @@ import {
           <TouchableOpacity style={styles.buttonSignin} onPress={""}>
             <Text style={styles.buttonSigninText}>Xác thực OTP</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     );
   };

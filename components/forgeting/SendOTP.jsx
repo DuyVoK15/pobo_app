@@ -5,31 +5,46 @@ import {
   Pressable,
   Button,
   TouchableOpacity,
+  
 } from "react-native";
 import { Swipeable, TextInput } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-const SendOTP = () => {
+import { useState, useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+const SendOTP = ({navigation}) => {
+    const [username, setUsername] = useState("")
+    const {sendOtp} = useContext(AuthContext)
 
-    // const navigation = useNavigation()
-    // const handleNavigation = () => {
-    //     navigation.navigate("VerifyOTP")
-    // }
+    const handleSendOtp = async () => {
+      try {
+        const res = await sendOtp(username);
+        console.log(res)
+       
+          navigation.navigate("VerifyOTP", {username: username})
+       
+      } catch (error) {
+        console.error(error)
+      }
+        
+    }
+
+    
   return (
     <View style={styles.container}>
       <Text style={styles.text1}>Quên mật khẩu</Text>
-      <Text style={styles.text2}>Nhập email đã liên kết với tài khoản</Text>
+      <Text style={styles.text2}>Nhập tên tài khoản</Text>
       <View>
         {/* <Text style={styles.titleText}>Email</Text> */}
         <TextInput
           style={styles.containerInputText}
-          placeholder="Nhập email"
-          value={""}
+          placeholder="Nhập tên tài khoản"
+          value={username}
           secureTextEntry
-          onChangeText={""}
+          onChangeText={(text) => setUsername(text)}
         />
       </View>
       <View>
-        <TouchableOpacity style={styles.buttonSignin} onPress={""}>
+        <TouchableOpacity style={styles.buttonSignin} onPress={handleSendOtp}>
           <Text style={styles.buttonSigninText}>Gửi mã OTP</Text>
         </TouchableOpacity>
       </View>

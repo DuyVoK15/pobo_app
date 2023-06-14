@@ -15,17 +15,19 @@ import FirstOnboarding from "../onboarding/FirstOnboarding";
 import Booking from "../home/category/booking";
 import PhotographerProfile from "../booking/create/PhotographerProfile";
 import BookingCreate from "../booking/create/BookingCreate";
-
+import VerifyOTP from "../forgeting/VerifyOTP";
+import NewPassword from "../forgeting/NewPassword";
+import { SIZES } from "../constants";
 
 const IntroStack = createStackNavigator();
 const IntroStackScreen = () => {
   return (
     <IntroStack.Navigator>
       <IntroStack.Screen
-          options={{ headerShown: false }}
-          name="SwiperOnboarding"
-          component={SwiperOnboarding}
-        />
+        options={{ headerShown: false }}
+        name="SwiperOnboarding"
+        component={SwiperOnboarding}
+      />
     </IntroStack.Navigator>
   );
 };
@@ -45,6 +47,8 @@ const AuthStackScreen = () => {
         component={SuccessSignupScreen}
       />
       <AuthStack.Screen name="SendOTP" component={SendOTP} />
+      <AuthStack.Screen name="VerifyOTP" component={VerifyOTP} />
+      <AuthStack.Screen name="NewPassword" component={NewPassword} />
       <AuthStack.Screen
         options={{ headerShown: false }}
         name="UserProfile"
@@ -62,7 +66,16 @@ const AuthStackScreen = () => {
 const HomeStack = createStackNavigator();
 const HomeStackScreen = () => {
   return (
-    <HomeStack.Navigator screenOptions={{cardStyle: {backgroundColor: "white",height: 100, borderTopLeftRadius: 35, borderTopRightRadius: 35}}}>
+    <HomeStack.Navigator
+      screenOptions={{
+        cardStyle: {
+          backgroundColor: "white",
+          height: 100,
+          borderTopLeftRadius: 35,
+          borderTopRightRadius: 35,
+        },
+      }}
+    >
       <HomeStack.Screen
         options={{ headerShown: false }}
         name="HomeScreen"
@@ -70,9 +83,11 @@ const HomeStackScreen = () => {
       />
 
       <HomeStack.Screen
-        options={{ headerShown: false }}
         name="SettingsAccountPersonal"
         component={SettingsAccountPersonal}
+        options={{ headerTitle: "Trang cá nhân", headerTitleStyle: {
+          fontSize: SIZES.xLarge
+        } }}
       />
 
       <HomeStack.Screen
@@ -99,14 +114,11 @@ const HomeStackScreen = () => {
   );
 };
 
-
-
 const Navigation = () => {
   const { userToken } = useContext(AuthContext);
 
   return (
-    <NavigationContainer >
-      
+    <NavigationContainer>
       {userToken.accessToken ? <HomeStackScreen /> : <AuthStackScreen />}
     </NavigationContainer>
   );

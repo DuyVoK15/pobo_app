@@ -41,13 +41,13 @@ const BookingCreate = ({ navigation, route }) => {
   };
 
   const {createBookingById, bookingSuccess, isLoading} = useContext(AuthContext);
-  const handleCreateBooking = async (startTime, endTime, address, photographerId) => {
-    await createBookingById(startTime, endTime, address, photographerId);
-    if(bookingSuccess===true){
-      alert("Tạo lịch hẹn thành công!")
-    } else {
-      alert("Tạo lịch hẹn thất bại!")
-    }
+  const handleCreateBooking = () => {
+     createBookingById(formatDateTime(date, time), formatDateTime(date, time), location, paramValue);
+    // if(bookingSuccess===true){
+    //   alert("Tạo lịch hẹn thành công!")
+    // } else {
+    //   alert("Tạo lịch hẹn thất bại!")
+    // }
   }
 
   return (
@@ -189,7 +189,7 @@ const BookingCreate = ({ navigation, route }) => {
               </View> */}
 
               <TouchableOpacity
-                onPress={() => handleCreateBooking(formatDateTime(date, time),formatDateTime(date, time), location, paramValue)}
+                onPress={() => handleCreateBooking()}
                 style={ButtonStyle.buttonSignup}
               >
                 <Text style={ButtonStyle.buttonSignupText}>Xác nhận đặt lịch</Text>

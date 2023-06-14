@@ -12,6 +12,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from '@expo/vector-icons';
 import UserProfile from "../profile/UserProfile";
 import BookingManagement from "../booking/BookingManagement";
+import Map from "../map/Map";
 
 export default function BottomNavigator() {
     
@@ -52,13 +53,13 @@ export default function BottomNavigator() {
             tabBarOptions={{
                 showLabel: false,
                 style: {
-                  borderTopLeftRadius: 40,
-                  borderTopRightRadius: 40,
+                  // borderTopLeftRadius: 40,
+                  // borderTopRightRadius: 40,
                 },
               }}
             >
       <Tab.Screen name={ROUTES.HOME_TAB} component={HomeScreen} />
-      <Tab.Screen name="Map" component={HomeScreen} />
+      <Tab.Screen name="Map" component={Map} />
       <Tab.Screen name="BookingManagement" component={BookingManagement} />
       <Tab.Screen name="Chat" component={HomeScreen} />
       <Tab.Screen name="UserProfile" component={UserProfile} />
