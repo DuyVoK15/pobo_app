@@ -3,55 +3,24 @@ import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Modal, Dim
 // import { COLORS } from "../../constants";
 import { ImageBackground } from "react-native";
 // import {LinearGradient} from 'expo-linear-gradient';
+import { Ionicons } from "@expo/vector-icons";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 
 const height = Dimensions.get('window').height
 const width = Dimensions.get('window').width
 
-
-// const Photograper_Info = ({ navigation }) => {
-//     return(
-//     //     <View>
-//     //     <View style={{ position: 'absolute' }}>
-//     //   <LinearGradient
-//     //     colors={['rgba(0, 0, 0, 0.94)', 'rgba(102, 211, 194, 0)']}
-//     //     start={{ x: 0, y: 1 }}
-//     //     end={{ x: 0, y: 0 }}
-//     //     style={{ flex: 1, opacity: 0.5 }}
-//     //   />
-//     //   {/* Rest of your component */}
-//     // </View>
-//    <View>
-//     <ImageBackground
-//         source={require('../../../assets/images/anh4k.jpg')}
-//         style= {styles.img_bg}
-//         />
-       
-       
-// </View>
-//     )
-// }
-// export default Photograper_Info
-
-
-// const styles = StyleSheet.create({
-   
-//     img_bg:{
-//         height:height* 0.4,
-       
-//     },
- 
-     
-
-
-// })
-
 import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS } from "../../constants";
+import { COLORS,SIZES } from "../../constants";
 import { BlurView } from 'expo-blur';
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import ButtonStyle from "../../../styles/ButtonStyle";
+import AllProcess from "../process/AllProcess";
+import PendingProcess from "../process/PendingProcess";
+import packages_Info from "./packages_Info";
+import rating_info from "./rating_info";
 
 const PhotographerProfile = ({ route, navigation }) => {
   const { paramValue } = route.params;
@@ -64,15 +33,20 @@ const PhotographerProfile = ({ route, navigation }) => {
   useEffect(() => {
     fetchData();
   }, []);
-
+const Tab = createMaterialTopTabNavigator();
+const Stack = createStackNavigator();
   const handleNavigation = (obj) => {
     navigation.push("BookingCreate", {paramValue: paramValue})
   }
-
+  const headerTitle = () => {
+    return(
+      <Text style={{ fontWeight: 'bold', fontSize: SIZES.large }}>Quản lý lịch hẹn</Text>
+    )
+  }
 
   return (
     <ImageBackground
-      source={{uri: "https://st.quantrimang.com/photos/image/2018/01/25/anh-nen-chat-luong-cao-32.jpg"}}
+      source={require("../../../assets/images/avatav1.png")}
       style={styles.backgroundImage}
     >
       <LinearGradient
@@ -83,6 +57,16 @@ const PhotographerProfile = ({ route, navigation }) => {
         style={styles.linearGradientTop}
       />
 
+      <View style={styles.wrapText}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <View style={styles.wrapbackhome}>
+            <View style={styles.bg_icon}>
+              <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+            </View>
+            <Text style={styles.textHome}>Trang Chủ</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
 
       {/* <ImageBackground
         source={require('../../../assets/images/Rectangle.png')}
@@ -91,7 +75,6 @@ const PhotographerProfile = ({ route, navigation }) => {
      
       </ImageBackground> */}
 
-
       <LinearGradient
         colors={["#000000", "rgba(211, 102, 102, 0)"]}
         locations={[0.6759, 1.042]}
@@ -99,8 +82,9 @@ const PhotographerProfile = ({ route, navigation }) => {
         end={[1, 0]}
         style={styles.gradientBackground}
       >
+
         <View>
-          <View style={styles.abcd}>
+          <View style={styles.cardInfoContainer}>
             {/* <View style={styles.infoContainer}> */}
             <BlurView
               style={styles.infoContainer}
@@ -112,40 +96,76 @@ const PhotographerProfile = ({ route, navigation }) => {
                   <View style={styles.detailInfo}>
                     <Image
                       style={styles.avata}
-                      source={{uri: photographer.avatarUrl}}
+                      source={{ uri: photographer.avatarUrl }}
                     />
                     <View style={styles.wrap_DetailInfo}>
-                      <Text style={styles.textName}>{photographer.name}</Text>
+                      <View style={styles.wrapname}>
+                        <Text style={styles.textName}>{photographer.name}</Text>
+                      </View>
                       <View style={styles.wrap_plan_follow_rate}>
                         <View style={styles.plan_follow_rate}>
                           <Text style={styles.textInfo}>Dự Án</Text>
                           <Text style={styles.textInfonumber}>14</Text>
                         </View>
+                        <Text style={styles.underline}></Text>
                         <View style={styles.plan_follow_rate}>
-                          <Text style={styles.textInfo} >Follower</Text>
+                          <Text style={styles.textInfo}>Follower</Text>
                           <Text style={styles.textInfonumber}>14K</Text>
                         </View>
+                        <Text style={styles.underline}></Text>
                         <View style={styles.plan_follow_rate}>
                           <Text style={styles.textInfo}>Đánh giá</Text>
                           <Text style={styles.textInfonumber}>4.5</Text>
                         </View>
                       </View>
                     </View>
+                    <TouchableOpacity
+                      style={styles.buttonsubmit}
+                      onPress={handleNavigation}
+                    >
+                      <Text style={styles.textsubmit}>Đặt lịch</Text>
+                    </TouchableOpacity>
                   </View>
+                  <View>
+                    <View style={styles.story}>
+                      <View style={styles.arrow}></View>
 
-
-                  <View style={styles.story}></View>
+                      <Text>Hello world Im Hoang Vy, Im from HCMC </Text>
+                    </View>
+                  </View>
+                  
                 </View>
               </View>
             </BlurView>
             {/* </View> */}
             <View style={styles.profile}></View>
-            <TouchableOpacity style={[ButtonStyle.buttonSignup, {backgroundColor: COLORS.orange40}]} onPress={handleNavigation}>
-              <Text style={ButtonStyle.buttonSignupText}>Đặt lịch</Text>
-            </TouchableOpacity>
           </View>
+        
+          
         </View>
+       
+       
       </LinearGradient>
+      <Tab.Navigator
+           style={{ flex: 1, marginTop: 0 }}
+           tabBarPosition="top"
+           screenOptions={({ route }) => ({
+             tabBarStyle: { backgroundColor: "black" }, // Chỉnh màu nền của tab bar
+             tabBarLabelStyle: {
+               fontWeight: "bold",
+               fontSize: 14,
+               textTransform: "none",
+             }, // Chỉnh màu chữ của tab
+             tabBarIndicatorStyle: {
+               backgroundColor: COLORS.orange50,
+               height: 5,
+             }, // Chỉnh màu dấu chỉ dẫn hiện tại
+             tabBarActiveTintColor: COLORS.orange50,
+           })}
+          >
+            <Tab.Screen name="All Process" component={packages_Info} />
+            <Tab.Screen name="Pending Process" component={rating_info} />
+          </Tab.Navigator>
     </ImageBackground>
   );
 
@@ -154,6 +174,7 @@ const PhotographerProfile = ({ route, navigation }) => {
 export default PhotographerProfile;
 
 const styles = StyleSheet.create({
+ 
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -163,7 +184,7 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: 'cover',
     justifyContent: 'center',
-    height: height*0.5
+    height: height*0.7
   },
   linearGradientTop: {
     position: 'absolute',
@@ -171,6 +192,40 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 200,
+  },
+  wrapText: {
+    position:'absolute',
+    top:50,
+    left:0,
+    // flexDirection: "row",
+    // alignItems: "center",
+    // paddingTop: 10,
+    // justifyContent: "center",
+    
+    // padding: 10,
+  },
+  wrapbackhome:{
+    display:'flex',
+    flexDirection:'row',
+    gap:22
+  },
+  bg_icon: {
+    // backgroundColor: COLORS.orange70,
+    borderRadius: 50,
+    height: 32,
+    width: 32,
+   
+    top: 0,
+    left : 20
+  
+  },
+  textHome:{
+    fontStyle: "normal",
+    fontWeight: "700",
+    fontSize: 18,
+    lineHeight: 18 * 1.5,
+    color:'#FFFFFF'
+    
   },
   linearGradientBottom: {
     position: 'absolute',
@@ -198,8 +253,8 @@ const styles = StyleSheet.create({
   //   },
 
 
-    abcd:{
-      top: 50,
+  cardInfoContainer:{
+      top: 0,
       alignItems:'center',
       justifyContent:'center'
     },
@@ -235,7 +290,7 @@ const styles = StyleSheet.create({
       height: height*0.3,
       width: width *0.9,
       borderRadius: 20,
-      paddingTop: 20,
+      paddingTop: 5,
       paddingLeft:20,
       alignItems:'center',
       justifyContent:'center'
@@ -244,6 +299,22 @@ const styles = StyleSheet.create({
       display:'flex',
       flexDirection:'column',
       gap: 6
+    },
+    buttonsubmit:{
+      display:'flex',
+      alignItems:'center', 
+      justifyContent:'center',
+      backgroundColor:'#FFFFFF',
+      borderRadius:20,
+      width:75,
+      height: 32,
+      right: 2,
+      
+    },
+    textsubmit:{
+      fontWeight:600,
+      fontSize:14,
+      color: '#FE5D26'
     },
     detailInfo:{
       display:'flex',
@@ -262,6 +333,9 @@ const styles = StyleSheet.create({
       flexDirection:"column",
       gap:7
     },
+    wrapname:{
+      alignItems:'flex-start'
+    },
     textName:{
       fontStyle: 'normal',
   fontWeight: '700',
@@ -273,7 +347,9 @@ const styles = StyleSheet.create({
     wrap_plan_follow_rate:{
       display:'flex',
       flexDirection:'row',
-      gap:4
+      gap:1,
+      textAlign:'center',
+      alignItems:'center'
     },
     plan_follow_rate:{
       display:'flex',
@@ -295,11 +371,48 @@ const styles = StyleSheet.create({
       lineHeight: 21,
       color: '#FFFFFF'
     },
-    story:{
-      height:height*0.09,
-      width: width*0.7,
+    underline:{
+      width: 28,
+        height: 0,
+        // left: 86.48,
+        // top: 35,
+        borderColor: 'rgba(254, 93, 38, 0.42)',
+        borderWidth: 1,
+        transform: [{ rotate: '90deg' }],
+    },
+    arrow:{
+      position:'absolute',
       backgroundColor:'rgba(255,250,250, 0.24)',
-      borderRadius:20
-    }
+      width:11.39,
+      height:11.39,
+      top: -3,
+      left:29,
+      borderRadius:4.34889,
+      transform: [{ rotate: '44deg' }]    },
+      overflow: 'hidden',
+
+    story:{
+      height:height*0.11,
+      width: width*0.8,
+      backgroundColor:'rgba(255,250,250, 0.24)',
+      borderRadius:20,
+      textAlign:'left',
+      justifyContent:'flex-start',
+      padding:5
+    },
+    tabBar: {
+      backgroundColor: 'black', // Replace COLORS.transparent with your desired background color
+    },
+    tabLabel: {
+      fontWeight: 'bold',
+      fontSize: 16,
+      textTransform: 'capitalize',
+      color: COLORS.orange50, // Replace COLORS.white with your desired text color
+    },
+    tabIndicator: {
+      backgroundColor: COLORS.orange50, // Replace COLORS.orange with your desired indicator color
+      height: 2,
+      paddingBottom:1
+    },
 });
 

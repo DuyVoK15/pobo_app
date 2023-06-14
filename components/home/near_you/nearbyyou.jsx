@@ -14,6 +14,8 @@ import data from "./data_near_you";
 const NearYou = ({ photographerList, navigation }) => {
   const handleNavigate = (id) => {
     navigation.navigate("PhotographerProfile", { paramValue: id });
+    console.log("handleNavigate called with ID:", id); // Add this line
+    
   };
 
   useEffect(()=> {
@@ -35,6 +37,7 @@ const NearYou = ({ photographerList, navigation }) => {
               imageSource={{ uri: item.avatarUrl }}
               photographerName={item.name}
               location="TP. HCM"
+              navigation={navigation}
             />
           </TouchableOpacity>
         ))}

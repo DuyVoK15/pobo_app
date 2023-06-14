@@ -1,11 +1,15 @@
 import React from "react";
-import { View,ScrollView, Touchable,Image, Text, StyleSheet } from "react-native";
+import { View,ScrollView, Touchable,Image, Text, StyleSheet,TouchableOpacity } from "react-native";
 import { COLORS, FONT, SIZES } from "../../constants";
 import { MaterialIcons } from "@expo/vector-icons";
 import data from './data_near_you';
 
-export default function PhotographercCard( {imageSource, photographerName, location} ) {
+export default function PhotographercCard( {imageSource, photographerName, location,navigation} ) {
   return (
+    <View>
+            {/* <TouchableOpacity onPress={()=> navigation.}> */}
+
+    
     <View style={styles.container}>
       <View style={styles.wrap}>
         <Image source={imageSource} style={styles.image} />
@@ -15,6 +19,8 @@ export default function PhotographercCard( {imageSource, photographerName, locat
           <Text style={styles.locationText}>{location}</Text>
           </View>
       </View>
+    </View>
+    {/* </TouchableOpacity> */}
     </View>
   );
 }
