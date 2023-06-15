@@ -104,19 +104,21 @@ export default Packages_Info = ({ route }) => {
     //     </View>
     //   ))}
     // </ScrollView>
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
+
+    <ScrollView contentContainerStyle={styles.wrapCard}>
       <View style={styles.rowWrapper}>
         {listPackageShooting &&
           listPackageShooting.map((packageShooting) => (
             <TouchableOpacity style={styles.card} key={packageShooting.id}>
-              <View style={styles.cardCotainer}>
+              <View style={styles.cardContainer}>
                 <Image
                   source={{ uri: packageShooting.photographerData.avatarUrl }}
                   style={styles.image}
                 />
                 <View style={styles.content}>
                   <Text style={styles.title}>{packageShooting.title}</Text>
-                  <View style={styles.wrap_prive_like}>
+                  <View style={styles.wrap_price_likes}>
                     <View style={styles.priceContainer}>
                       <Text style={styles.price}>
                         {packageShooting.totalPrice}
@@ -135,16 +137,101 @@ export default Packages_Info = ({ route }) => {
                 </View>
               </View>
             </TouchableOpacity>
+           
           ))}
       </View>
     </ScrollView>
+    </View>
   );
 };
 const styles = StyleSheet.create({
+  // container: {
+  //   paddingHorizontal: 10,
+  //   // marginBottom: 10,
+  //   backgroundColor: "black",
+  //   paddingTop: 20,
+  // },
+  // rowWrapper: {
+  //   flexDirection: "row",
+  //   flexWrap: "wrap",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   gap: 30,
+  // },
+  // card: {
+  //   width: 161.88,
+  //   height: 252,
+  //   backgroundColor: "rgba(255, 255, 255, 0.07)",
+  //   borderWidth: 0.4375,
+  //   borderColor: "rgba(255, 255, 255, 0.3)",
+  //   borderRadius: 5.25,
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  //   // padding: 20,
+  //   // marginBottom: 10,
+  // },
+  // image: {
+  //   width: 140,
+  //   height: 150.5,
+  //   borderRadius: 10,
+  //   top: -9,
+  // },
+  // content: {
+  //   // padding: 10,
+  //   gap: 5,
+  // },
+  // title: {
+  //   fontStyle: "normal",
+  //   fontWeight: "600",
+  //   fontSize: 12.25,
+  //   lineHeight: 18,
+  //   letterSpacing: -0.04,
+  //   color: "#FFFFFF",
+  // },
+  // wrap_prive_like: {
+  //   display: "flex",
+  //   flexDirection: "row",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   gap: 37,
+  // },
+  // priceContainer: {
+  //   display: "flex",
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   marginBottom: 5,
+  //   gap: 5.25,
+  //   alignItems: "flex-start",
+  // },
+  // price: {
+  //   fontStyle: "normal",
+  //   fontWeight: "600",
+  //   fontSize: 12.25,
+  //   lineHeight: 18,
+  //   color: "#FFFFFF",
+  // },
+  // currency: {
+  //   fontStyle: "normal",
+  //   fontWeight: "400",
+  //   fontSize: 10.5,
+  //   lineHeight: 16,
+  //   color: "#FFFFFF",
+  // },
+  // likesContainer: {
+  //   display: "flex",
+  //   flexDirection: "row",
+  //   alignItems: "flex-end",
+  // },
+  // likes: {
+  //   color: "#FFFFFF",
+  // },
+
   container: {
+    flex: 1,
+    backgroundColor: 'black', // Set the desired background color here
+  },
+  wrapCard: {
     paddingHorizontal: 10,
-    // marginBottom: 10,
-    backgroundColor: "black",
     paddingTop: 20,
   },
   rowWrapper: {
@@ -163,8 +250,9 @@ const styles = StyleSheet.create({
     borderRadius: 5.25,
     alignItems: "center",
     justifyContent: "center",
-    // padding: 20,
-    // marginBottom: 10,
+  },
+  cardContainer: {
+    alignItems: "center",
   },
   image: {
     width: 140,
@@ -173,52 +261,52 @@ const styles = StyleSheet.create({
     top: -9,
   },
   content: {
-    // padding: 10,
     gap: 5,
   },
   title: {
-    fontStyle: "normal",
-    fontWeight: "600",
+    fontStyle: 'normal',
+    fontWeight: '600',
     fontSize: 12.25,
     lineHeight: 18,
     letterSpacing: -0.04,
-    color: "#FFFFFF",
+    color: '#FFFFFF',
   },
-  wrap_prive_like: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+  wrap_price_likes: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     gap: 37,
   },
   priceContainer: {
-    display: "flex",
+    display: 'flex',
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 5,
     gap: 5.25,
-    alignItems: "flex-start",
+    alignItems: 'flex-start',
   },
   price: {
-    fontStyle: "normal",
-    fontWeight: "600",
+    fontStyle: 'normal',
+    fontWeight: '600',
     fontSize: 12.25,
     lineHeight: 18,
-    color: "#FFFFFF",
-  },
-  currency: {
-    fontStyle: "normal",
-    fontWeight: "400",
-    fontSize: 10.5,
-    lineHeight: 16,
-    color: "#FFFFFF",
-  },
-  likesContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "flex-end",
-  },
-  likes: {
-    color: "#FFFFFF",
-  },
+    color: '#FFFFFF',
+      },
+      currency: {
+        fontStyle: 'normal',
+        fontWeight: '400',
+        fontSize: 10.5,
+        lineHeight: 16,
+        color: '#FFFFFF',
+      },
+      likesContainer: {
+        display:'flex',
+        flexDirection: "row",
+        alignItems: "flex-end",
+    
+      },
+      likes: {
+        color: "#FFFFFF",
+      },
 });

@@ -47,7 +47,7 @@ const Booking = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.wrapbill}>
-          <Text style={styles.textBill}>Đơn hẹn của bạn</Text>
+          <Text style={styles.text}>Đơn hẹn của bạn</Text>
 
           <View style={styles.card}>
             <View style={styles.wrapcard}>
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
     marginBottom: 8,
   },
-  textBill:{
+  text:{
     // fontFamily: 'SVN-Gilroy',
     fontStyle: 'normal',
     fontWeight: '700',
