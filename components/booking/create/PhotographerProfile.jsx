@@ -148,9 +148,13 @@ const Stack = createStackNavigator();
       </LinearGradient>
       
       <Tab.Navigator
-           style={{ flex: 1, marginTop: 0 }}
+           style={{ flex: 1, marginTop: 0  }}
+           tabBarOptions={{
+            style: { backgroundColor: 'red' } // Chỉnh màu nền ở đây
+          }}
            tabBarPosition="top"
            screenOptions={({ route }) => ({
+            
              tabBarStyle: { backgroundColor: "black" }, // Chỉnh màu nền của tab bar
              tabBarLabelStyle: {
                fontWeight: "bold",
