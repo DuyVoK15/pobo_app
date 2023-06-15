@@ -9,10 +9,11 @@ import { COLORS, FONT, SIZES } from "../../constants";
 import { AuthContext } from '../../../context/AuthContext';
 
 const Cate = ({ navigation }) =>{
-    const { getAllListPackageShooting } = useContext(AuthContext)
+    const { getAllListPackageShooting, getPackageShootingById } = useContext(AuthContext)
     const [listPackageShooting, getListPackageShooting] = useState([])
     const fetchData = async () => {
       const data = await getAllListPackageShooting();
+      const haha = await getPackageShootingById("1c52af5a-315e-453a-b1cd-929d958aa167")
       getListPackageShooting(data)
     }
 

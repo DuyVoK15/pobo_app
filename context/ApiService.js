@@ -24,5 +24,27 @@ class ApiService {
     }
     return axios.get(`http://${IPv4}:8448/api/v1/package-shooting`, {params})
   }
+  getAllListPackageShootingByPhotographerId(photographerId){
+    const params = {
+      hl: "en",
+      select: '["$all"]',
+      where: `{"photographerId": "${photographerId}"}`,
+      limit: "unlimited",
+      page: 1,
+      order: "[]",
+    }
+    return axios.get(`http://${IPv4}:8448/api/v1/package-shooting`, {params})
+  }
+  getPackageShootingById(id) {
+    const params = {
+      hl: "en",
+      select: '["$all"]',
+      where: "{}",
+      limit: "unlimited",
+      page: 1,
+      order: "[]",
+    }
+    return axios.get(`http://${IPv4}:8448/api/v1/package-shooting/${id}`, {params})
+  }
 }
 export default new ApiService();

@@ -67,15 +67,15 @@ const AllProcess = () => {
               <View key={index} style={styles.containerRow}>
                 <View style={{ flex: 1 }}>
                   <Image
-                    source={{ uri: booking.photographerData.avatarUrl }}
+                    source={{ uri: booking.packageShootingData.photographerData.avatarUrl }}
                     style={styles.avatar}
                   />
                 </View>
                 <View style={{ flex: 1.8 }}>
                   <Text style={styles.title}>
-                    {booking.photographerData.name}
+                    {booking.packageShootingData.photographerData.name}
                   </Text>
-                  <Text style={styles.title2}>{formatDateToVN(booking.startTime)}</Text>
+                  <Text style={styles.title2}>{"22/22/2222"}</Text>
                 </View>
                 <View style={{ flex: 1.4 }}>
                   <TouchableOpacity style={styles.button}>

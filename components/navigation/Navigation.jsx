@@ -18,6 +18,7 @@ import BookingCreate from "../booking/create/BookingCreate";
 import VerifyOTP from "../forgeting/VerifyOTP";
 import NewPassword from "../forgeting/NewPassword";
 import { SIZES } from "../constants";
+import RechargeScreen from "../payment/RechargeScreen";
 
 const IntroStack = createStackNavigator();
 const IntroStackScreen = () => {
@@ -71,8 +72,8 @@ const HomeStackScreen = () => {
         cardStyle: {
           backgroundColor: "white",
           height: 100,
-          borderTopLeftRadius: 35,
-          borderTopRightRadius: 35,
+          // borderTopLeftRadius: 35,
+          // borderTopRightRadius: 35,
         },
       }}
     >
@@ -94,6 +95,11 @@ const HomeStackScreen = () => {
         options={{ headerShown: false }}
         name="UserProfile"
         component={BottomNavigator}
+      />
+      <HomeStack.Screen
+        options={{ headerShown: false }}
+        name="RechargeScreen"
+        component={RechargeScreen}
       />
       <HomeStack.Screen
         options={{ headerShown: false }}

@@ -18,7 +18,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 const UserProfile = ({ navigation }) => {
   const imageVoDien =
     "https://toigingiuvedep.vn/wp-content/uploads/2022/04/hinh-avatar-anh-vo-dien-cute.jpg";
-  const { logout, userInfo, userToken, isLoading } = useContext(AuthContext);
+  const { logout, userInfo, userToken, getUserInfo, isLoading } = useContext(AuthContext);
   const [info, setInfo] = useState({});
   const [refreshing, setRefreshing] = useState(false);
 
@@ -31,9 +31,10 @@ const UserProfile = ({ navigation }) => {
   });
 
   const fetchData = async () => {
-    const value = await AsyncStorage.getItem("userInfo");
-    const parseValue = JSON.parse(value);
-    setInfo(parseValue);
+    // const value = await AsyncStorage.getItem("userInfo");
+    // const parseValue = JSON.parse(value);
+    const data = await getUserInfo();
+    setInfo(data);
   };
 
   useEffect(() => {
@@ -74,19 +75,31 @@ const UserProfile = ({ navigation }) => {
           </View>
           <View style={styles.column2}>
             <TouchableOpacity onPress={handleNavigateToSetting}>
-              <Text style={styles.textName}> {info.name?info.name:"Vui lòng đăng nhập"}</Text>
+              <Text style={styles.textName}>
+                {" "}
+                {info.name ? info.name : "Vui lòng đăng nhập"}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => console.log("alo")}>
-              <Text style={styles.textName2}> Đăng kí POBO Premium  {">"}</Text>
+              <Text style={styles.textName2}> Đăng kí POBO Premium {">"}</Text>
             </TouchableOpacity>
           </View>
         </View>
+
+        <View style={styles.containerTextTitles}>
+          <Text style={styles.textTitle}>Số dư tài khoản: <Text style={styles.textBalance}>{info.balance} VNĐ</Text></Text>
+              <TouchableOpacity style={styles.buttonRecharge} onPress={() => navigation.push("RechargeScreen")}>
+                <Text style={styles.textRecharge}>Nạp tiền</Text>
+              </TouchableOpacity>
+        </View>
+
         <View style={styles.containerPoBo}>
           <Text style={styles.textPoBo1}>Trở thành thợ chụp ảnh của POBO</Text>
           <Text style={styles.textPoBo2}>
             Thiết lập và bắt đầu kiếm tiền thật đơn giản.
           </Text>
         </View>
+
         <View style={styles.containerTextTitles}>
           <Text style={styles.textTitle}>Cài đặt</Text>
         </View>
@@ -249,7 +262,9 @@ const UserProfile = ({ navigation }) => {
             style={ButtonStyle.buttonSignup}
             onPress={() => logout()}
           >
-            <Text style={[ButtonStyle.buttonSignupText, {color: "#FFF"}]}>Đăng xuất</Text>
+            <Text style={[ButtonStyle.buttonSignupText, { color: "#FFF" }]}>
+              Đăng xuất
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -285,10 +300,10 @@ const styles = StyleSheet.create({
   textName: {
     fontSize: SIZES.large,
     fontWeight: "bold",
-    marginBottom: 5
+    marginBottom: 5,
   },
   textName2: {
-    fontSize: SIZES.small
+    fontSize: SIZES.small,
   },
   textPoBo1: {
     fontSize: SIZES.large,
@@ -310,7 +325,7 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     backgroundColor: COLORS.orange50,
     ...SHADOWS.beauty,
-    elevation: 2
+    elevation: 2,
   },
   containerColumn: {
     flexDirection: "column",
@@ -318,7 +333,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     borderRadius: 10,
     ...SHADOWS.beauty,
-    elevation: 2
+    elevation: 2,
   },
   containerRow: {
     flexDirection: "row",
@@ -347,8 +362,27 @@ const styles = StyleSheet.create({
   textTitle: {
     fontSize: SIZES.large,
   },
+  textBalance: {
+    fontSize: SIZES.large,
+    fontWeight: "bold"
+  },
+  buttonRecharge:{
+    marginTop: 10,
+    backgroundColor: "#FFF",
+    borderWidth: 2,
+    borderColor: COLORS.orange50,
+    alignItems: "center",
+    width: 100,
+    paddingVertical: 10,
+    borderRadius: 10
+  },
+  textRecharge: {
+    fontSize: SIZES.medium,
+    fontWeight: 500,
+     color: COLORS.orange40
+  },
   containerTextTitles: {
-    marginVertical: 20,
+    marginVertical: 10,
     width: 380,
   },
   containerButton: {

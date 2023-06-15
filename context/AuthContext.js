@@ -4,23 +4,23 @@ import React, { createContext, useState } from "react";
 import { saveDataToStorage } from "./AsyncStorage";
 import { BASE_URL, IPv4 } from "../utils/config";
 export const AuthContext = createContext();
-import ApiService from './ApiService';
+import ApiService from "./ApiService";
 
 export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState({});
   const [userTokenRegister, setUserTokenRegister] = useState({});
   const [bookingList, setBookingList] = useState([]);
-  const [countAllBooking, setCountAllBooking] = useState('')
+  const [countAllBooking, setCountAllBooking] = useState("");
   const [bookingListByStatus, setBookingListByStatus] = useState([]);
   const [photographerList, setPhotographerList] = useState([]);
   const [bookingData, setBookingData] = useState([]);
-  const [bookingAfterCreating, setBookingAfterCreating] = useState([])
-  const [bookingSuccess, setBookingSuccess] = useState(false)
+  const [bookingAfterCreating, setBookingAfterCreating] = useState([]);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
 
-  const getUserInfo = async (userToken) => {
+  const getUserInfo = async () => {
     // setIsLoading(true);
     try {
       const res = await axios.get(`http://${IPv4}:8448/api/v1/auth/info`, {
@@ -30,8 +30,9 @@ export const AuthProvider = ({ children }) => {
       });
 
       console.log("Thông tin user: " + JSON.stringify(res.data));
-      setUserInfo(await res.data);
+      setUserInfo(res.data);
       saveDataToStorage("userInfo", JSON.stringify(res.data));
+      return res.data
     } catch (error) {
       console.log(error);
     }
@@ -95,10 +96,10 @@ export const AuthProvider = ({ children }) => {
       setUserToken({});
       setUserInfo({});
       setUserTokenRegister({});
-      setIsLoading(false)
+      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false)
-      console.error(error)
+      setIsLoading(false);
+      console.error(error);
     }
   };
 
@@ -145,21 +146,21 @@ export const AuthProvider = ({ children }) => {
 
   const sendOtp = async (username) => {
     try {
-      const res = await ApiService.sendOtp(username)
-      console.log(res)
+      const res = await ApiService.sendOtp(username);
+      console.log(res);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   const verifyOtp = async (username, otp, newPassword) => {
     try {
-      const res = await ApiService.verifyOtp(username, otp, newPassword)
-      console.log(res)
+      const res = await ApiService.verifyOtp(username, otp, newPassword);
+      console.log(res);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   const getListBooking = async (accessToken) => {
     const config = {
@@ -185,19 +186,19 @@ export const AuthProvider = ({ children }) => {
 
       const data = await Promise.all(
         res.data.row.map(async (booking) => {
-          const photographerData = await getPhotographerById(
-            booking.photographerId
+          const packageShootingData = await getPackageShootingById(
+            booking.packageShootingId
           );
           return {
             ...booking,
-            photographerData,
+            packageShootingData,
           };
         })
       );
-      setBookingList(res.data.row)
+      setBookingList(res.data.row);
       setBookingData(data);
-      setCountAllBooking(res.data.count)
-      console.log("[COUNT] " + res.data.count)
+      setCountAllBooking(res.data.count);
+      console.log("[COUNT] " + res.data.count);
     } catch (error) {
       console.error(error);
     }
@@ -262,38 +263,46 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const createBookingById = async (startTime, endTime, address, photographerId) => {
+  const createBookingById = async (
+    startTime,
+    endTime,
+    address,
+    photographerId
+  ) => {
     setIsLoading(true);
     try {
-      const res = await axios.post(`http://${IPv4}:8448/api/v1/booking`,
-      {
-        startTime,
-        endTime,
-        address,
-        photographerId,
-      }, {
-        headers: {
-          Authorization: `Bearer ${userToken.accessToken}`,
+      const res = await axios.post(
+        `http://${IPv4}:8448/api/v1/booking`,
+        {
+          startTime,
+          endTime,
+          address,
+          photographerId,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.accessToken}`,
+          },
+        }
+      );
 
       console.log("Tạo lịch thành công: \n" + JSON.stringify(res.data));
       setIsLoading(false);
-      setBookingAfterCreating(res.data)
-      setBookingSuccess(true)
+      setBookingAfterCreating(res.data);
+      setBookingSuccess(true);
     } catch (error) {
       console.error(error);
       console.log("Tạo lịch thất bại!");
       setIsLoading(false);
-      setBookingSuccess(false)
+      setBookingSuccess(false);
     }
-  }
+  };
 
   const getAllListPackageShooting = async () => {
     try {
       const res = await ApiService.getAllListPackageShooting();
       console.log("Dữ liệu gói chụp tổng: \n" + JSON.stringify(res.data));
-      
+
       const data = await Promise.all(
         res.data.row.map(async (packageShooting) => {
           const photographerData = await getPhotographerById(
@@ -308,9 +317,52 @@ export const AuthProvider = ({ children }) => {
 
       return data;
     } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getAllListPackageShootingByPhotographerId = async (photographerId) => {
+    try {
+      const res = await ApiService.getAllListPackageShootingByPhotographerId(photographerId);
+
+      const data = await Promise.all(
+        res.data.row.map(async (packageShooting) => {
+          const photographerData = await getPhotographerById(
+            packageShooting.photographerId
+          );
+          return {
+            ...packageShooting,
+            photographerData,
+          };
+        })
+      );
+        console.log(JSON.stringify(data) + "getAllListPackageShootingByPhotographerId")
+      return data;
+    } catch (error) {
       console.error(error)
     }
   }
+
+  const getPackageShootingById = async (id) => {
+    try {
+      const res = await ApiService.getPackageShootingById(id);
+      console.log("Dữ liệu package by id: \n" + JSON.stringify(res.data));
+
+      const data = await (async () => {
+        const photographerData = await getPhotographerById(
+          res.data.photographerId
+        );
+        return {
+          ...res.data,
+          photographerData,
+        };
+      })();
+      return data;
+      console.log("Dữ liệu CÓ PHOTOGRAPHER: \n" + JSON.stringify(data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -338,6 +390,8 @@ export const AuthProvider = ({ children }) => {
         sendOtp,
         verifyOtp,
         getAllListPackageShooting,
+        getPackageShootingById,
+        getAllListPackageShootingByPhotographerId,
         isLogin,
       }}
     >

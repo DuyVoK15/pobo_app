@@ -28,7 +28,7 @@ const BookingManagement = () => {
           style={{ flex: 1, marginTop: 0 }}
           tabBarPosition="top"
           screenOptions={({ route }) => ({
-            tabBarStyle: { backgroundColor: "black" }, // Chỉnh màu nền của tab bar
+            tabBarStyle: { backgroundColor: "white" }, // Chỉnh màu nền của tab bar
             tabBarLabelStyle: {
               fontWeight: "bold",
               fontSize: 14,

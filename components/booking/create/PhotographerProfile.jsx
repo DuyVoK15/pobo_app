@@ -35,7 +35,7 @@ const PhotographerProfile = ({ route, navigation }) => {
   }, []);
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
-  const handleNavigation = (obj) => {
+  const handleNavigation = () => {
     navigation.push("BookingCreate", {paramValue: paramValue})
   }
   const headerTitle = () => {
@@ -146,6 +146,7 @@ const Stack = createStackNavigator();
        
        
       </LinearGradient>
+      
       <Tab.Navigator
            style={{ flex: 1, marginTop: 0 }}
            tabBarPosition="top"
@@ -163,8 +164,8 @@ const Stack = createStackNavigator();
              tabBarActiveTintColor: COLORS.orange50,
            })}
           >
-            <Tab.Screen name="All Process" component={packages_Info} />
-            <Tab.Screen name="Pending Process" component={rating_info} />
+            <Tab.Screen initialParams={{photographerId: paramValue }} name="packages_Info" component={packages_Info} options={{tabBarLabel: "Các gói chụp"}}/>
+            <Tab.Screen initialParams={{photographerId: paramValue }} name="rating_info" component={rating_info}  options={{tabBarLabel: "Đánh giá"}} />
           </Tab.Navigator>
     </ImageBackground>
   );
