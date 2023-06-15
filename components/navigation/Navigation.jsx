@@ -19,6 +19,7 @@ import VerifyOTP from "../forgeting/VerifyOTP";
 import NewPassword from "../forgeting/NewPassword";
 import { SIZES } from "../constants";
 import RechargeScreen from "../payment/RechargeScreen";
+import QRCodeScreen from "../payment/QRCodeScreen";
 
 const IntroStack = createStackNavigator();
 const IntroStackScreen = () => {
@@ -97,9 +98,14 @@ const HomeStackScreen = () => {
         component={BottomNavigator}
       />
       <HomeStack.Screen
-        options={{ headerShown: false }}
+        // options={{ headerShown: false }}
         name="RechargeScreen"
         component={RechargeScreen}
+      />
+      <HomeStack.Screen
+        // options={{ headerShown: false }}
+        name="QRCodeScreen"
+        component={QRCodeScreen}
       />
       <HomeStack.Screen
         options={{ headerShown: false }}

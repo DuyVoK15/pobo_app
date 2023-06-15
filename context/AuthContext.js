@@ -344,6 +344,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   const getPackageShootingById = async (id) => {
+    setIsLoading(true);
     try {
       const res = await ApiService.getPackageShootingById(id);
       console.log("Dữ liệu package by id: \n" + JSON.stringify(res.data));
@@ -357,12 +358,28 @@ export const AuthProvider = ({ children }) => {
           photographerData,
         };
       })();
-      return data;
+      setIsLoading(false);
       console.log("Dữ liệu CÓ PHOTOGRAPHER: \n" + JSON.stringify(data));
+      return data;
+      
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
     }
   };
+
+  const buyCoinRequest = async (amount, platform) => {
+    setIsLoading(true);
+    try {
+      const res = await ApiService.buyCoinRequest(amount, platform, userToken.accessToken);
+      console.log("Dữ liệu MUA TIỀN: \n" + JSON.stringify(res.data));    
+      setIsLoading(false);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+    }
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -392,6 +409,7 @@ export const AuthProvider = ({ children }) => {
         getAllListPackageShooting,
         getPackageShootingById,
         getAllListPackageShootingByPhotographerId,
+        buyCoinRequest,
         isLogin,
       }}
     >

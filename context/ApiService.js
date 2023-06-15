@@ -1,6 +1,9 @@
 import axios from "axios";
 import { IPv4 } from "../utils/config";
+
 class ApiService {
+  
+
   sendOtp(username) {
     return axios.post(`http://${IPv4}:8448/api/v1/auth/forgot_password`, {
       username,
@@ -45,6 +48,16 @@ class ApiService {
       order: "[]",
     }
     return axios.get(`http://${IPv4}:8448/api/v1/package-shooting/${id}`, {params})
+  }
+  buyCoinRequest(amount, platform, accessToken) {
+    return axios.post(`http://${IPv4}:8448/api/v1/deposit/user`, {
+      amount,
+      platform
+    }, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
   }
 }
 export default new ApiService();

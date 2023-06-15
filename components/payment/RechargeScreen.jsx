@@ -1,13 +1,15 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { RadioButton, Checkbox } from "react-native-paper";
 import { TouchableOpacity } from "react-native";
 import { COLORS, SHADOWS, SIZES } from "../constants";
+import { AuthContext } from "../../context/AuthContext";
 const RechargeScreen = ({ navigation }) => {
-  const [amount, setAmount] = useState("");
+  const {buyCoinRequest} = useContext(AuthContext)
   const listPlatform = ["MOMO", "VNPAY", "ZALOPAY", "TPB", "BIDV"];
+  const [amount, setAmount] = useState("");
   const [platform, setPlatform] = useState("");
-  const [checked, setChecked] = useState("MOMO");
+  const [listDataBuyCoinRequest, setListDataBuyCoinRequest] = useState({});
 
   //   useEffect(() => {
   //     listPlatform.map(item => {
@@ -15,9 +17,21 @@ const RechargeScreen = ({ navigation }) => {
   //     })
 
   //   })
-  const handleRecharge = () => {
+  const handleRecharge =  async () => {
     console.log(amount);
     console.log(platform);
+    try {
+      const data = await buyCoinRequest(parseInt(amount), platform);
+      setListDataBuyCoinRequest(data);
+      console.log(JSON.stringify(data));
+      if(data&&data!=null){
+        navigation.replace("QRCodeScreen", {qrString: data.qrString});
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    
+
   };
   return (
     <View style={styles.container}>
@@ -26,7 +40,7 @@ const RechargeScreen = ({ navigation }) => {
       <View style={styles.containerInputText}>
         <TextInput
           style={styles.textInput}
-          keyboardType="numeric"
+          // keyboardType="numeric"
           value={amount}
           placeholder="Vui lòng nhập số tiền..."
           onChangeText={(text) => setAmount(text)}
@@ -67,7 +81,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: COLORS.orange50,
+    backgroundColor: "#FFF",
   },
   containerView: {
     justifyContent: "center",
