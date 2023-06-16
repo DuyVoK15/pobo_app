@@ -20,6 +20,7 @@ import NewPassword from "../forgeting/NewPassword";
 import { SIZES } from "../constants";
 import RechargeScreen from "../payment/RechargeScreen";
 import QRCodeScreen from "../payment/QRCodeScreen";
+import Detail from "../home/justview/Detail";
 
 const IntroStack = createStackNavigator();
 const IntroStackScreen = () => {
@@ -121,6 +122,11 @@ const HomeStackScreen = () => {
         options={{ headerShown: false }}
         name="BookingCreate"
         component={BookingCreate}
+      />
+      <HomeStack.Screen
+        options={{ headerShown: false }}
+        name="Detail"
+        component={Detail}
       />
     </HomeStack.Navigator>
   );

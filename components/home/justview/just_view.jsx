@@ -5,23 +5,36 @@ import { COLORS, FONT, SIZES } from "../../constants";
 import JustViewer from './just_View_card';
 
 import data from './data_just_view';
-const JustView = () =>{
+const JustView = ( {navigation}) =>{
+  const handleViewerClick = (item) => {
+    // Handle the click event here
+    // You can navigate to the Detail page or show it as a modal, etc.
+    console.log('Clicked item:', item);
+    // Example: You can navigate to the Detail page using React Navigation
+    // Replace 'navigation' with the actual navigation prop from React Navigation
+    navigation.navigate('Detail', { item });
+  };
     return (
       <View style={styles.wrap}>
-        <Text style={styles.text}>Mới Xem</Text>
+        <Text style={styles.text}>Mới Xe aam</Text>
         
         <ScrollView horizontal 
         contentContainerStyle={styles.cardsContainer}   
         showsHorizontalScrollIndicator={false}
         >
         {data.map((item) => (
+          <TouchableOpacity
+          key={item.id}
+          onPress={() => handleViewerClick(item)} // Handle the click event
+        >
           <JustViewer
-            key={item.id}
+            // key={item.id}
             imageSource={item.imageSource}
             title={item.title}
             name={item.name}
 
           />
+          </TouchableOpacity>
           
         ))}
         </ScrollView>
