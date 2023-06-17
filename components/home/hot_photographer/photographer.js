@@ -108,16 +108,16 @@ const PhotographerList = ({photographerList}) => {
   };
   const data = photographerList
   useEffect(()=> {
-    console.log(data)
+    // console.log(data)
   })
   return (
     <View style={styles.container}>
       <Text style={styles.textContent}>Nhiếp ảnh gia hot tuần này</Text>
       <View style={styles.wrapcard}>
-        {data.map((photographer, index) => (
+        {data.map((photographer) => (
           <View  style={styles.rowContainer}>
             <Avatar 
-            key={index}
+            key={photographer.id}
             image={{ uri: photographer.avatarUrl }} 
             photographerName={photographer.name}
 

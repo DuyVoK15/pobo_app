@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from "../../../context/AuthContext";
-export default Packages_Info = ({ route }) => {
+export default Packages_Info = ({ route, navigation }) => {
   const { photographerId } = route.params;
   const { getAllListPackageShootingByPhotographerId } = useContext(AuthContext);
   const [listPackageShooting, getListPackageShooting] = useState([]);
@@ -60,7 +60,12 @@ export default Packages_Info = ({ route }) => {
     fetchData();
   }, []);
 
+  const handleNavigateToBookingCreate = (packageShootingId) => {
+    navigation.push("BookingCreate", {packageShootingId: packageShootingId})
+  }
+
   return (
+
     //     <View style={styles.container}>
 
     //      {data.map((item, index) => (
@@ -110,10 +115,12 @@ export default Packages_Info = ({ route }) => {
       <View style={styles.rowWrapper}>
         {listPackageShooting &&
           listPackageShooting.map((packageShooting) => (
-            <TouchableOpacity style={styles.card} key={packageShooting.id}>
-              <View style={styles.cardContainer}>
+
+            <TouchableOpacity style={styles.card} key={packageShooting.id} onPress={() => handleNavigateToBookingCreate(packageShooting.id)}>
+              <View style={styles.cardCotainer}>
+
                 <Image
-                  source={{ uri: packageShooting.photographerData.avatarUrl }}
+                  source={{ uri: packageShooting.images[0] }}
                   style={styles.image}
                 />
                 <View style={styles.content}>

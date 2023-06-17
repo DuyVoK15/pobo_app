@@ -27,7 +27,7 @@ const Card = ({
   return (
     // <View style={styles.card}>
     <View>
-      <TouchableOpacity onPress={()=> navigation.navigate('Booking')}>
+     
         <View style={styles.contentContainer}>
           <Image source={image} style={styles.image} resizeMode="cover" />
 
@@ -48,7 +48,7 @@ const Card = ({
           </View>
         </View>
         {/* // </View> */}
-      </TouchableOpacity>
+     
       <Modal
         isVisible={isModalVisible}
         onSwipeComplete={toggleModal}

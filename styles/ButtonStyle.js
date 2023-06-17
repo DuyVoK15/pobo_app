@@ -22,5 +22,5 @@ const ButtonStyle = StyleSheet.create({
       },
 })
 
-export default ButtonStyle
+export default ButtonStyle;
 

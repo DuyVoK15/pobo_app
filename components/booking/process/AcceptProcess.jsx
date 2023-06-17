@@ -1,33 +1,25 @@
-import {
-  Image,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Animated,
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import BookingEmptyScreen from "../BookingEmptyScreen";
 import { AuthContext } from "../../../context/AuthContext";
+import { Animated } from "react-native";
+import { RefreshControl } from "react-native";
+import Spinner from "react-native-loading-spinner-overlay";
+import { Image } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { COLORS, SIZES } from "../../constants";
 import { formatDateToVN } from "../../../utils/FormatDate";
-import Spinner from "react-native-loading-spinner-overlay";
 
-const AllProcess = () => {
+const AcceptProcess = () => {
   const {
-    userToken,
-    getListBooking,
-    bookingList,
-    getPhotographerById,
-    bookingData,
-    countAllBooking,
-    isLoading
+    getListBookingByStatus,
+    countAcceptBooking,
+    isLoading,
   } = useContext(AuthContext);
   // const [bookingData, setBookingData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-
+  const [bookingData, setBookingData] = useState([]);
+  const [count, setCount] = useState('')
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchData();
@@ -37,7 +29,10 @@ const AllProcess = () => {
   });
 
   const fetchData = async () => {
-    await getListBooking();
+    const data = await getListBookingByStatus("ACCEPT");
+    setBookingData(data);
+    setCount(data.count);
+    
   };
 
   useEffect(() => {
@@ -62,15 +57,18 @@ const AllProcess = () => {
       <View style={styles.container}>
         <Spinner visible={isLoading} />
         <Text style={styles.textHeader}>
-          Hiện có tất cả {countAllBooking?countAllBooking:0} lịch hẹn{" "}
+          Hiện có {countAcceptBooking ? countAcceptBooking : 0} lịch hẹn được chấp thuận{" "}
         </Text>
-        {countAllBooking!==0 ? (
+        {countAcceptBooking !== 0 ? (
           <>
             {bookingData.map((booking, index) => (
               <View key={index} style={styles.containerRow}>
                 <View style={{ flex: 1 }}>
                   <Image
-                    source={{ uri: booking.packageShootingData.photographerData.avatarUrl }}
+                    source={{
+                      uri: booking.packageShootingData.photographerData
+                        .avatarUrl,
+                    }}
                     style={styles.avatar}
                   />
                 </View>
@@ -78,7 +76,9 @@ const AllProcess = () => {
                   <Text style={styles.title}>
                     {booking.packageShootingData.photographerData.name}
                   </Text>
-                  <Text style={styles.title2}>{formatDateToVN(booking.startTime)}</Text>
+                  <Text style={styles.title2}>
+                    {formatDateToVN(booking.startTime)}
+                  </Text>
                 </View>
                 <View style={{ flex: 1.4 }}>
                   <TouchableOpacity style={styles.button}>
@@ -91,7 +91,7 @@ const AllProcess = () => {
                         ? "Xong"
                         : booking.bookingStatus === "ACCEPT"
                         ? "Hẹn"
-                        : ""}
+                        : "Chờ"}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -106,7 +106,7 @@ const AllProcess = () => {
   );
 };
 
-export default AllProcess;
+export default AcceptProcess;
 
 const styles = StyleSheet.create({
   container: {

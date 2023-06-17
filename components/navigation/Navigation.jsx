@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SwiperOnboarding from "../onboarding/SwiperOnboarding";
@@ -20,7 +20,11 @@ import NewPassword from "../forgeting/NewPassword";
 import { SIZES } from "../constants";
 import RechargeScreen from "../payment/RechargeScreen";
 import QRCodeScreen from "../payment/QRCodeScreen";
+
 import Detail from "../home/justview/Detail";
+
+import BookingSuccess from "../booking/create/BookingSuccess";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const IntroStack = createStackNavigator();
 const IntroStackScreen = () => {
@@ -52,11 +56,11 @@ const AuthStackScreen = () => {
       <AuthStack.Screen name="SendOTP" component={SendOTP} />
       <AuthStack.Screen name="VerifyOTP" component={VerifyOTP} />
       <AuthStack.Screen name="NewPassword" component={NewPassword} />
-      <AuthStack.Screen
+      {/* <AuthStack.Screen
         options={{ headerShown: false }}
         name="UserProfile"
         component={BottomNavigator}
-      />
+      /> */}
       <AuthStack.Screen
         options={{ headerShown: false }}
         name="SettingsAccountPersonal"
@@ -88,9 +92,12 @@ const HomeStackScreen = () => {
       <HomeStack.Screen
         name="SettingsAccountPersonal"
         component={SettingsAccountPersonal}
-        options={{ headerTitle: "Trang cá nhân", headerTitleStyle: {
-          fontSize: SIZES.xLarge
-        } }}
+        options={{
+          headerTitle: "Trang cá nhân",
+          headerTitleStyle: {
+            fontSize: SIZES.xLarge,
+          },
+        }}
       />
 
       <HomeStack.Screen
@@ -128,16 +135,21 @@ const HomeStackScreen = () => {
         name="Detail"
         component={Detail}
       />
+      <HomeStack.Screen
+        // options={{ headerShown: false }}
+        name="BookingSuccess"
+        component={BookingSuccess}
+      />
     </HomeStack.Navigator>
   );
 };
 
 const Navigation = () => {
-  const { userToken } = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
 
   return (
     <NavigationContainer>
-      {userToken.accessToken ? <HomeStackScreen /> : <AuthStackScreen />}
+      {isLoggedIn ? <HomeStackScreen /> : <AuthStackScreen />}
     </NavigationContainer>
   );
 };

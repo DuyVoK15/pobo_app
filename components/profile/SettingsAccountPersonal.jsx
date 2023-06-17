@@ -65,9 +65,9 @@ const SettingsAccountPersonal = ({ navigation }) => {
   }, []); // KẾT THÚC xử lí useEffect
 
   // BẮT ĐẦU xử lí handle update profile
-  const { updateProfile, userToken, isLoading } = useContext(AuthContext);
+  const { updateProfile, isLoading } = useContext(AuthContext);
   const handleUpdateProfile = () => {
-    console.log(userToken.accessToken);
+   
     updateProfile(
       name,
       phone,
@@ -75,7 +75,7 @@ const SettingsAccountPersonal = ({ navigation }) => {
       genderValue,
       formatDateToAPI(date),
       avatar,
-      userToken.accessToken
+
     );
     console.log("date: " + typeof date);
     console.log("formatDate: " + formatDateToAPI("2022/12/12"));
@@ -191,7 +191,7 @@ const SettingsAccountPersonal = ({ navigation }) => {
             />
           </View>
         </TouchableOpacity>
-        <Text style={styles.avatarName}>Võ Thanh Duy</Text>
+        <Text style={styles.avatarName}>{name}</Text>
         <View style={styles.containerInputText}>
           <Text style={InputTextStyle.titleText}>Tên</Text>
           <TextInput

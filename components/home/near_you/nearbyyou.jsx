@@ -31,7 +31,7 @@ const NearYou = ({ photographerList, navigation }) => {
         showsHorizontalScrollIndicator={false}
       >
         {photographerList.map((item) => (
-          <TouchableOpacity onPress={() => handleNavigate(item.id)}>
+          <TouchableOpacity key={item.id} onPress={() => handleNavigate(item.id)}>
             <PhotographercCard
                key={item.id}
               imageSource={{ uri: item.avatarUrl }}

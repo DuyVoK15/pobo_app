@@ -18,7 +18,8 @@ import Spinner from "react-native-loading-spinner-overlay";
 const UserProfile = ({ navigation }) => {
   const imageVoDien =
     "https://toigingiuvedep.vn/wp-content/uploads/2022/04/hinh-avatar-anh-vo-dien-cute.jpg";
-  const { logout, userInfo, userToken, getUserInfo, isLoading } = useContext(AuthContext);
+  const { logout, userToken, getUserInfo, isLoading } =
+    useContext(AuthContext);
   const [info, setInfo] = useState({});
   const [refreshing, setRefreshing] = useState(false);
 
@@ -31,11 +32,22 @@ const UserProfile = ({ navigation }) => {
   });
 
   const fetchData = async () => {
-    // const value = await AsyncStorage.getItem("userInfo");
-    // const parseValue = JSON.parse(value);
-    const data = await getUserInfo();
-    setInfo(data);
+    try {
+      getUserInfo();
+      const userInfo = await AsyncStorage.getItem("userInfo");
+      // const parseValue = JSON.parse(value);
+      if (userInfo != null) {
+        setInfo(JSON.parse(userInfo));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  const handleLogout = async () => {
+    await logout();
+    fetchData();
+  }
 
   useEffect(() => {
     const interval = setInterval(fetchData, 5000000000000000);
@@ -87,10 +99,16 @@ const UserProfile = ({ navigation }) => {
         </View>
 
         <View style={styles.containerTextTitles}>
-          <Text style={styles.textTitle}>Số dư tài khoản: <Text style={styles.textBalance}>{info.balance} VNĐ</Text></Text>
-              <TouchableOpacity style={styles.buttonRecharge} onPress={() => navigation.push("RechargeScreen")}>
-                <Text style={styles.textRecharge}>Nạp tiền</Text>
-              </TouchableOpacity>
+          <Text style={styles.textTitle}>
+            Số dư tài khoản:{" "}
+            <Text style={styles.textBalance}>{info.balance} VNĐ</Text>
+          </Text>
+          <TouchableOpacity
+            style={styles.buttonRecharge}
+            onPress={() => navigation.push("RechargeScreen")}
+          >
+            <Text style={styles.textRecharge}>Nạp tiền</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.containerPoBo}>
@@ -260,7 +278,7 @@ const UserProfile = ({ navigation }) => {
         <View style={styles.containerButton}>
           <TouchableOpacity
             style={ButtonStyle.buttonSignup}
-            onPress={() => logout()}
+            onPress={() => handleLogout()}
           >
             <Text style={[ButtonStyle.buttonSignupText, { color: "#FFF" }]}>
               Đăng xuất
@@ -364,9 +382,9 @@ const styles = StyleSheet.create({
   },
   textBalance: {
     fontSize: SIZES.large,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
-  buttonRecharge:{
+  buttonRecharge: {
     marginTop: 10,
     backgroundColor: "#FFF",
     borderWidth: 2,
@@ -374,12 +392,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 100,
     paddingVertical: 10,
-    borderRadius: 10
+    borderRadius: 10,
   },
   textRecharge: {
     fontSize: SIZES.medium,
     fontWeight: 500,
-     color: COLORS.orange40
+    color: COLORS.orange40,
   },
   containerTextTitles: {
     marginVertical: 10,

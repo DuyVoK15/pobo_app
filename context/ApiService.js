@@ -41,7 +41,7 @@ class ApiService {
   getPackageShootingById(id) {
     const params = {
       hl: "en",
-      select: '["$all"]',
+      select: '["$all", {"packageShootingCategory":["$all",{"category":["$all"]}]}]',
       where: "{}",
       limit: "unlimited",
       page: 1,

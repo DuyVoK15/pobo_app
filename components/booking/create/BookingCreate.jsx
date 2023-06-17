@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   Modal,
+  RefreshControl,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../../constants";
@@ -16,19 +17,39 @@ import { formatDateTime, formatTime } from "../../../utils/FormatDate";
 import ButtonStyle from "../../../styles/ButtonStyle";
 import { AuthContext } from "../../../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
+import { BookingCreateValidation } from "../../../utils/Validation";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const BookingCreate = ({ navigation, route }) => {
-  const { paramValue } = route.params;
-  const { getPhotographerById } = useContext(AuthContext);
-  const [ photographer, setPhotographer] = useState({});
+  const { packageShootingId } = route.params;
+  const {
+    createBookingById,
+    // packageShooting,
+    getPackageShootingById,
+    getUserInfo,
+    isLoading,
+  } = useContext(AuthContext);
+  const [packageShooting, setPackageShooting] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+  
   const fetchData = async () => {
-    const data = await getPhotographerById(paramValue);
-    setPhotographer(data);
+    try {   
+      const data = await getPackageShootingById(packageShootingId);  
+      console.log(JSON.stringify(data) + " HIẾU ĂN CỨC");
+      setPackageShooting(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
+  // const userInfo = await getUserInfo();
+  //   setUserInfo(userInfo);
+  
   useEffect(() => {
     fetchData();
+    // console.log(JSON.stringify(packageShootingId) + " VÃI Ò");
+    // console.log(JSON.stringify(packageShooting) + " HUHUHUHUHUHUHUHUHUHUHU");
   }, []);
   const [open, setOpen] = useState(false);
-  const [location, setLocation] = useState("")
+  const [location, setLocation] = useState("");
   const [date, setDate] = useState("Chọn ngày");
   const [time, setTime] = useState("và giờ chụp");
   const today = new Date();
@@ -40,15 +61,34 @@ const BookingCreate = ({ navigation, route }) => {
     setOpen(!open);
   };
 
-  const {createBookingById, bookingSuccess, isLoading} = useContext(AuthContext);
-  const handleCreateBooking = () => {
-     createBookingById(formatDateTime(date, time), formatDateTime(date, time), location, paramValue);
-    // if(bookingSuccess===true){
-    //   alert("Tạo lịch hẹn thành công!")
-    // } else {
-    //   alert("Tạo lịch hẹn thất bại!")
-    // }
-  }
+  // const { createBookingById, bookingSuccess, isLoading } =
+  //   useContext(AuthContext);
+  const handleCreateBooking = async () => {
+    console.log(formatDateTime(date, time) + location + packageShootingId);
+    if (date != "" && time != "" && location != "") {
+      const data = await createBookingById(
+        formatDateTime(date, time),
+        location,
+        packageShootingId
+      );
+
+      if (data) {
+        navigation.replace("BookingSuccess");
+      }
+    } else {
+      alert("Vui lòng nhập đầy đủ thông tin!");
+    }
+  };
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchData();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  });
 
   return (
     <View style={styles.container}>
@@ -63,24 +103,33 @@ const BookingCreate = ({ navigation, route }) => {
           <Text style={styles.headerText}>Thông tin thợ Chụp Ảnh</Text>
         </View>
       </View>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={styles.cardContainer}>
           <View style={styles.wrapInfo}>
             <Image
-              source={{ uri: photographer.avatarUrl }}
+              source={{ uri: packageShooting?.images[0] }}
               style={styles.bg_img}
             />
             <View style={styles.cardContent}>
               <View style={styles.wraptitle}>
-                <Text style={styles.title}>{photographer.name}</Text>
-                <Text style={styles.photographerName}>Chụp ảnh cưới</Text>
-                <Text style={styles.cameraName}>Cannon</Text>
+                <Text style={styles.title}>
+                  {packageShooting?.photographerData?.name}
+                </Text>
+                <Text style={styles.photographerName}>
+                  Gói chụp: {packageShooting?.packageShootingCategory[0]?.category?.name}
+                </Text>
+                <Text style={styles.cameraName}>Máy ảnh: Cannon</Text>
               </View>
             </View>
           </View>
           <View style={styles.priceContainer}>
             <Ionicons name="md-cash-outline" size={18} color={COLORS.black} />
-            <Text style={styles.price}>VND 1.000.000</Text>
+            <Text style={styles.price}>VND {packageShooting?.totalPrice}</Text>
           </View>
         </View>
         <View style={styles.wrapSection}>
@@ -178,7 +227,9 @@ const BookingCreate = ({ navigation, route }) => {
                   <Ionicons name="person" size={24} color={COLORS.boder50} />
                   <View style={styles.sectionText}>
                     <Text style={styles.sectionTitle}>Số người chụp</Text>
-                    <Text style={styles.sectionContent}>1 người</Text>
+                    <Text style={styles.sectionContent}>
+                      {packageShooting?.duration} người
+                    </Text>
                   </View>
                 </View>
 
@@ -190,7 +241,9 @@ const BookingCreate = ({ navigation, route }) => {
                   />
                   <View style={styles.sectionText}>
                     <Text style={styles.sectionTitle}>Gói Chụp</Text>
-                    <Text style={styles.sectionContent}>Chụp tốt nghiệp</Text>
+                    <Text style={styles.sectionContent}>
+                      {packageShooting?.title}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -199,7 +252,10 @@ const BookingCreate = ({ navigation, route }) => {
           <TouchableOpacity>
             <View style={styles.discountCard}>
               <View style={styles.wrapDiscount}>
-              <Image source={require('../../../assets/icons/sale.png')} size={20} />
+                <Image
+                  source={require("../../../assets/icons/sale.png")}
+                  size={20}
+                />
                 <Text>Áp dụng mã giảm giá</Text>
               </View>
               <View style={styles.iconchevron}>
@@ -219,7 +275,9 @@ const BookingCreate = ({ navigation, route }) => {
               <View style={styles.SectionDetailPrice}>
                 <View style={styles.wrapPackage}>
                   <Text style={styles.sectionTitle}>Gói chụp hình</Text>
-                  <Text style={styles.sectionTitle}>1.000.000 VND</Text>
+                  <Text style={styles.sectionTitle}>
+                    {packageShooting?.totalPrice} VND
+                  </Text>
                 </View>
                 <Text style={styles.sectionContent}>Gói chụp tốt nghiệp </Text>
               </View>
@@ -228,7 +286,7 @@ const BookingCreate = ({ navigation, route }) => {
               <View style={styles.SectionDetailPrice}>
                 <View style={styles.wrapPackage}>
                   <Text style={styles.sectionTitle}>Thuế</Text>
-                  <Text style={styles.sectionTitle}>100.000 VND</Text>
+                  <Text style={styles.sectionTitle}>0 VND</Text>
                 </View>
               </View>
               <View style={styles.underline} />
@@ -236,7 +294,7 @@ const BookingCreate = ({ navigation, route }) => {
               <View style={styles.SectionDetailPrice}>
                 <View style={styles.wrapPackage}>
                   <Text style={styles.textSale}>Khuyến mãi</Text>
-                  <Text style={styles.textSale}>100.000 VND</Text>
+                  <Text style={styles.textSale}>0 VND</Text>
                 </View>
               </View>
               <View style={styles.underline} />
@@ -244,44 +302,64 @@ const BookingCreate = ({ navigation, route }) => {
               <View style={styles.SectionDetailPrice}>
                 <View style={styles.wrapPackage}>
                   <Text style={styles.sectionTitle}>Tổng</Text>
-                  <Text style={styles.sectionTitle}>1.000.000 VND</Text>
+                  <Text style={styles.sectionTitle}>
+                    {packageShooting?.totalPrice} VND
+                  </Text>
                 </View>
               </View>
             </View>
           </View>
 
-
           <Text style={styles.text}>Thanh toán bằng</Text>
           <View style={styles.card}>
             <View style={styles.wrapcard}>
-            <TouchableOpacity>
-              <View style={styles.SectionPaymentBy}>
-                <View style={styles.wrapPayment}>
-                  <Ionicons name="card-outline" size={20}/>
-                  <Text style={styles.sectionTitle}>Thẻ tín dụng và ghi nợ</Text>
+              <TouchableOpacity>
+                <View style={styles.SectionPaymentBy}>
+                  <View style={styles.wrapPayment}>
+                    <Ionicons name="card-outline" size={20} />
+                    <Text style={styles.sectionTitle}>
+                      Thẻ tín dụng và ghi nợ
+                    </Text>
+                  </View>
                 </View>
-              </View>
               </TouchableOpacity>
               <View style={styles.underline} />
-              
+
               <TouchableOpacity>
-              <View style={styles.SectionPaymentBy}>
-                <View style={styles.wrapPayment}>
-                <Image source={require('../../../assets/icons/momo.png')} size={20} />
-                <Text>Momo</Text>
+                <View style={styles.SectionPaymentBy}>
+                  <View style={styles.wrapPayment}>
+                    <Image
+                      source={require("../../../assets/icons/momo.png")}
+                      size={20}
+                    />
+                    <Text>Momo</Text>
+                  </View>
                 </View>
-              </View>
               </TouchableOpacity>
               <View style={styles.underline} />
-              
+
               <TouchableOpacity>
-              <View style={styles.SectionPaymentBy}>
-                <View style={styles.wrapPayment}>
-                <Ionicons name="wallet-outline" size={20}/>
-                  <Text style={styles.sectionTitle}>Tiền mặt</Text>
+                <View style={styles.SectionPaymentBy}>
+                  <View style={styles.wrapPayment}>
+                    <Ionicons name="wallet-outline" size={20} />
+                    <Text style={styles.sectionTitle}>Tiền mặt</Text>
+                  </View>
                 </View>
-                
-              </View>
+              </TouchableOpacity>
+              <View style={styles.underline} />
+              <TouchableOpacity>
+                <View style={styles.SectionPaymentBy}>
+                  <View style={styles.wrapPayment}>
+                    <Ionicons name="wallet-outline" size={20} />
+                    <Text style={styles.sectionTitle}>
+                      Tài khoản PoBo: [số dư:{" "}
+                      <Text style={{ fontWeight: "bold" }}>
+                        {userInfo.balance}
+                      </Text>
+                      ]
+                    </Text>
+                  </View>
+                </View>
               </TouchableOpacity>
             </View>
           </View>
@@ -289,11 +367,15 @@ const BookingCreate = ({ navigation, route }) => {
           <View style={styles.card}>
             <View style={styles.wrapcard}>
               <View style={styles.wrapTextCacel}>
-                <Text style={styles.textcancel}>Bạn được hoàn tiền một phần nếu hủy trong vòng 24 giờ sau khi đặt. Sau 24 giờ, bạn sẽ không được hoàn tiền cho đơn đặt lịch chụp hình này.</Text>
+                <Text style={styles.textcancel}>
+                  Bạn được hoàn tiền một phần nếu hủy trong vòng 24 giờ sau khi
+                  đặt. Sau 24 giờ, bạn sẽ không được hoàn tiền cho đơn đặt lịch
+                  chụp hình này.
+                </Text>
                 <Text style={styles.underlinedText}> Tìm hiểu thêm</Text>
               </View>
-              </View>
-              </View>
+            </View>
+          </View>
 
           <TouchableOpacity
             onPress={() => handleCreateBooking()}
@@ -312,7 +394,7 @@ export default BookingCreate;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'#F5F5FA'
+    backgroundColor: "#F5F5FA",
   },
   header: {
     paddingTop: 30,
@@ -378,7 +460,7 @@ const styles = StyleSheet.create({
   bg_img: {
     width: 111,
     height: 74,
-    borderRadius: 16,
+    borderRadius: 10,
   },
   wrapInfo: {
     display: "flex",
@@ -452,29 +534,29 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 16,
-    justifyContent:'space-between',
-    paddingHorizontal:12
+    justifyContent: "space-between",
+    paddingHorizontal: 12,
   },
   listitem: {
     flexDirection: "row",
     alignItems: "center",
-    gap:8
+    gap: 8,
   },
   sectionText: {
-    display:'flex',
-    flexDirection:'column'
+    display: "flex",
+    flexDirection: "column",
   },
-  wrapDate_icon:{
-    display:'flex',
-    flexDirection:'row',
-    gap:8
+  wrapDate_icon: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 8,
   },
-  wrapLocation:{
-    display:'flex',
-    flexDirection:'row',
-    overflow:'hidden',
-    paddingRight:100,
-    gap:8
+  wrapLocation: {
+    display: "flex",
+    flexDirection: "row",
+    overflow: "hidden",
+    paddingRight: 100,
+    gap: 8,
   },
   sectionTitle: {
     // fontFamily: 'SVN-Gilroy',
@@ -490,95 +572,90 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 21,
     // width:250,
-    overflow:'hidden'
+    overflow: "hidden",
   },
   underline: {
     borderWidth: 1,
     borderColor: "#EBEBF0",
     borderStyle: "solid",
     marginBottom: 16,
-    
+
     // paddingHorizontal: 25
   },
-  discountCard:{
-    display:'flex',
-    flexDirection:'row',
+  discountCard: {
+    display: "flex",
+    flexDirection: "row",
     paddingHorizontal: 20,
-    paddingTop:18,
-    paddingBottom:16,
-    backgroundColor:'#FFFFFF',
-    justifyContent: 'space-between',    
-    
+    paddingTop: 18,
+    paddingBottom: 16,
+    backgroundColor: "#FFFFFF",
+    justifyContent: "space-between",
   },
-  wrapDiscount:{
-    display:'flex',
-    flexDirection:'row',
-    alignItems:'flex-start',
-    gap:8,
-    
+  wrapDiscount: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "center",
+    gap: 8,
   },
-  iconchevron:{
-    display:'flex',
-    alignItems:'flex-end'
+  iconchevron: {
+    display: "flex",
+    alignItems: "flex-end",
   },
-  icon_insize_Discount:{
+  icon_insize_Discount: {
     // display:'flex',
     // alignItems:'flex-end'
     // alignItems: 'flex-end'
   },
-  SectionDetailPrice:{
-    display:'flex',
-    flexDirection:'column',
-    gap:8,
+  SectionDetailPrice: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 8,
     // alignItems:'center',
-    justifyContent:'center',
+    justifyContent: "center",
     paddingBottom: 15,
-    paddingHorizontal:12
-
+    paddingHorizontal: 12,
   },
-  wrapPackage:{
-    display:'flex',
-    flexDirection:'row',
-    justifyContent:'space-between'
-    
+  wrapPackage: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
-  textSale:{
+  textSale: {
     fontStyle: "normal",
     fontWeight: 400,
     fontSize: 14,
     lineHeight: 21,
-    color:COLORS.orange50
+    color: COLORS.orange50,
   },
-  SectionPaymentBy:{
-    display:'flex',
-    flexDirection:'column',
-    gap:8,
+  SectionPaymentBy: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 8,
     // alignItems:'center',
-    justifyContent:'center',
+    justifyContent: "center",
     paddingBottom: 15,
-    paddingHorizontal:12
-
+    paddingHorizontal: 12,
   },
-  wrapPayment:{
-    display:'flex',
-    flexDirection:'row',
-    gap:15
+  wrapPayment: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 15,
   },
-  wrapTextCacel:{
-    paddingLeft:14,
-    paddingRight:13
-
+  wrapTextCacel: {
+    paddingLeft: 14,
+    paddingRight: 13,
   },
-  textcancel:{
-    fontStyle: 'normal',
-    fontWeight: '400',
+  textcancel: {
+    fontStyle: "normal",
+    fontWeight: "400",
     fontSize: 14,
     lineHeight: 21,
   },
   underlinedText: {
-    textDecorationLine: 'underline',
-    fontStyle: 'normal',
-    fontWeight: '400',
+    textDecorationLine: "underline",
+    fontStyle: "normal",
+    fontWeight: "400",
     fontSize: 14,
     lineHeight: 21,
   },

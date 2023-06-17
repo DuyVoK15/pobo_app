@@ -21,6 +21,7 @@ import { AuthContext } from "../../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
 import { StatusBar } from "react-native";
 import { COLORS } from "../constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SigninModal = ({ navigation }) => {
   const handleNavigateToForgetPassword = () => {
@@ -43,9 +44,20 @@ const SigninModal = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const GoogleLogo = require("../../assets/google.png");
-  const { login, isLoading, isLogin } = useContext(AuthContext);
-  const handleLogin = () => {
-    login(username, password);
+  const { login, isLoading } = useContext(AuthContext);
+  const handleLogin = async () => {
+    try {
+      await login(username, password);
+      const data = await AsyncStorage.getItem("userToken")
+      if(data!=null){
+        console.log("Đăng nhập thành công");
+      } else {
+        console.log("Đăng nhập thất bại", JSON.stringify(data))
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    
     // navigation.push('HomeScreen');
   };
 
