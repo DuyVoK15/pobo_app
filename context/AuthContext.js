@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     checkLoggedIn();
   }, []);
+
   const checkLoggedIn = async () => {
     try {
       const userToken = await AsyncStorage.getItem("userToken");
@@ -53,7 +54,7 @@ export const AuthProvider = ({ children }) => {
           Authorization: `Bearer ${JSON.parse(userToken).accessToken}`,
         },
       });
-
+      
       console.log("Thông tin user: " + JSON.stringify(res.data));
       setUserInfo(res.data);
       saveDataToStorage("userInfo", JSON.stringify(res.data));
@@ -318,7 +319,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const createBookingById = async (startTime, address, packgeShootingId) => {
+  const createBookingById = async (startTime, address, packageShootingId) => {
     setIsLoading(true);
     try {
       const userToken = await AsyncStorage.getItem("userToken");
@@ -327,7 +328,7 @@ export const AuthProvider = ({ children }) => {
         {
           startTime,
           address,
-          packgeShootingId,
+          packageShootingId,
         },
         {
           headers: {
@@ -443,6 +444,20 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
+
+  const updateBookingStatus = async (id, bookingStatus) => {
+    const userToken = await AsyncStorage.getItem("userToken");
+    try {
+      const res = await ApiService.updateBookingStatus(id, bookingStatus, JSON.parse(userToken).accessToken);
+      console.log(JSON.stringify(res.data));
+      return res.data;
+    } catch (error) {
+      
+    }
+  }
+
+
+
   return (
     <AuthContext.Provider
       value={{
@@ -477,7 +492,7 @@ export const AuthProvider = ({ children }) => {
         getPackageShootingById,
         getAllListPackageShootingByPhotographerId,
         buyCoinRequest,
-
+        updateBookingStatus,
         isLoggedIn,
       }}
     >

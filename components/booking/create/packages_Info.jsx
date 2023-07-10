@@ -61,7 +61,7 @@ export default Packages_Info = ({ route, navigation }) => {
   }, []);
 
   const handleNavigateToBookingCreate = (packageShootingId) => {
-    navigation.push("BookingCreate", {packageShootingId: packageShootingId})
+    navigation.push("Detail", {packageShootingId: packageShootingId})
   }
 
   return (

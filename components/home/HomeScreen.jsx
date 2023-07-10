@@ -44,6 +44,7 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {  
     fetchData();
   }, []);
+  
   return (
     <ScrollView showsVerticalScrollIndicator={false}
     refreshControl={

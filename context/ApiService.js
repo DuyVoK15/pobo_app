@@ -59,5 +59,12 @@ class ApiService {
       },
     })
   }
+  updateBookingStatus(id, bookingStatus, accessToken){
+    return axios.patch(`http://${IPv4}:8448/api/v1/booking/${id}`, {bookingStatus}, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    })
+  }
 }
 export default new ApiService();

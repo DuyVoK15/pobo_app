@@ -29,13 +29,16 @@ const BookingCreate = ({ navigation, route }) => {
     isLoading,
   } = useContext(AuthContext);
   const [packageShooting, setPackageShooting] = useState(null);
-  const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState({});
   
   const fetchData = async () => {
     try {   
+      getUserInfo();
       const data = await getPackageShootingById(packageShootingId);  
       console.log(JSON.stringify(data) + " HIẾU ĂN CỨC");
       setPackageShooting(data);
+      const userInfo = await AsyncStorage.getItem("userInfo");
+      setUserInfo(JSON.parse(userInfo));
     } catch (error) {
       console.log(error);
     }

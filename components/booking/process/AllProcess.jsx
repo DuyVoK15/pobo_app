@@ -14,19 +14,20 @@ import { AuthContext } from "../../../context/AuthContext";
 import { COLORS, SIZES } from "../../constants";
 import { formatDateToVN } from "../../../utils/FormatDate";
 import Spinner from "react-native-loading-spinner-overlay";
+import { Modal } from "react-native";
+import { ButtonConfirmCategory, ButtonConfuseCategory } from "../../../styles/ButtonStyle";
 
 const AllProcess = () => {
   const {
-    userToken,
     getListBooking,
-    bookingList,
-    getPhotographerById,
     bookingData,
     countAllBooking,
-    isLoading
+    isLoading,
+    updateBookingStatus
   } = useContext(AuthContext);
   // const [bookingData, setBookingData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [bookingAfterUpdate, setBookingAfterUpdate] = ("");
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -41,7 +42,7 @@ const AllProcess = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(fetchData, 10000000000); // Gọi fetchData mỗi 5 giây
+    const interval = setInterval(fetchData, 100000); // Gọi fetchData mỗi 5 giây
 
     return () => {
       clearInterval(interval); // Hủy bỏ interval khi component bị unmount
@@ -51,6 +52,25 @@ const AllProcess = () => {
   useEffect(() => {
     fetchData(); // Lấy dữ liệu ban đầu khi component được render
   }, []);
+
+
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleOpenModal = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleUpdateStatus = async (id, bookingStatus) => {
+    const data = await updateBookingStatus(id, bookingStatus);
+    handleCloseModal();
+    setBookingAfterUpdate(data);
+    fetchData();
+  };
 
   return (
     <Animated.ScrollView
@@ -62,15 +82,18 @@ const AllProcess = () => {
       <View style={styles.container}>
         <Spinner visible={isLoading} />
         <Text style={styles.textHeader}>
-          Hiện có tất cả {countAllBooking?countAllBooking:0} lịch hẹn{" "}
+          Hiện có tất cả {countAllBooking ? countAllBooking : 0} lịch hẹn{" "}
         </Text>
-        {countAllBooking!==0 ? (
+        {countAllBooking !== 0 ? (
           <>
             {bookingData.map((booking, index) => (
               <View key={index} style={styles.containerRow}>
                 <View style={{ flex: 1 }}>
                   <Image
-                    source={{ uri: booking.packageShootingData.photographerData.avatarUrl }}
+                    source={{
+                      uri: booking.packageShootingData.photographerData
+                        .avatarUrl,
+                    }}
                     style={styles.avatar}
                   />
                 </View>
@@ -78,11 +101,13 @@ const AllProcess = () => {
                   <Text style={styles.title}>
                     {booking.packageShootingData.photographerData.name}
                   </Text>
-                  <Text style={styles.title2}>{formatDateToVN(booking.startTime)}</Text>
+                  <Text style={styles.title2}>
+                    {formatDateToVN(booking.startTime)}
+                  </Text>
                 </View>
                 <View style={{ flex: 1.4 }}>
-                  <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>
+                  <View style={styles.status}>
+                    <Text style={styles.textStatus}>
                       {booking.bookingStatus === "PENDING"
                         ? "Chờ"
                         : booking.bookingStatus === "CANCEL"
@@ -93,7 +118,66 @@ const AllProcess = () => {
                         ? "Hẹn"
                         : ""}
                     </Text>
-                  </TouchableOpacity>
+                  </View>
+                  {booking.bookingStatus === "PENDING" ? (
+                    <View>
+                      <TouchableOpacity style={styles.button} onPress={() => handleOpenModal()}>
+                        <Text style={styles.buttonText}>
+                          Hủy lịch
+                        </Text>
+                      </TouchableOpacity>
+
+                      <Modal
+                          visible={modalVisible}
+                          animationType="fade"
+                          transparent
+                        >
+                          <View style={styles.modalBackground}>
+                            <View style={styles.modalContent}>
+                            <Text style={styles.textQuestion}>
+                                Bạn có chắc chắn với quyết định này?
+                              </Text>
+                              <View style={styles.containerRoww}>
+                                <TouchableOpacity
+                                  style={ButtonConfirmCategory.buttonConfirm}
+                                  onPress={() =>
+                                    handleUpdateStatus(booking.id, "CANCEL")
+                                  }
+                                >
+                                  <Text
+                                    style={
+                                      ButtonConfirmCategory.buttonConfirmText
+                                    }
+                                  >
+                                    Xác nhận
+                                  </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                  style={ButtonConfuseCategory.buttonConfuse}
+                                  onPress={handleCloseModal}
+                                >
+                                  <Text
+                                    style={
+                                      ButtonConfuseCategory.buttonConfuseText
+                                    }
+                                  >
+                                    Quay lại
+                                  </Text>
+                                </TouchableOpacity>
+                              </View>
+                              <TouchableOpacity
+                                style={styles.closeButton}
+                                onPress={handleCloseModal}
+                              >
+                                <Text style={styles.closeButtonText}>x</Text>
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+                        </Modal>
+                    </View>
+                  ) : (
+                    <></>
+                  )}
                 </View>
               </View>
             ))}
@@ -131,6 +215,11 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginHorizontal: 20,
   },
+  containerRoww:{
+    flexDirection: "row",
+    marginBottom: 10,
+    justifyContent: "space-between",
+  },
   column: {
     flex: 1,
   },
@@ -146,6 +235,22 @@ const styles = StyleSheet.create({
   title2: {
     fontSize: SIZES.small,
   },
+  status: {
+    height: 25,
+    marginRight: 5,
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: "green",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  textStatus: {
+    color: "green",
+    fontSize: SIZES.small,
+  },
+
   button: {
     backgroundColor: "white",
     paddingHorizontal: 12,
@@ -158,5 +263,42 @@ const styles = StyleSheet.create({
     color: COLORS.orange40,
     alignSelf: "center",
     fontWeight: "bold",
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 0,
+  },
+  textQuestion: {
+    fontSize: SIZES.large,
+    marginBottom: 20,
+    fontWeight: "bold",
+
+    textAlign: "center",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    paddingVertical: 50,
+    paddingHorizontal: 30,
+    marginHorizontal: 5,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  closeButton: {
+    position: "absolute",
+    top: 5,
+    right: 15,
+  },
+  closeButtonText: {
+    fontSize: 30,
+    fontWeight: 500,
+    color: "black",
   },
 });

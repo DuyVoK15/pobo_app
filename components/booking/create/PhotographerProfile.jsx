@@ -130,7 +130,7 @@ const Stack = createStackNavigator();
                     <View style={styles.story}>
                       <View style={styles.arrow}></View>
 
-                      <Text>Hello world Im Hoang Vy, Im from HCMC </Text>
+                      <Text>Hello world Im {photographer.name}, Im from HCMC </Text>
                     </View>
                   </View>
                   

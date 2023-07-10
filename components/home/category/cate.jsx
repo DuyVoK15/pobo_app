@@ -9,10 +9,11 @@ import { COLORS, FONT, SIZES } from "../../constants";
 import { AuthContext } from "../../../context/AuthContext";
 
 const Cate = ({ navigation }) => {
-  const { getAllListPackageShooting, getPackageShootingById } =
+  const { getAllListPackageShooting, getUserInfo } =
     useContext(AuthContext);
   const [listPackageShooting, getListPackageShooting] = useState([]);
   const fetchData = async () => {
+    getUserInfo()
     const data = await getAllListPackageShooting();
     // const haha = await getPackageShootingById(
     //   "1c52af5a-315e-453a-b1cd-929d958aa167"
@@ -26,7 +27,7 @@ const Cate = ({ navigation }) => {
   }, []);
 
   const handle = (packageShootingId) => {
-    navigation.push("BookingCreate", {packageShootingId: packageShootingId})
+    navigation.push("Detail", {packageShootingId: packageShootingId})
   }
 
   return (

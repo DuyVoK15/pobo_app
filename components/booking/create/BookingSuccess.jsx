@@ -1,11 +1,12 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import ButtonStyle from "../../../styles/ButtonStyle";
+import { SIZES } from "../../constants";
 
 const BookingSuccess = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <Text>Đặt lịch thành công</Text>
+      <Text style={styles.textTitle}>Đặt lịch thành công</Text>
       <View style={ButtonStyle.buttonContainer}>
         <TouchableOpacity style={ButtonStyle.buttonSignup} onPress={() => navigation.replace("HomeScreen")}>
           <Text style={ButtonStyle.buttonSignupText}>Quay về trang chủ</Text>
@@ -24,4 +25,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#FFF",
   },
+  textTitle: {
+    fontSize: SIZES.xLarge,
+    fontWeight: "bold"
+  }
 });

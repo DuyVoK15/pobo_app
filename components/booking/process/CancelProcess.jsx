@@ -44,6 +44,9 @@ const CancelProcess = () => {
     fetchData(); // Lấy dữ liệu ban đầu khi component được render
   }, []);
 
+  
+
+
   return (
     <Animated.ScrollView
       showsVerticalScrollIndicator={false}

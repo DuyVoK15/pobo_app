@@ -136,7 +136,7 @@ const HomeStackScreen = () => {
         component={Detail}
       />
       <HomeStack.Screen
-        // options={{ headerShown: false }}
+        options={{ headerShown: false }}
         name="BookingSuccess"
         component={BookingSuccess}
       />
