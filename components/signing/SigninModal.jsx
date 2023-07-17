@@ -44,7 +44,7 @@ const SigninModal = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const GoogleLogo = require("../../assets/google.png");
-  const { login, isLoading } = useContext(AuthContext);
+  const { login, isLoading, errorMessageLogin } = useContext(AuthContext);
   const handleLogin = async () => {
     try {
       await login(username, password);
@@ -99,7 +99,9 @@ const SigninModal = ({ navigation }) => {
                     {/* <Text style={styles.underline2}></Text> */}
                   </View>
                 </View>
-
+                <View>
+                  <Text>{errorMessageLogin}</Text>
+                </View>
                 <View>
                   <Text style={styles.titleText}>Tên đăng nhập</Text>
                   <TextInput

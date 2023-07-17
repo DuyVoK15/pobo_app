@@ -17,15 +17,21 @@ export const AuthProvider = ({ children }) => {
   const [countCancelBooking, setCountCancelBooking] = useState("");
   const [photographerList, setPhotographerList] = useState([]);
   const [bookingData, setBookingData] = useState([]);
+  const [bookingPendingData, setBookingPendingData] = useState([]);
+  const [bookingAcceptData, setBookingAcceptData] = useState([]);
+  const [bookingDoneData, setBookingDoneData] = useState([]);
+  const [bookingCancelData, setBookingCancelData] = useState([]);
   const [bookingAfterCreating, setBookingAfterCreating] = useState([]);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [packageShooting, setPackageShooting] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [errorMessageLogin, setErrorMessageLogin] = useState("");
 
   useEffect(() => {
     checkLoggedIn();
+    // getUserInfo();
   }, []);
 
   const checkLoggedIn = async () => {
@@ -49,16 +55,18 @@ export const AuthProvider = ({ children }) => {
     // setIsLoading(true);
     try {
       const userToken = await AsyncStorage.getItem("userToken");
-      const res = await axios.get(`http://${IPv4}:8448/api/v1/auth/info`, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(userToken).accessToken}`,
-        },
-      });
-      
-      console.log("Thông tin user: " + JSON.stringify(res.data));
-      setUserInfo(res.data);
-      saveDataToStorage("userInfo", JSON.stringify(res.data));
-      return res.data;
+      if (userToken != null) {
+        const res = await axios.get(`http://${IPv4}:8448/api/v1/auth/info`, {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(userToken).accessToken}`,
+          },
+        });
+
+        console.log("Thông tin user: " + JSON.stringify(res.data));
+        setUserInfo(res.data);
+        saveDataToStorage("userInfo", JSON.stringify(res.data));
+        return res.data;
+      }
     } catch (error) {
       console.log(error);
     }
@@ -67,54 +75,62 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, username, email, password) => {
     // console.log(name + username + email + password)
     setIsLoading(true);
-    await axios
-      .post(`http://${IPv4}:8448/api/v1/auth/register`, {
+    try {
+      const res = await axios.post(`http://${IPv4}:8448/api/v1/auth/register`, {
         name,
         username,
         email,
         password,
-      })
-      .then((response) => {
-        let userTokenRegister = response.data;
-        setUserTokenRegister(userTokenRegister);
-        saveDataToStorage(
-          "userTokenRegister",
-          JSON.stringify(userTokenRegister)
-        );
-        setIsLoading(false);
-        console.log(userTokenRegister);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
       });
+
+      let userTokenRegister = res.data;
+      setUserTokenRegister(userTokenRegister);
+      saveDataToStorage("userTokenRegister", JSON.stringify(userTokenRegister));
+      setIsLoading(false);
+      console.log(userTokenRegister);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
   };
 
   const login = async (username, password) => {
     setIsLoading(true);
-    await axios
-      .post(`http://${IPv4}:8448/api/v1/auth/login`, {
+    try {
+      const res = await axios.post(`http://${IPv4}:8448/api/v1/auth/login`, {
         username,
         password,
-      })
-      .then((res) => {
-        console.log("DUYDEPTRAI: " + JSON.stringify(res.data));
-        const userToken = res.data;
-        setUserToken(userToken);
-        saveDataToStorage("userToken", JSON.stringify(userToken));
-        setIsLoggedIn(true);
-        getUserInfo();
-        setIsLoading(false);
-        // console.log(userToken);
-
-        // setIsLogin(true);
-        return res.data;
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
-        // setIsLogin(false);
       });
+      // console.log("DUYDEPTRAI: " + JSON.stringify(res.data));
+      let userToken = res.data;
+      setUserToken(userToken);
+      saveDataToStorage("userToken", JSON.stringify(userToken));
+      setIsLoggedIn(true);
+      getUserInfo();
+      setIsLoading(false);
+      return res.data;
+    } catch (error) {
+      setIsLoading(false);
+      if (error.response) {
+        // Khi phản hồi HTTP có mã lỗi
+        if(error.response.status === 404) {
+          setErrorMessageLogin("Tài khoản này không tồn tại.");
+        } else if (error.response.status === 400) {
+          setErrorMessageLogin("Mật khẩu đăng nhập không chính xác.");
+        }
+        
+        
+        console.log(error.response.data); // Thông báo lỗi từ server
+        console.log(error.response.status); // Mã lỗi HTTP
+      } else if (error.request) {
+        // Khi không nhận được phản hồi từ server
+        console.log(error.request);
+      } else {
+        // Khi có lỗi xảy ra trong quá trình gửi yêu cầu
+        console.log("Error", error.message);
+      }
+      console.log(error);
+    }
   };
 
   const logout = async () => {
@@ -207,8 +223,8 @@ export const AuthProvider = ({ children }) => {
         `http://${IPv4}:8448/api/v1/user/booking`,
         config
       );
-      console.log("AccessToken: ");
-      console.log("List Booking: " + JSON.stringify(res.data.row));
+      // console.log("AccessToken: ");
+      // console.log("List Booking: " + JSON.stringify(res.data.row));
 
       const data = await Promise.all(
         res.data.row.map(async (booking) => {
@@ -225,7 +241,8 @@ export const AuthProvider = ({ children }) => {
       setBookingData(data);
       setCountAllBooking(res.data.count);
       setIsLoading(false);
-      console.log("[COUNT] " + res.data.count);
+      console.log(JSON.stringify(data))
+      // console.log("[COUNT] " + res.data.count);
     } catch (error) {
       console.log(error);
       setIsLoading(false);
@@ -234,7 +251,7 @@ export const AuthProvider = ({ children }) => {
 
   const getListBookingByStatus = async (status) => {
     setIsLoading(true);
-    const userToken = await AsyncStorage.getItem('userToken');
+    const userToken = await AsyncStorage.getItem("userToken");
     const config = {
       headers: {
         Authorization: `Bearer ${JSON.parse(userToken).accessToken}`,
@@ -253,7 +270,7 @@ export const AuthProvider = ({ children }) => {
         `http://${IPv4}:8448/api/v1/user/booking`,
         config
       );
-      console.log("List Booking: " + JSON.stringify(res.data.row));
+      // console.log("List Booking: " + JSON.stringify(res.data.row));
 
       const data = await Promise.all(
         res.data.row.map(async (booking) => {
@@ -269,17 +286,21 @@ export const AuthProvider = ({ children }) => {
       // setBookingList(res.data.row);
       // setBookingData(data);
       // setCountAllBooking(res.data.count);
-      if(status==="PENDING"){
+      if (status === "PENDING") {
         setCountPendingBooking(res.data.count);
-      } else if (status==="ACCEPT"){
-        setCountAcceptBooking(res.data.count)
-      } else if (status==="DONE") {
-        setCountDoneBooking(res.data.count)
+        setBookingPendingData(data);
+      } else if (status === "ACCEPT") {
+        setCountAcceptBooking(res.data.count);
+        setBookingAcceptData(data);
+      } else if (status === "DONE") {
+        setCountDoneBooking(res.data.count);
+        setBookingDoneData(data);
       } else {
-        setCountCancelBooking(res.data.count)
+        setCountCancelBooking(res.data.count);
+        setBookingCancelData(data);
       }
       setIsLoading(false);
-      console.log("[COUNT] " + res.data.count);
+      // console.log("[COUNT] " + res.data.count);
       return data;
     } catch (error) {
       console.log(error);
@@ -292,7 +313,7 @@ export const AuthProvider = ({ children }) => {
       const res = await axios.get(
         `http://${IPv4}:8448/api/v1/photographer/${id}`
       );
-      console.log("Photographer: " + JSON.stringify(res.data));
+      // console.log("Photographer: " + JSON.stringify(res.data));
       return res.data;
     } catch (error) {
       console.log(error);
@@ -400,10 +421,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const getPackageShootingById = async (id) => {
-    setIsLoading(true);
+    // setIsLoading(true);
     try {
       const res = await ApiService.getPackageShootingById(id);
-      console.log("Dữ liệu package by id: \n" + JSON.stringify(res.data));
+      // console.log("Dữ liệu package by id: \n" + JSON.stringify(res.data));
 
       const data = await (async () => {
         const photographerData = await getPhotographerById(
@@ -415,14 +436,14 @@ export const AuthProvider = ({ children }) => {
         };
       })();
       saveDataToStorage("packageShootingById", JSON.stringify(data));
-      setIsLoading(false);
+      // setIsLoading(false);
       setPackageShooting(data);
-      console.log("Dữ liệu CÓ PHOTOGRAPHER: \n" + JSON.stringify(data));
+      // console.log("Dữ liệu CÓ PHOTOGRAPHER: \n" + JSON.stringify(data));
       return data;
     } catch (error) {
       console.log(error);
       console.log("KHÔNG CÓ getPackageShootingById");
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 
@@ -448,20 +469,21 @@ export const AuthProvider = ({ children }) => {
   const updateBookingStatus = async (id, bookingStatus) => {
     const userToken = await AsyncStorage.getItem("userToken");
     try {
-      const res = await ApiService.updateBookingStatus(id, bookingStatus, JSON.parse(userToken).accessToken);
+      const res = await ApiService.updateBookingStatus(
+        id,
+        bookingStatus,
+        JSON.parse(userToken).accessToken
+      );
       console.log(JSON.stringify(res.data));
       return res.data;
-    } catch (error) {
-      
-    }
-  }
-
-
+    } catch (error) {}
+  };
 
   return (
     <AuthContext.Provider
       value={{
         isLoading,
+        isLoggedIn,
         userToken,
         userInfo,
         userTokenRegister,
@@ -476,6 +498,11 @@ export const AuthProvider = ({ children }) => {
         countAcceptBooking,
         countDoneBooking,
         countCancelBooking,
+        bookingPendingData,
+        bookingAcceptData,
+        bookingDoneData,
+        bookingCancelData,
+        errorMessageLogin,
         register,
         login,
         logout,
@@ -493,7 +520,6 @@ export const AuthProvider = ({ children }) => {
         getAllListPackageShootingByPhotographerId,
         buyCoinRequest,
         updateBookingStatus,
-        isLoggedIn,
       }}
     >
       {children}

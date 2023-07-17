@@ -9,11 +9,11 @@ import { COLORS, FONT, SIZES } from "../../constants";
 import { AuthContext } from "../../../context/AuthContext";
 
 const Cate = ({ navigation }) => {
-  const { getAllListPackageShooting, getUserInfo } =
-    useContext(AuthContext);
+  const { getAllListPackageShooting, getUserInfo } = useContext(AuthContext);
   const [listPackageShooting, getListPackageShooting] = useState([]);
+
   const fetchData = async () => {
-    getUserInfo()
+    getUserInfo();
     const data = await getAllListPackageShooting();
     // const haha = await getPackageShootingById(
     //   "1c52af5a-315e-453a-b1cd-929d958aa167"
@@ -27,8 +27,8 @@ const Cate = ({ navigation }) => {
   }, []);
 
   const handle = (packageShootingId) => {
-    navigation.push("Detail", {packageShootingId: packageShootingId})
-  }
+    navigation.push("Detail", { packageShootingId: packageShootingId });
+  };
 
   return (
     <View style={styles.discoverWrapper}>
@@ -51,9 +51,12 @@ const Cate = ({ navigation }) => {
         showsHorizontalScrollIndicator={false}
       >
         {listPackageShooting.map((packageShooting) => (
-          <TouchableOpacity key={packageShooting.id} onPress={() => handle(packageShooting.id)}> 
+          <TouchableOpacity
+            key={packageShooting.id}
+            onPress={() => handle(packageShooting.id)}
+          >
             <Card
-              image={{ uri: packageShooting.images[0] }}
+              image={{ uri: packageShooting?.images[0] }}
               rating={"4.5"}
               title={packageShooting.title}
               authorAvatar={{ uri: packageShooting.photographerData.avatarUrl }}

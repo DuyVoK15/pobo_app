@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 
 import { COLORS, FONT, SIZES } from "../../constants";
+import { fontFamily } from "../../constants/fonts";
 
 const styles = StyleSheet.create({
   container: {
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
   welcomeText: {
     // fontFamily: FONT.bold,
     fontSize: SIZES.xLarge,
-    // fontFamily :'SVN-Gilroy'
+    fontFamily : "SVN-Gilroy-Bold"
     // marginTop: 2, 
     // paddingRight : 70
     

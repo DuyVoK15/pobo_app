@@ -14,6 +14,7 @@ import { Image } from "react-native";
 import { ScrollView } from "react-native";
 import { Icon } from "./IconProfile";
 import Spinner from "react-native-loading-spinner-overlay";
+import * as Font from "expo-font";
 
 const UserProfile = ({ navigation }) => {
   const imageVoDien =
@@ -58,10 +59,16 @@ const UserProfile = ({ navigation }) => {
   useEffect(() => {
     fetchData();
   }, []);
+  useEffect(() => {
+    // loadFonts();
+  }, []);
 
   const handleNavigateToSetting = () => {
     navigation.push("SettingsAccountPersonal");
   };
+
+
+ 
 
   return (
     <ScrollView
@@ -69,6 +76,7 @@ const UserProfile = ({ navigation }) => {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
+      // onLayout={onLayoutRootView}
     >
       <Spinner visible={isLoading} />
       <View style={styles.container}>
@@ -82,7 +90,7 @@ const UserProfile = ({ navigation }) => {
               source={{
                 uri: info.avatarUrl ? info.avatarUrl : imageVoDien,
               }}
-              style={{ width: 70, height: 70, borderRadius: 100 }}
+              style={{ width: 57, height: 57, borderRadius: 100 }}
             />
           </View>
           <View style={styles.column2}>
@@ -305,8 +313,8 @@ const styles = StyleSheet.create({
     width: 380,
   },
   textHeader: {
-    fontSize: SIZES.xxLarge,
-    fontWeight: "bold",
+    fontSize: SIZES.large,
+    fontFamily: "SVN-Gilroy-Bold"
   },
   avatarStyle: {
     borderRadius: 100,
@@ -316,23 +324,25 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   textName: {
-    fontSize: SIZES.large,
-    fontWeight: "bold",
+    fontSize: 14,
+    fontFamily: "SVN-Gilroy-XBold",
     marginBottom: 5,
   },
   textName2: {
-    fontSize: SIZES.small,
+    fontSize: 11,
+    fontFamily: "SVN-Gilroy-Regular",
   },
   textPoBo1: {
-    fontSize: SIZES.large,
-    fontWeight: "bold",
-    marginLeft: 15,
+    fontSize: 14,
+    marginLeft: 22,
     color: "#FFFFFF",
+    fontFamily: "SVN-Gilroy-Bold"
   },
   textPoBo2: {
-    fontSize: SIZES.medium,
+    fontSize: 11,
     color: "#FFFFFF",
-    marginLeft: 15,
+    marginLeft: 22,
+    fontFamily: "SVN-Gilroy-Regular",
   },
   containerPoBo: {
     justifyContent: "space-around",
@@ -340,7 +350,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.boder40,
     borderRadius: 10,
     width: 380,
-    paddingVertical: 40,
+    paddingVertical: 30,
     backgroundColor: COLORS.orange50,
     ...SHADOWS.beauty,
     elevation: 2,
@@ -375,10 +385,12 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   text: {
-    fontSize: SIZES.medium,
+    fontSize: 13,
+    fontFamily: "SVN-Gilroy-Medium"
   },
   textTitle: {
-    fontSize: SIZES.large,
+    fontSize: 15,
+    fontFamily: "SVN-Gilroy-Medium"
   },
   textBalance: {
     fontSize: SIZES.large,

@@ -33,7 +33,7 @@ const NearYou = ({ photographerList, navigation }) => {
         {photographerList.map((item) => (
           <TouchableOpacity key={item.id} onPress={() => handleNavigate(item.id)}>
             <PhotographercCard
-               key={item.id}
+              //  key={item.id}
               imageSource={{ uri: item.avatarUrl }}
               photographerName={item.name}
               location="TP. HCM"
@@ -68,9 +68,9 @@ const styles = StyleSheet.create({
   text: {
     width: 231,
     height: 28,
-    // fontFamily: 'SVN-Gilroy',
-    fontStyle: "normal",
-    fontWeight: "800",
+    fontFamily: 'SVN-Gilroy-XBold',
+    // fontStyle: "normal",
+    // fontWeight: "800",
     fontSize: 20,
     lineHeight: 28,
     color: "#181818",

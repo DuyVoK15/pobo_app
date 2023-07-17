@@ -20,6 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay/lib";
 import { COLORS } from "../constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const GoogleLogo = require("../../assets/google.png");
 
 const SignupModal = ({ navigation, onClose }) => {
@@ -36,11 +37,13 @@ const SignupModal = ({ navigation, onClose }) => {
 
   // -----------------------------------------
   const { register, isLoading, userTokenRegister } = useContext(AuthContext);
-  const handleRegister = () => {
-    register(name, username, email, password);
-    if (userTokenRegister.accessToken) {
+  const handleRegister = async () => {
+    await register(name, username, email, password);
+    const userTokenRegister = await AsyncStorage.getItem("userTokenRegister")
+    if (userTokenRegister!==null) {
       navigation.push("SuccessSignupScreen");
-    }
+      toggleModal();
+    } 
   };
 
   const handlePressOutside = () => {

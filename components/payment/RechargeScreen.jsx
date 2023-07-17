@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     fontSize: SIZES.large,
   },
   containerInputText: {
-    width: 300,
+    
     alignItems: "center"
   },
   textInput: {
@@ -121,7 +121,8 @@ const styles = StyleSheet.create({
     // elevation: 2,
     backgroundColor: COLORS.orange10,
     textAlign: "center",
-    marginVertical: 15
+    marginVertical: 15,
+    width: 300,
   },
   buttonRechargeContainer: {
     marginTop: 20,

@@ -124,7 +124,7 @@ export default Packages_Info = ({ route, navigation }) => {
                   style={styles.image}
                 />
                 <View style={styles.content}>
-                  <Text style={styles.title}>{packageShooting.title}</Text>
+                  <Text style={styles.title}>{packageShooting.title.slice(0, 25)}</Text>
                   <View style={styles.wrap_price_likes}>
                     <View style={styles.priceContainer}>
                       <Text style={styles.price}>
@@ -232,11 +232,14 @@ const styles = StyleSheet.create({
   // likes: {
   //   color: "#FFFFFF",
   // },
-
+ 
   container: {
     flex: 1,
     backgroundColor: 'black', // Set the desired background color here
   },
+  // cardCotainer: {
+  //   alignItems: "center",
+  // },
   wrapCard: {
     paddingHorizontal: 10,
     paddingTop: 20,
@@ -246,7 +249,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "center",
     alignItems: "center",
-    gap: 30,
+    gap: 25,
   },
   card: {
     width: 161.88,
@@ -254,18 +257,18 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.07)",
     borderWidth: 0.4375,
     borderColor: "rgba(255, 255, 255, 0.3)",
-    borderRadius: 5.25,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
   },
-  cardContainer: {
+  cardCotainer: {
     alignItems: "center",
   },
   image: {
     width: 140,
     height: 150.5,
     borderRadius: 10,
-    top: -9,
+    top: -15,
   },
   content: {
     gap: 5,

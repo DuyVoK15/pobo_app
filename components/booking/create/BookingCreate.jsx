@@ -30,11 +30,11 @@ const BookingCreate = ({ navigation, route }) => {
   } = useContext(AuthContext);
   const [packageShooting, setPackageShooting] = useState(null);
   const [userInfo, setUserInfo] = useState({});
-  
+
   const fetchData = async () => {
-    try {   
+    try {
       getUserInfo();
-      const data = await getPackageShootingById(packageShootingId);  
+      const data = await getPackageShootingById(packageShootingId);
       console.log(JSON.stringify(data) + " HIẾU ĂN CỨC");
       setPackageShooting(data);
       const userInfo = await AsyncStorage.getItem("userInfo");
@@ -45,7 +45,7 @@ const BookingCreate = ({ navigation, route }) => {
   };
   // const userInfo = await getUserInfo();
   //   setUserInfo(userInfo);
-  
+
   useEffect(() => {
     fetchData();
     // console.log(JSON.stringify(packageShootingId) + " VÃI Ò");
@@ -121,18 +121,23 @@ const BookingCreate = ({ navigation, route }) => {
             <View style={styles.cardContent}>
               <View style={styles.wraptitle}>
                 <Text style={styles.title}>
-                  {packageShooting?.photographerData?.name}
+                  Chụp{" "}
+                  {packageShooting?.packageShootingCategory[0]?.category?.name}
                 </Text>
                 <Text style={styles.photographerName}>
-                  Gói chụp: {packageShooting?.packageShootingCategory[0]?.category?.name}
+                  Thợ chụp: {packageShooting?.photographerData?.name}
                 </Text>
-                <Text style={styles.cameraName}>Máy ảnh: Cannon</Text>
+                <Text style={styles.cameraName}>
+                  Máy ảnh: {packageShooting?.equipment}
+                </Text>
               </View>
             </View>
           </View>
           <View style={styles.priceContainer}>
             <Ionicons name="md-cash-outline" size={18} color={COLORS.black} />
-            <Text style={styles.price}>VND {packageShooting?.totalPrice}</Text>
+            <Text style={styles.price}>
+              {packageShooting?.totalPrice.toLocaleString("vi-VN")} VND
+            </Text>
           </View>
         </View>
         <View style={styles.wrapSection}>
@@ -245,7 +250,7 @@ const BookingCreate = ({ navigation, route }) => {
                   <View style={styles.sectionText}>
                     <Text style={styles.sectionTitle}>Gói Chụp</Text>
                     <Text style={styles.sectionContent}>
-                      {packageShooting?.title}
+                      {packageShooting?.title.slice(0, 20)}
                     </Text>
                   </View>
                 </View>
@@ -259,7 +264,7 @@ const BookingCreate = ({ navigation, route }) => {
                   source={require("../../../assets/icons/sale.png")}
                   size={20}
                 />
-                <Text>Áp dụng mã giảm giá</Text>
+                <Text style={styles.discountText}>Áp dụng mã giảm giá</Text>
               </View>
               <View style={styles.iconchevron}>
                 <Ionicons
@@ -271,7 +276,7 @@ const BookingCreate = ({ navigation, route }) => {
             </View>
           </TouchableOpacity>
 
-          <Text style={styles.text}>Chi Tiết giá</Text>
+          <Text style={styles.text}>Chi tiết giá</Text>
 
           <View style={styles.card}>
             <View style={styles.wrapcard}>
@@ -359,7 +364,12 @@ const BookingCreate = ({ navigation, route }) => {
                       <Text style={{ fontWeight: "bold" }}>
                         {userInfo.balance}
                       </Text>
-                      ]
+                      ]{" "}
+                      <Text
+                        style={{ fontFamily: "SVN-Gilroy-Bold", fontSize: 14 }}
+                      >
+                        [Mặc định]
+                      </Text>
                     </Text>
                   </View>
                 </View>
@@ -382,7 +392,7 @@ const BookingCreate = ({ navigation, route }) => {
 
           <TouchableOpacity
             onPress={() => handleCreateBooking()}
-            style={ButtonStyle.buttonSignup}
+            style={[ButtonStyle.buttonSignup, {marginBottom: 50}]}
           >
             <Text style={ButtonStyle.buttonSignupText}>Xác nhận đặt lịch</Text>
           </TouchableOpacity>
@@ -424,7 +434,7 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "700",
     fontSize: 18,
-    lineHeight: 27,
+
     display: "flex",
     alignItems: "center",
     color: "#FFFFFF",
@@ -480,7 +490,7 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
   title: {
-    fontWeight: "bold",
+    fontFamily: "SVN-Gilroy-Bold",
     fontSize: 16,
     marginBottom: 8,
   },
@@ -491,21 +501,25 @@ const styles = StyleSheet.create({
   },
   price: {
     marginLeft: 4,
+    fontFamily: "SVN-Gilroy-Regular",
+    fontSize: 14,
+    letterSpacing: 1,
   },
   photographerName: {
     color: COLORS.gray,
     marginBottom: 8,
+    fontFamily: "SVN-Gilroy-Regular",
+    fontSize: 12,
   },
   cameraName: {
     color: COLORS.gray,
     marginBottom: 8,
+    fontFamily: "SVN-Gilroy-Regular",
+    fontSize: 12,
   },
   text: {
-    // fontFamily: 'SVN-Gilroy',
-    fontStyle: "normal",
-    fontWeight: "700",
-    fontSize: 14,
-    lineHeight: 15,
+    fontFamily: "SVN-Gilroy-Bold",
+    fontSize: 16,
     color: "#000000",
   },
   wrapSection: {
@@ -562,16 +576,12 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   sectionTitle: {
-    // fontFamily: 'SVN-Gilroy',
-    fontStyle: "normal",
-    fontWeight: 400,
+    fontFamily: "SVN-Gilroy-Regular",
     fontSize: 14,
-    lineHeight: 21,
+    fontSize: 14,
   },
   sectionContent: {
-    // fontFamily: 'SVN-Gilroy',
-    fontStyle: "normal",
-    fontWeight: "700",
+    fontFamily: "SVN-Gilroy-Bold",
     fontSize: 14,
     lineHeight: 21,
     // width:250,
@@ -593,13 +603,19 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     backgroundColor: "#FFFFFF",
     justifyContent: "space-between",
+    borderRadius: 5,
   },
   wrapDiscount: {
     display: "flex",
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "center",
     justifyContent: "center",
+
     gap: 8,
+  },
+  discountText: {
+    fontFamily: "SVN-Gilroy-Regular",
+    fontSize: 14,
   },
   iconchevron: {
     display: "flex",
@@ -650,17 +666,13 @@ const styles = StyleSheet.create({
     paddingRight: 13,
   },
   textcancel: {
-    fontStyle: "normal",
-    fontWeight: "400",
+    fontFamily: "SVN-Gilroy-Regular",
     fontSize: 14,
-    lineHeight: 21,
   },
   underlinedText: {
     textDecorationLine: "underline",
-    fontStyle: "normal",
-    fontWeight: "400",
+    fontFamily: "SVN-Gilroy-Bold",
     fontSize: 14,
-    lineHeight: 21,
   },
   centeredView: {
     flex: 1,

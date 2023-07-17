@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from '../home/HomeScreen'
 import {COLORS, ROUTES} from '../constants'
 // import { MaterialIcons } from "@expo/vector-icons";
-import { Text } from "react-native";
+import { Platform, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 // import { Icon } from "react-native-vector-icons/Icon";
 // import Icon from 'react-native-ionicons'
@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import UserProfile from "../profile/UserProfile";
 import BookingManagement from "../booking/BookingManagement";
 import Map from "../map/Map";
+import MapFake from "../map/MapFake";
 
 export default function BottomNavigator() {
     
@@ -21,7 +22,7 @@ export default function BottomNavigator() {
     // <NavigationContainer>
     <Tab.Navigator
         screenOptions={({route}) => ({
-          tabBarStyle: { backgroundColor: "white", height: 100, borderTopLeftRadius: 35, borderTopRightRadius: 35, shadowColor: 'black',
+          tabBarStyle: { backgroundColor: "white", height: Platform.OS === "ios" ? 100 : 60, borderTopLeftRadius: 35, borderTopRightRadius: 35, shadowColor: 'black',
           shadowOpacity: 0.2,
           shadowOffset: { width: 0, height: -4 },
           shadowRadius: 6,
@@ -50,19 +51,19 @@ export default function BottomNavigator() {
                 return <Ionicons name={iconName} size ={20} color={COLORS.orange50} />
             },
             })}
-            tabBarOptions={{
-                showLabel: false,
-                style: {
-                  // borderTopLeftRadius: 40,
-                  // borderTopRightRadius: 40,
-                },
-              }}
+            // tabBarOptions={{
+            //     showLabel: false,
+            //     style: {
+            //       // borderTopLeftRadius: 40,
+            //       // borderTopRightRadius: 40,
+            //     },
+            //   }}
             >
-      <Tab.Screen name={ROUTES.HOME_TAB} component={HomeScreen} />
-      <Tab.Screen name="Map" component={Map} />
-      <Tab.Screen name="BookingManagement" component={BookingManagement} />
-      <Tab.Screen name="Chat" component={HomeScreen} />
-      <Tab.Screen name="UserProfile" component={UserProfile} />
+      <Tab.Screen name={ROUTES.HOME_TAB} component={HomeScreen} options={{tabBarLabel: "Trang chủ"}}/>
+      <Tab.Screen name="Map" component={MapFake}  options={{tabBarLabel: "Bản đồ"}}/>
+      <Tab.Screen name="BookingManagement" component={BookingManagement}  options={{tabBarLabel: "Quản lý"}}/>
+      <Tab.Screen name="Chat" component={HomeScreen} options={{tabBarLabel: "Nhắn tin"}} />
+      <Tab.Screen name="UserProfile" component={UserProfile}  options={{tabBarLabel: "Thông tin"}}/>
 
     </Tab.Navigator>
     // </NavigationContainer>

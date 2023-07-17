@@ -87,12 +87,18 @@
 
 // export default PhotographerList;
 
-
-import React, { useEffect,useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity ,ImageBackground} from 'react-native';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  ImageBackground,
+} from "react-native";
 import Modal from "react-native-modal";
-import { Ionicons } from '@expo/vector-icons';
-import Avatar from './avata_photo';
+import { Ionicons } from "@expo/vector-icons";
+import Avatar from "./avata_photo";
 // const data = [
 //   { name: 'John Doe', avatar: require('../../../assets/images/anhCuoi1.png') },
 //   { name: 'Jane Smith', avatar: require('../../../assets/images/anhCuoi1.png') },
@@ -101,29 +107,30 @@ import Avatar from './avata_photo';
 
 // ];
 
-const PhotographerList = ({photographerList}) => {
+const PhotographerList = ({ photographerList }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
-  const data = photographerList
-  useEffect(()=> {
+  const data = photographerList;
+  useEffect(() => {
     // console.log(data)
-  })
+  });
   return (
     <View style={styles.container}>
       <Text style={styles.textContent}>Nhiếp ảnh gia hot tuần này</Text>
       <View style={styles.wrapcard}>
-        {data.map((photographer) => (
-          <View  style={styles.rowContainer}>
-            <Avatar 
-            key={photographer.id}
-            image={{ uri: photographer.avatarUrl }} 
-            photographerName={photographer.name}
-
- />     
-          </View>
-        ))}
+        
+          {data.map((photographer) => (
+            <View    key={photographer.id} style={styles.rowContainer}>
+            <Avatar
+          
+              image={{ uri: photographer.avatarUrl }}
+              photographerName={photographer.name}
+            />
+                </View>
+          ))}
+    
       </View>
     </View>
   );
@@ -131,30 +138,30 @@ const PhotographerList = ({photographerList}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
+    flexDirection: "column",
+    alignItems: "flex-start",
     marginVertical: 10,
     // height: 200,
   },
   textContent: {
     width: 142,
     height: 56,
-    // fontFamily: 'Mulish',
-    fontStyle: 'normal',
-    fontWeight: '800',
+    fontFamily: "SVN-Gilroy-XBold",
+    // fontStyle: 'normal',
+    // fontWeight: '800',
     fontSize: 20,
     lineHeight: 28,
-    color: '#181818',
+    color: "#181818",
   },
   wrapcard: {
     // height: 98,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 10,
   },
   rowContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
+    flexDirection: "column",
+    alignItems: "center",
     marginHorizontal: 8,
   },
   avatar: {
@@ -166,11 +173,11 @@ const styles = StyleSheet.create({
     marginTop: 8,
     // height: 15,
     // fontFamily: 'Mulish',
-    fontStyle: 'normal',
-    fontWeight: '600',
+    fontStyle: "normal",
+    fontWeight: "600",
     fontSize: 12,
     lineHeight: 15,
-    color: '#797979',
+    color: "#797979",
   },
   modal: {
     flex: 1,
@@ -183,41 +190,38 @@ const styles = StyleSheet.create({
     height: 750,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    alignItems:'center'
-
+    alignItems: "center",
   },
   modalContent: {
     // flex: 1,
     // justifyContent: 'center',
     // alignItems: 'center',
-    paddingTop:33,
+    paddingTop: 33,
   },
   imgCate: {
     width: 335,
-    height: 278 ,
+    height: 278,
     alignSelf: "center",
-    borderRadius : 16,
-    overflow: "hidden" 
+    borderRadius: 16,
+    overflow: "hidden",
   },
-  wrapContent:{
-   
+  wrapContent: {
     // Additional styling if needed
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
     padding: 0,
     marginBottom: 20,
     marginTop: 20, // Adjust this value as needed
     width: 335,
     // height: 136,
     gap: 24,
-   
   },
-  Description:{
-    position: 'absolute',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
+  Description: {
+    position: "absolute",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
     padding: 0,
     gap: 20,
   },
@@ -229,71 +233,69 @@ const styles = StyleSheet.create({
   //   gap: 12,
 
   //   position: 'absolute',
-    
+
   //   left: 0,
   //   top: 0,
-    
+
   // },
-  name_price:{
-    flexDirection: 'row', 
+  name_price: {
+    flexDirection: "row",
     // justifyContent: 'flex-end'
-    justifyContent: 'space-between',
-    width: 335
+    justifyContent: "space-between",
+    width: 335,
   },
-  Name_Info:{
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
+  Name_Info: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
     paddingBottom: 1,
   },
-  Price_Info:{
-    display: 'flex',
-    flexDirection:'column',
-    alignItems:'flex-end',
-    
-  }
-  ,
-  Price_modal:{
+  Price_Info: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-end",
+  },
+  Price_modal: {
     // position: 'absolute',
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '700',
+    fontFamily: "Inter",
+    fontStyle: "normal",
+    fontWeight: "700",
     fontSize: 28,
     lineHeight: 32,
-    textAlign: 'right',
+    textAlign: "right",
     letterSpacing: -0.24,
-    color: '#F26333',
+    color: "#F26333",
   },
-    Discount:{
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'flex-end',
-      gap:5
-    },
+  Discount: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-end",
+    gap: 5,
+  },
 
-  Title:{
+  Title: {
     // fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '700',
+    fontStyle: "normal",
+    fontWeight: "700",
     fontSize: 20,
     lineHeight: 24,
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     letterSpacing: -0.16,
 
-    color: '#040C22',
+    color: "#040C22",
   },
-  Info:{
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
+  Info: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
     padding: 0,
     gap: 16,
   },
-  Rating:{
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
+  Rating: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
     // padding: 0,
     gap: 4,
 
@@ -304,29 +306,29 @@ const styles = StyleSheet.create({
     // order: 1,
     // flexGrow: 0,
   },
-  starModal:{
-      height: 12,
-      width: 12,
-      color: '#F2C94C'
+  starModal: {
+    height: 12,
+    width: 12,
+    color: "#F2C94C",
   },
-  timeModal:{
-    height:12,
-    width:12,
+  timeModal: {
+    height: 12,
+    width: 12,
   },
-  Time:{
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
+  Time: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
     gap: 4,
   },
-  text :{
+  text: {
     // fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '400',
+    fontStyle: "normal",
+    fontWeight: "400",
     fontSize: 15,
     lineHeight: 22,
     letterSpacing: -0.2,
-    color: '#5C616F',
+    color: "#5C616F",
   },
 });
 

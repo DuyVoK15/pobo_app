@@ -85,9 +85,9 @@ const styles = StyleSheet.create({
   text: {
     width: 231,
     height: 28,
-    // fontFamily: 'SVN-Gilroy',
-    fontStyle: "normal",
-    fontWeight: "800",
+    fontFamily: 'SVN-Gilroy-XBold',
+    // fontStyle: "normal",
+    // fontWeight: "800",
     fontSize: 20,
     lineHeight: 28,
     color: "#181818",

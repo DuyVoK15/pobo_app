@@ -43,9 +43,9 @@ const styles = StyleSheet.create({
   discoverTitle: {
     width: 95,
     height: 28,
-    // fontFamily: 'SVN-Gilroy',
-    fontStyle: 'normal',
-    fontWeight: '800',
+    fontFamily: 'SVN-Gilroy-XBold',
+    // fontStyle: 'normal',
+    // fontWeight: '800',
     fontSize: 20,
     lineHeight: 28,
     color: COLORS.darkfonts100,

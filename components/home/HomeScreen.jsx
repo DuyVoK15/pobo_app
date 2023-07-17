@@ -19,9 +19,9 @@ import { BASE_URL, IPv4 } from "../../utils/config";
 import { AuthContext } from "../../context/AuthContext";
 import { RefreshControl } from "react-native";
 const HomeScreen = ({ navigation }) => {
-  const {photographerList, getAllPhotographer} = useContext(AuthContext)
+  const { photographerList, getAllPhotographer } = useContext(AuthContext);
   const [refreshing, setRefreshing] = useState(false);
-  
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchData();
@@ -32,24 +32,132 @@ const HomeScreen = ({ navigation }) => {
 
   const fetchData = async () => {
     await getAllPhotographer();
-  }
-
-  
+  };
   useEffect(() => {
-    const interval = setInterval(fetchData, 10000000000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-  useEffect(() => {  
     fetchData();
   }, []);
-  
+  // useEffect(() => {
+  //   const interval = setInterval(fetchData, 10000000000);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, []);
+
+  const listPackageShooting = [
+    {
+      id: "1c52af5a-315e-453a-b1cd-929d958aa167",
+      createdAt: "2023-06-14T13:37:51.278Z",
+      updatedAt: "2023-06-14T13:37:51.278Z",
+      deletedAt: null,
+      photographerId: "758efb0f-1ac7-4076-ba38-eed862ade081",
+      title: "Gói chụp hình kỷ yếu siêu đẹp",
+      description:
+        "Hãy đến với chúng tôi, chúng tôi là những thợ ảnh chuyên nghiệp, thân thiện và nhiệt huyết",
+      duration: 1,
+      numberPeople: 3,
+      totalPrice: 50000,
+      equipment: [],
+      images: ["https://i.ytimg.com/vi/bf4yyStDWHE/maxresdefault.jpg"],
+      pagination: {
+        currentPage: 1,
+        nextPage: 2,
+        prevPage: 0,
+        limit: "unlimited",
+      },
+      photographerData: {
+        slug: null,
+        name: "Phạm Hữu Phúc",
+        username: "phucbpz",
+        dob: "2001-10-12T17:00:00.000Z",
+        gender: "MALE",
+        phone: "0984799607",
+        email: "dotranminhchu@gmail.com",
+        loginType: "INAPP",
+        avatarUrl:
+          "https://haycafe.vn/wp-content/uploads/2022/02/anh-meo-cute-hinh-cute-meo.jpg",
+        balance: 0,
+        pagination: { currentPage: 1, nextPage: 2, prevPage: 0, limit: 50 },
+      },
+    },
+    {
+      id: "1c52af5a-315e-453a-b1cd-929d958aa168",
+      createdAt: "2023-06-14T13:37:51.278Z",
+      updatedAt: "2023-06-14T13:37:51.278Z",
+      deletedAt: null,
+      photographerId: "758efb0f-1ac7-4076-ba38-eed862ade081",
+      title: "Gói chụp hình kỷ yếu siêu đẹp",
+      description:
+        "Hãy đến với chúng tôi, chúng tôi là những thợ ảnh chuyên nghiệp, thân thiện và nhiệt huyết",
+      duration: 1,
+      numberPeople: 3,
+      totalPrice: 50000,
+      equipment: [],
+      images: ["https://i.ytimg.com/vi/bf4yyStDWHE/maxresdefault.jpg"],
+      pagination: {
+        currentPage: 1,
+        nextPage: 2,
+        prevPage: 0,
+        limit: "unlimited",
+      },
+      photographerData: {
+        slug: null,
+        name: "Phạm Hữu Phúc",
+        username: "phucbpz",
+        dob: "2001-10-12T17:00:00.000Z",
+        gender: "MALE",
+        phone: "0984799607",
+        email: "dotranminhchu@gmail.com",
+        loginType: "INAPP",
+        avatarUrl:
+          "https://haycafe.vn/wp-content/uploads/2022/02/anh-meo-cute-hinh-cute-meo.jpg",
+        balance: 0,
+        pagination: { currentPage: 1, nextPage: 2, prevPage: 0, limit: 50 },
+      },
+    },
+    {
+      id: "1c52af5a-315e-453a-b1cd-929d958aa169",
+      createdAt: "2023-06-14T13:37:51.278Z",
+      updatedAt: "2023-06-14T13:37:51.278Z",
+      deletedAt: null,
+      photographerId: "758efb0f-1ac7-4076-ba38-eed862ade081",
+      title: "Gói chụp hình kỷ yếu siêu đẹp",
+      description:
+        "Hãy đến với chúng tôi, chúng tôi là những thợ ảnh chuyên nghiệp, thân thiện và nhiệt huyết",
+      duration: 1,
+      numberPeople: 3,
+      totalPrice: 50000,
+      equipment: [],
+      images: ["https://i.ytimg.com/vi/bf4yyStDWHE/maxresdefault.jpg"],
+      pagination: {
+        currentPage: 1,
+        nextPage: 2,
+        prevPage: 0,
+        limit: "unlimited",
+      },
+      photographerData: {
+        slug: null,
+        name: "Phạm Hữu Phúc",
+        username: "phucbpz",
+        dob: "2001-10-12T17:00:00.000Z",
+        gender: "MALE",
+        phone: "0984799607",
+        email: "dotranminhchu@gmail.com",
+        loginType: "INAPP",
+        avatarUrl:
+          "https://haycafe.vn/wp-content/uploads/2022/02/anh-meo-cute-hinh-cute-meo.jpg",
+        balance: 0,
+        pagination: { currentPage: 1, nextPage: 2, prevPage: 0, limit: 50 },
+      },
+    },
+  ];
+
   return (
-    <ScrollView showsVerticalScrollIndicator={false}
-    refreshControl={
-      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    } >
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View
         style={{
           flex: 1,
@@ -69,10 +177,19 @@ const HomeScreen = ({ navigation }) => {
         //   }
         // }}
         />
-        <Cate navigation={navigation}/>
-        <NearYou navigation={navigation} photographerList={photographerList} />
-        <JustView navigation={navigation}/>
-        <PhotographerList photographerList={photographerList} />
+        <Cate
+          navigation={navigation}
+          listPackageShooting={listPackageShooting ? listPackageShooting : []}
+        />
+        <NearYou
+          navigation={navigation}
+          photographerList={photographerList ? photographerList : []}
+        />
+        <JustView
+          navigation={navigation}
+          listPackageShooting={listPackageShooting ? listPackageShooting : []}
+        />
+        <PhotographerList photographerList={photographerList ? photographerList : []} />
         {/* <TouchableOpacity
           style={ButtonStyle.buttonSignup}
           onPress={() => console.log(photographerList.row[0].id)}
@@ -83,7 +200,6 @@ const HomeScreen = ({ navigation }) => {
         </TouchableOpacity> */}
       </View>
     </ScrollView>
-    
   );
 };
 

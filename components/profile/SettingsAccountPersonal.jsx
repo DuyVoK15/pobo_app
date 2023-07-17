@@ -150,7 +150,7 @@ const SettingsAccountPersonal = ({ navigation }) => {
   const [genderValue, setGenderValue] = useState(null);
   const [gender, setGender] = useState([
     { label: "Nam", value: "MALE" },
-    { label: "Nữ", value: "FEMALE" },
+    { label: "Nữ", value: "FAMALE" },
     { label: "Không tiện nói", value: "ORTHER" },
   ]);
   const { handleSubmit, control } = useForm();

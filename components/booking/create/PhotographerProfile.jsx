@@ -149,9 +149,9 @@ const Stack = createStackNavigator();
       
       <Tab.Navigator
            style={{ flex: 1, marginTop: 0  }}
-           tabBarOptions={{
-            style: { backgroundColor: 'red' } // Chỉnh màu nền ở đây
-          }}
+          //  tabBarOptions={{
+          //   style: { backgroundColor: 'red' } // Chỉnh màu nền ở đây
+          // }}
            tabBarPosition="top"
            screenOptions={({ route }) => ({
             

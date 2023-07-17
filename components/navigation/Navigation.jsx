@@ -25,6 +25,7 @@ import Detail from "../home/justview/Detail";
 
 import BookingSuccess from "../booking/create/BookingSuccess";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import DetailProcess from "../booking/process/DetailProcess";
 
 const IntroStack = createStackNavigator();
 const IntroStackScreen = () => {
@@ -139,6 +140,11 @@ const HomeStackScreen = () => {
         options={{ headerShown: false }}
         name="BookingSuccess"
         component={BookingSuccess}
+      />
+      <HomeStack.Screen
+        options={{ headerShown: false }}
+        name="DetailProcess"
+        component={DetailProcess}
       />
     </HomeStack.Navigator>
   );

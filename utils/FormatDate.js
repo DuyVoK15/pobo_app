@@ -78,3 +78,19 @@ export const formatDateToVN = (dateTimeString) => {
   console.log(formattedDate);
   return formattedDate;
 };
+export const formatDateToCustomString = (dateString) => {
+  const daysOfWeek = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+
+  const date = new Date(dateString);
+  const dayOfWeek = daysOfWeek[date.getDay()];
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const amOrPm = hours >= 12 ? 'PM' : 'AM';
+  const formattedHours = hours % 12 || 12;
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+
+  return `${dayOfWeek} ${day}/${month}/${year} | ${formattedHours}:${formattedMinutes} ${amOrPm}`;
+};
