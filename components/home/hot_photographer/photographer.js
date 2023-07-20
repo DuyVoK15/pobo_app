@@ -120,7 +120,6 @@ const PhotographerList = ({ photographerList }) => {
     <View style={styles.container}>
       <Text style={styles.textContent}>Nhiếp ảnh gia hot tuần này</Text>
       <View style={styles.wrapcard}>
-        
           {data.map((photographer) => (
             <View    key={photographer.id} style={styles.rowContainer}>
             <Avatar
@@ -128,6 +127,9 @@ const PhotographerList = ({ photographerList }) => {
               image={{ uri: photographer.avatarUrl }}
               photographerName={photographer.name}
             />
+            {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.name}>
+              {photographer.name}
+            </Text> */}
                 </View>
           ))}
     
@@ -158,11 +160,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
+    gap: 12
   },
   rowContainer: {
+    display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    marginHorizontal: 8,
+    // marginHorizontal: 8,
+    justifyContent: "center",
+    
+
+    
   },
   avatar: {
     width: 75,
@@ -170,7 +178,7 @@ const styles = StyleSheet.create({
     borderRadius: 85,
   },
   name: {
-    marginTop: 8,
+    // marginTop: 8,
     // height: 15,
     // fontFamily: 'Mulish',
     fontStyle: "normal",
@@ -178,6 +186,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 15,
     color: "#797979",
+    width: 67,
+    overflow:"hidden"
   },
   modal: {
     flex: 1,
