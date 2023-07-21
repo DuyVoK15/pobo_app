@@ -13,7 +13,8 @@ export default function PhotographercCard( {imageSource, photographerName, locat
     <View style={styles.container}>
       <View style={styles.wrap}>
         <Image source={imageSource} style={styles.image} />
-        <Text style={styles.name}>{photographerName}</Text>
+        <View style={styles.containerName}><Text style={styles.name}>{photographerName}</Text></View>
+        
         <View style={styles.locationContainer}>
           <MaterialIcons name="location-on" size={18} color={COLORS.orange50} />
           <Text style={styles.locationText}>{location}</Text>
@@ -27,58 +28,13 @@ export default function PhotographercCard( {imageSource, photographerName, locat
 
 const styles = StyleSheet.create({
   container: {
-    // width: "100%",
-    // padding: 16,
-    // backgroundColor: "white",
-    // borderRadius: 8,
-    // shadowColor: "black",
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.2,
-    // shadowRadius: 4,
-    // elevation: 3,
-
-
-    // display: 'flex',
-    // flexDirection: 'row',
-    // alignItems: 'flex-start',
-    // padding: 0,
-    // gap: 11,
-    // // width: 782,
-    // // height: 161,
-    // overflowX: 'scroll',
-    // flex: 0,
-    // order: 1,
-    // flexGrow: 0,
-
-    // display: 'flex',
-    // flexDirection: 'column',
-    // alignItems: 'flex-start',
-    // padding: 0,
-    // gap: 19,
-    // // width: 643,
-    // // height: 197,
-    // flex: 0,
-    // order: 0,
-    // flexGrow: 0,
-
-    // display: 'flex',
-    // flexDirection: 'row',
-    // alignItems: 'flex-start',
-    // padding: 0,
-    // gap: 11,
-    // // width: 782,
-    // // height: 161,
-    // overflowX: 'scroll',
-    // // flex: 0,
-    // // order: 1,
-    // // flexGrow: 0,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     padding: 9,
     gap: 10,
     width: 150,
-    height: 161,
+    height: 200,
     backgroundColor: COLORS.backgound20,
     shadowColor: COLORS.black,
     shadowOffset: {
@@ -118,6 +74,10 @@ const styles = StyleSheet.create({
     height: 98,
     borderRadius: 10,
     marginBottom: 8,
+  },
+  containerName: {
+    height: 50,
+    alignItems: "center",
   },
   wrapLocation: {
     display: 'flex',

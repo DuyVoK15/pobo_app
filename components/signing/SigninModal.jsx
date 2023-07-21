@@ -1,29 +1,64 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Image } from "expo-image";
-import { Swipeable, TextInput } from "react-native-gesture-handler";
+import { TextInput } from "react-native-gesture-handler";
 import {
   StyleSheet,
   View,
   Text,
-  Pressable,
-  Button,
   TouchableOpacity,
-  ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
 } from "react-native";
-
 import Modal from "react-native-modal";
-import axios from "axios";
-import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
 import { StatusBar } from "react-native";
 import { COLORS } from "../constants";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
+// import * as Google from "expo-auth-session/providers/google";
+// import * as WebBrowser from "expo-web-browser";
+// import {
+//   GoogleAuthProvider,
+//   onAuthStateChanged,
+//   signInWithCredential,
+// } from "firebase/auth";
+
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+// import { auth } from "../firebaseConfig";
+
+// WebBrowser.maybeCompleteAuthSession();
+
+// import "expo-dev-client";
+// import auth from "@react-native-firebase/auth";
+// import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 const SigninModal = ({ navigation }) => {
+  // GoogleSignin.configure({
+  //   webClientId:
+  //     "354643669357-7nk2vti5iokhidun3qnifbf5qklm55vu.apps.googleusercontent.com",
+  // });
+  // const onGoogleButtonPress = async () => {
+  //   // Check if your device supports Google Play
+  //   await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+  //   // Get the users ID token
+  //   const { idToken } = await GoogleSignin.signIn();
+
+  //   // Create a Google credential with the token
+  //   const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+  //   // Sign-in the user with the credential
+  //   // return auth().signInWithCredential(googleCredential);
+  //   const user_sign_in = auth().signInWithCredential(googleCredential);
+  //   user_sign_in
+  //     .then((user) => {
+  //       console.log(user);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+
   const handleNavigateToForgetPassword = () => {
     navigation.push("SendOTP");
     toggleModal();
@@ -32,7 +67,7 @@ const SigninModal = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
-    setInfoToNull();
+    // setInfoToNull();
   };
   const setInfoToNull = () => {
     setUsername("");
@@ -47,23 +82,25 @@ const SigninModal = ({ navigation }) => {
   const { login, isLoading, errorMessageLogin } = useContext(AuthContext);
   const handleLogin = async () => {
     try {
-      await login(username, password);
-      const data = await AsyncStorage.getItem("userToken")
-      if(data!=null){
-        console.log("Đăng nhập thành công");
+      if (username !== "" && password !== "") {
+        setErrorMessage("");
+        await login(username, password);
+        const data = await AsyncStorage.getItem("userToken");
+        if (data != null) {
+          console.log("Đăng nhập thành công");
+        } else {
+          console.log("Đăng nhập thất bại", JSON.stringify(data));
+        }
       } else {
-        console.log("Đăng nhập thất bại", JSON.stringify(data))
+        setErrorMessage("Không được để trống thông tin!");
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-    
-    // navigation.push('HomeScreen');
   };
 
   const handlePressOutside = () => {
     Keyboard.dismiss();
-    // onClose();
   };
 
   return (
@@ -99,9 +136,7 @@ const SigninModal = ({ navigation }) => {
                     {/* <Text style={styles.underline2}></Text> */}
                   </View>
                 </View>
-                <View>
-                  <Text>{errorMessageLogin}</Text>
-                </View>
+
                 <View>
                   <Text style={styles.titleText}>Tên đăng nhập</Text>
                   <TextInput
@@ -130,7 +165,9 @@ const SigninModal = ({ navigation }) => {
                   </TouchableOpacity>
                 </View>
 
-                <Text style={styles.errorMessageText}>{errorMessage}</Text>
+                <Text style={styles.errorMessageText}>
+                  {errorMessageLogin !== "" ? errorMessageLogin : errorMessage}
+                </Text>
                 <View style={styles.listButtonContainer}>
                   <View>
                     <TouchableOpacity
@@ -146,7 +183,10 @@ const SigninModal = ({ navigation }) => {
                   <View>
                     <TouchableOpacity
                       style={styles.buttonSigninGoogle}
-                      onPress={() => navigation.push("UserProfile")}
+                      onPress={() =>
+                          console.log("Signed in with Google!")
+                        
+                      }
                     >
                       <Image
                         style={{ width: 32, height: 32 }}

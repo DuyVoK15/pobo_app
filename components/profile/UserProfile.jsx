@@ -19,7 +19,7 @@ import * as Font from "expo-font";
 const UserProfile = ({ navigation }) => {
   const imageVoDien =
     "https://toigingiuvedep.vn/wp-content/uploads/2022/04/hinh-avatar-anh-vo-dien-cute.jpg";
-  const { logout, userToken, getUserInfo, isLoading } =
+  const { logout, userToken, getUserInfo, isLoading, userInfo } =
     useContext(AuthContext);
   const [info, setInfo] = useState({});
   const [refreshing, setRefreshing] = useState(false);
@@ -34,12 +34,7 @@ const UserProfile = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      getUserInfo();
-      const userInfo = await AsyncStorage.getItem("userInfo");
-      // const parseValue = JSON.parse(value);
-      if (userInfo != null) {
-        setInfo(JSON.parse(userInfo));
-      }
+      await getUserInfo();
     } catch (error) {
       console.log(error);
     }
@@ -47,28 +42,16 @@ const UserProfile = ({ navigation }) => {
 
   const handleLogout = async () => {
     await logout();
-    fetchData();
+    // fetchData();
   }
 
   useEffect(() => {
-    const interval = setInterval(fetchData, 5000000000000000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-  useEffect(() => {
     fetchData();
   }, []);
-  useEffect(() => {
-    // loadFonts();
-  }, []);
-
+  
   const handleNavigateToSetting = () => {
     navigation.push("SettingsAccountPersonal");
   };
-
-
- 
 
   return (
     <ScrollView
@@ -88,7 +71,7 @@ const UserProfile = ({ navigation }) => {
           <View style={styles.avatarStyle}>
             <Image
               source={{
-                uri: info.avatarUrl ? info.avatarUrl : imageVoDien,
+                uri: userInfo?.avatarUrl ? userInfo?.avatarUrl : imageVoDien,
               }}
               style={{ width: 57, height: 57, borderRadius: 100 }}
             />
@@ -97,7 +80,7 @@ const UserProfile = ({ navigation }) => {
             <TouchableOpacity onPress={handleNavigateToSetting}>
               <Text style={styles.textName}>
                 {" "}
-                {info.name ? info.name : "Vui lòng đăng nhập"}
+                {userInfo?.name ? userInfo?.name : "-------------"}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => console.log("alo")}>
@@ -109,7 +92,7 @@ const UserProfile = ({ navigation }) => {
         <View style={styles.containerTextTitles}>
           <Text style={styles.textTitle}>
             Số dư tài khoản:{" "}
-            <Text style={styles.textBalance}>{info.balance} VNĐ</Text>
+            <Text style={styles.textBalance}>{userInfo?.balance} VNĐ</Text>
           </Text>
           <TouchableOpacity
             style={styles.buttonRecharge}

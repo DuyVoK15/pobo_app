@@ -24,13 +24,13 @@ import { formatDateToAPI, formatDateToYYYYMMDD } from "../../utils/FormatDate";
 import { AuthContext } from "../../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
 import { BASE_URL, IPv4 } from "../../utils/config";
-import { SHADOWS, SIZES } from "../constants";
+import { COLORS, SHADOWS, SIZES } from "../constants";
+import { Ionicons } from "@expo/vector-icons";
 // import RNPickerSelect from "react-native-picker-select";
 // import { Dropdown } from "react-native-paper";
 // import RadioButtonsGroup from "react-native-radio-buttons-group";
 const SettingsAccountPersonal = ({ navigation }) => {
   // BẮT ĐẦU khai báo biến Image
-  const imageIcon = require("../../assets/logo/logo.png");
   const imageVoDien =
     "https://toigingiuvedep.vn/wp-content/uploads/2022/04/hinh-avatar-anh-vo-dien-cute.jpg";
   // KẾT THÚC khai báo biến Image
@@ -39,15 +39,13 @@ const SettingsAccountPersonal = ({ navigation }) => {
   useEffect(() => {
     (async () => {
       try {
-        const value = await AsyncStorage.getItem("userInfo");
-        if (value !== null) {
-          const parseValue = JSON.parse(value);
-          setName(parseValue.name);
-          setEmail(parseValue.email);
-          setGenderValue(parseValue.gender);
-          setPhone(parseValue.phone);
-          setAvatar(parseValue.avatarUrl);
-          setDate(formatDateToYYYYMMDD(parseValue.dob));
+        if (userInfo !== null) {
+          setName(userInfo.name);
+          setEmail(userInfo.email);
+          setGenderValue(userInfo.gender);
+          setPhone(userInfo.phone);
+          setAvatar(userInfo.avatarUrl);
+          setDate(formatDateToYYYYMMDD(userInfo.dob));
           // console.log(parseValue)
           // console.log(userInfo)
           // console.log(userInfo.name)
@@ -65,17 +63,15 @@ const SettingsAccountPersonal = ({ navigation }) => {
   }, []); // KẾT THÚC xử lí useEffect
 
   // BẮT ĐẦU xử lí handle update profile
-  const { updateProfile, isLoading } = useContext(AuthContext);
+  const { updateProfile, isLoading, userInfo } = useContext(AuthContext);
   const handleUpdateProfile = () => {
-   
     updateProfile(
       name,
       phone,
       email,
       genderValue,
       formatDateToAPI(date),
-      avatar,
-
+      avatar
     );
     console.log("date: " + typeof date);
     console.log("formatDate: " + formatDateToAPI("2022/12/12"));
@@ -179,10 +175,20 @@ const SettingsAccountPersonal = ({ navigation }) => {
 
   // ----------------------------------------------RETURN-----------------------------------------------------
   return (
-    
-      <View style={styles.container}>
-        <Spinner visible={isLoading} />
-        {/* Avatar */}
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.wrapText}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <View style={styles.bg_icon}>
+              <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+            </View>
+          </TouchableOpacity>
+          <Text style={styles.headerText}>Thông tin cá nhân</Text>
+        </View>
+      </View>
+      <Spinner visible={isLoading} />
+      {/* Avatar */}
+      <View style={styles.containerInfo}>
         <TouchableOpacity onPress={() => pickImage()}>
           <View style={styles.imageStyle}>
             <Image
@@ -279,7 +285,7 @@ const SettingsAccountPersonal = ({ navigation }) => {
             </Modal>
           </View>
 
-          <View style={[ButtonStyle.buttonContainer, {marginBottom: 20}]}>
+          <View style={[ButtonStyle.buttonContainer, { marginBottom: 20 }]}>
             <TouchableOpacity
               style={ButtonStyle.buttonSignup}
               onPress={handleUpdateProfile}
@@ -289,15 +295,49 @@ const SettingsAccountPersonal = ({ navigation }) => {
           </View>
         </View>
       </View>
-   
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  containerInfo: {
     justifyContent: "center",
     alignItems: "center",
+  },
+  header: {
+    paddingTop: 30,
+    paddingBottom: 5,
+    backgroundColor: COLORS.orange50,
+  },
+  wrapText: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 20,
+    paddingTop: 10,
+    justifyContent: "center",
+    padding: 10,
+  },
+  bg_icon: {
+    backgroundColor: COLORS.orange70,
+    borderRadius: 50,
+    height: 32,
+    width: 32,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  headerText: {
+    fontStyle: "normal",
+    fontWeight: "700",
+    fontSize: 18,
+
+    display: "flex",
+    alignItems: "center",
+    color: "#FFFFFF",
+    flex: 1,
+    flexGrow: 1,
   },
   containerInputText: {
     width: 350,
@@ -310,6 +350,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     paddingHorizontal: 3,
     paddingVertical: 4,
+  
   },
   //   picker: {
   //     paddingHorizontal: 20,
@@ -322,7 +363,7 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     borderColor: "#FE5D26",
     padding: 2,
-    marginBottom: 10,
+    marginBottom: 10,  marginTop: 30
   },
   avatar: {
     width: 80,

@@ -2,8 +2,6 @@ import axios from "axios";
 import { IPv4 } from "../utils/config";
 
 class ApiService {
-  
-
   sendOtp(username) {
     return axios.post(`http://${IPv4}:8448/api/v1/auth/forgot_password`, {
       username,
@@ -24,10 +22,10 @@ class ApiService {
       limit: "unlimited",
       page: 1,
       order: "[]",
-    }
-    return axios.get(`http://${IPv4}:8448/api/v1/package-shooting`, {params})
+    };
+    return axios.get(`http://${IPv4}:8448/api/v1/package-shooting`, { params });
   }
-  getAllListPackageShootingByPhotographerId(photographerId){
+  getAllListPackageShootingByPhotographerId(photographerId) {
     const params = {
       hl: "en",
       select: '["$all"]',
@@ -35,36 +33,63 @@ class ApiService {
       limit: "unlimited",
       page: 1,
       order: "[]",
-    }
-    return axios.get(`http://${IPv4}:8448/api/v1/package-shooting`, {params})
+    };
+    return axios.get(`http://${IPv4}:8448/api/v1/package-shooting`, { params });
   }
   getPackageShootingById(id) {
     const params = {
       hl: "en",
-      select: '["$all", {"packageShootingCategory":["$all",{"category":["$all"]}]}]',
+      select:
+        '["$all", {"packageShootingCategory":["$all",{"category":["$all"]}]}]',
       where: "{}",
       limit: "unlimited",
       page: 1,
       order: "[]",
-    }
-    return axios.get(`http://${IPv4}:8448/api/v1/package-shooting/${id}`, {params})
+    };
+    return axios.get(`http://${IPv4}:8448/api/v1/package-shooting/${id}`, {
+      params,
+    });
   }
   buyCoinRequest(amount, platform, accessToken) {
-    return axios.post(`http://${IPv4}:8448/api/v1/deposit/user`, {
-      amount,
-      platform
-    }, {
+    return axios.post(
+      `http://${IPv4}:8448/api/v1/deposit/user`,
+      {
+        amount,
+        platform,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+  }
+  updateBookingStatus(id, bookingStatus, accessToken) {
+    return axios.patch(
+      `http://${IPv4}:8448/api/v1/booking/${id}`,
+      { bookingStatus },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+  }
+  getUserVoucher(accessToken) {
+    const params = {
+      hl: "en",
+      select: '["$all", {"voucher": ["$all"]}]',
+      where: "{}",
+      limit: "unlimited",
+      page: 1,
+      order: "[]",
+    };
+    return axios.get(`http://${IPv4}:8448/api/v1/user-voucher`, {
+      params,
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-    })
-  }
-  updateBookingStatus(id, bookingStatus, accessToken){
-    return axios.patch(`http://${IPv4}:8448/api/v1/booking/${id}`, {bookingStatus}, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      }
-    })
+    });
   }
 }
 export default new ApiService();

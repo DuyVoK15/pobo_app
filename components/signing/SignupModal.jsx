@@ -38,12 +38,33 @@ const SignupModal = ({ navigation, onClose }) => {
   // -----------------------------------------
   const { register, isLoading, userTokenRegister } = useContext(AuthContext);
   const handleRegister = async () => {
-    await register(name, username, email, password);
-    const userTokenRegister = await AsyncStorage.getItem("userTokenRegister")
-    if (userTokenRegister!==null) {
-      navigation.push("SuccessSignupScreen");
-      toggleModal();
-    } 
+    if (name !== "" && username !== "" && email !== "" && password !== "") {
+      if (/^[a-zA-Z0-9_]+$/.test(username)) {
+        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password)) {
+            await register(name, username, email, password);
+            setErrorMessage("");
+            const userTokenRegister = await AsyncStorage.getItem(
+              "userTokenRegister"
+            );
+            if (userTokenRegister !== null) {
+              navigation.push("SuccessSignupScreen");
+              toggleModal();
+            }
+          } else {
+            setErrorMessage(
+              "Mật khẩu chứa ít nhất 8 ký tự, chứa ít nhất một chữ cái viết hoa, một chữ cái viết thường và một chữ số"
+            );
+          }
+        } else {
+          setErrorMessage("Email không hợp lệ!");
+        }
+      } else {
+        setErrorMessage("Tên đăng nhập không hợp lệ!");
+      }
+    } else {
+      setErrorMessage("Không được để trống thông tin!");
+    }
   };
 
   const handlePressOutside = () => {

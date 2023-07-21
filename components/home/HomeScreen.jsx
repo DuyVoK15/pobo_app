@@ -189,7 +189,7 @@ const HomeScreen = ({ navigation }) => {
           navigation={navigation}
           listPackageShooting={listPackageShooting ? listPackageShooting : []}
         />
-        <PhotographerList photographerList={photographerList ? photographerList : []} />
+        <PhotographerList photographerList={photographerList ? photographerList : []} navigation={navigation}/>
         {/* <TouchableOpacity
           style={ButtonStyle.buttonSignup}
           onPress={() => console.log(photographerList.row[0].id)}

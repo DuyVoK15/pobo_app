@@ -50,7 +50,7 @@ const Cate = ({ navigation }) => {
         contentContainerStyle={styles.cardsContainer}
         showsHorizontalScrollIndicator={false}
       >
-        {listPackageShooting.map((packageShooting) => (
+        {listPackageShooting ? listPackageShooting.map((packageShooting) => (
           <TouchableOpacity
             key={packageShooting.id}
             onPress={() => handle(packageShooting.id)}
@@ -64,7 +64,7 @@ const Cate = ({ navigation }) => {
               navigation={navigation}
             />
           </TouchableOpacity>
-        ))}
+        )) : <View><Text>Không có gì ở đây</Text></View>}
         {/* </TouchableOpacity> */}
       </ScrollView>
     </View>

@@ -20,8 +20,6 @@ import * as Font from "expo-font";
 // import UserProfile from "./components/profile/UserProfile";
 // import SettingsAccountPersonal from "./components/profile/SettingsAccountPersonal";
 // import BottomNavigator from "./components/navigation/bottomTabNavigator";
-
-
 // const Stack = createNativeStackNavigator();
 export default function App() {
   useEffect(() => {

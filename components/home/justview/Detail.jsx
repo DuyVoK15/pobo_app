@@ -18,8 +18,8 @@ const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
 const Detail = ({ route, navigation }) => {
-  const { packageShootingId } = route.params;
-  const { getPackageShootingById, getUserInfo, isLoading } =
+  const {packageShootingId} = route.params
+  const { getPackageShootingById, getUserInfo, isLoading,handleSetPackageShootingId } =
     useContext(AuthContext);
   const [packageShooting, setPackageShooting] = useState(null);
   const [userInfo, setUserInfo] = useState({});
@@ -41,6 +41,7 @@ const Detail = ({ route, navigation }) => {
 
   useEffect(() => {
     fetchData();
+    
     // console.log(JSON.stringify(packageShootingId) + " VÃI Ò");
     // console.log(JSON.stringify(packageShooting) + " HUHUHUHUHUHUHUHUHUHUHU");
   }, []);
@@ -54,8 +55,9 @@ const Detail = ({ route, navigation }) => {
   ];
 
   const [image, setImage] = useState(packageShooting?.images[0]);
-  const handleNavigate = () => {
-    navigation.push("BookingCreate", { packageShootingId: packageShooting.id });
+  const handleNavigate = (packageShootingId) => {
+    handleSetPackageShootingId(packageShootingId);
+    navigation.push("BookingCreate");
   };
 
   const text =
@@ -184,7 +186,7 @@ const Detail = ({ route, navigation }) => {
           <View style={styles.wrapButton}>
             <TouchableOpacity
               style={styles.bookNow}
-              onPress={() => handleNavigate()}
+              onPress={() => handleNavigate(packageShooting.id)}
             >
               <Text style={styles.buttonBookText}>Đặt lịch ngay</Text>
             </TouchableOpacity>

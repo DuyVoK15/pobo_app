@@ -372,19 +372,19 @@ const styles = StyleSheet.create({
     fontSize: SIZES.small,
   },
   status: {
-    height: 30,
-    marginRight: 5,
-    borderWidth: 3,
-    borderRadius: 5,
+    borderWidth: 2,
+    borderRadius: 10,
     borderColor: "green",
+    backgroundColor: "green",
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 10,
+    paddingVertical: 6,
     marginBottom: 10,
   },
   textStatus: {
-    color: "green",
+    color: "white",
     fontSize: SIZES.small,
+    fontWeight: 700
   },
 
   button: {

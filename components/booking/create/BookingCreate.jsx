@@ -9,7 +9,7 @@ import {
   Modal,
   RefreshControl,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { COLORS } from "../../constants";
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { TextInput } from "react-native";
@@ -19,38 +19,43 @@ import { AuthContext } from "../../../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
 import { BookingCreateValidation } from "../../../utils/Validation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import PackageShootingModal from "./PackageShootingModal";
 const BookingCreate = ({ navigation, route }) => {
-  const { packageShootingId } = route.params;
   const {
     createBookingById,
-    // packageShooting,
+    packageShooting,
     getPackageShootingById,
     getUserInfo,
+    userInfo,
     isLoading,
+    voucher,
+    packageShootingId,
+    handleSetVoucherId,
   } = useContext(AuthContext);
-  const [packageShooting, setPackageShooting] = useState(null);
-  const [userInfo, setUserInfo] = useState({});
-
+  // const [voucher, setVoucher] = useState(null)
   const fetchData = async () => {
     try {
       getUserInfo();
-      const data = await getPackageShootingById(packageShootingId);
-      console.log(JSON.stringify(data) + " HIẾU ĂN CỨC");
-      setPackageShooting(data);
-      const userInfo = await AsyncStorage.getItem("userInfo");
-      setUserInfo(JSON.parse(userInfo));
+      await getPackageShootingById(packageShootingId);
     } catch (error) {
       console.log(error);
     }
   };
-  // const userInfo = await getUserInfo();
-  //   setUserInfo(userInfo);
+
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchData();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  });
 
   useEffect(() => {
     fetchData();
-    // console.log(JSON.stringify(packageShootingId) + " VÃI Ò");
-    // console.log(JSON.stringify(packageShooting) + " HUHUHUHUHUHUHUHUHUHUHU");
+    // console.log(voucher.id);
   }, []);
+
   const [open, setOpen] = useState(false);
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("Chọn ngày");
@@ -68,11 +73,12 @@ const BookingCreate = ({ navigation, route }) => {
   //   useContext(AuthContext);
   const handleCreateBooking = async () => {
     console.log(formatDateTime(date, time) + location + packageShootingId);
-    if (date != "" && time != "" && location != "") {
+    if (date !== "Chọn ngày" && time !== "và giờ chụp" && location !== "") {
       const data = await createBookingById(
         formatDateTime(date, time),
         location,
-        packageShootingId
+        packageShootingId,
+        voucher ? voucher.id : null
       );
 
       if (data) {
@@ -83,27 +89,29 @@ const BookingCreate = ({ navigation, route }) => {
     }
   };
 
-  const [refreshing, setRefreshing] = useState(false);
+  const handleNavigateToVoucher = () => {
+    navigation.navigate("VoucherScreen");
+  };
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    fetchData();
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1000);
-  });
+  const handleGoBack = () => {
+    // handleSetVoucherId(null);
+    navigation.goBack();
+  };
+  
+  const [isModalPackageVisible, setIsModalPackageVisible] = useState(false);
+
 
   return (
     <View style={styles.container}>
       <Spinner visible={isLoading} />
       <View style={styles.header}>
         <View style={styles.wrapText}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => handleGoBack()}>
             <View style={styles.bg_icon}>
               <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
             </View>
           </TouchableOpacity>
-          <Text style={styles.headerText}>Thông tin thợ Chụp Ảnh</Text>
+          <Text style={styles.headerText}>Xác nhận và thanh toán</Text>
         </View>
       </View>
       <ScrollView
@@ -241,7 +249,7 @@ const BookingCreate = ({ navigation, route }) => {
                   </View>
                 </View>
 
-                <View style={styles.listitem}>
+                <TouchableOpacity onPress={() => setIsModalPackageVisible(true)} style={[styles.listitem]}>
                   <Ionicons
                     name="school-sharp"
                     size={24}
@@ -253,28 +261,59 @@ const BookingCreate = ({ navigation, route }) => {
                       {packageShooting?.title.slice(0, 20)}
                     </Text>
                   </View>
-                </View>
+                </TouchableOpacity>
+                <PackageShootingModal isModalPackageVisible={isModalPackageVisible} toggleModal={() => setIsModalPackageVisible(false)}/>
               </View>
             </View>
           </View>
-          <TouchableOpacity>
-            <View style={styles.discountCard}>
-              <View style={styles.wrapDiscount}>
-                <Image
-                  source={require("../../../assets/icons/sale.png")}
-                  size={20}
-                />
-                <Text style={styles.discountText}>Áp dụng mã giảm giá</Text>
+          {voucher ? (
+            <TouchableOpacity onPress={() => handleNavigateToVoucher()}>
+              <View style={styles.discountCard}>
+                <View style={styles.wrapDiscount}>
+                  <Image
+                    source={require("../../../assets/icons/sale.png")}
+                    size={20}
+                  />
+                  <Text style={styles.discountText}>
+                    Đã áp dụng mã giảm giá
+                  </Text>
+
+                  <MaterialCommunityIcons
+                    onPress={() => handleSetVoucherId(null)}
+                    name="close-box-multiple-outline"
+                    size={24}
+                    color="red"
+                  />
+                </View>
+                <View style={styles.iconchevron}>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={24}
+                    style={styles.icon_insize_Discount}
+                  />
+                </View>
               </View>
-              <View style={styles.iconchevron}>
-                <Ionicons
-                  name="chevron-forward"
-                  size={24}
-                  style={styles.icon_insize_Discount}
-                />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={() => handleNavigateToVoucher()}>
+              <View style={styles.discountCard}>
+                <View style={styles.wrapDiscount}>
+                  <Image
+                    source={require("../../../assets/icons/sale.png")}
+                    size={20}
+                  />
+                  <Text style={styles.discountText}>Áp dụng mã giảm giá</Text>
+                </View>
+                <View style={styles.iconchevron}>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={24}
+                    style={styles.icon_insize_Discount}
+                  />
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          )}
 
           <Text style={styles.text}>Chi tiết giá</Text>
 
@@ -392,7 +431,7 @@ const BookingCreate = ({ navigation, route }) => {
 
           <TouchableOpacity
             onPress={() => handleCreateBooking()}
-            style={[ButtonStyle.buttonSignup, {marginBottom: 50}]}
+            style={[ButtonStyle.buttonSignup, { marginBottom: 50 }]}
           >
             <Text style={ButtonStyle.buttonSignupText}>Xác nhận đặt lịch</Text>
           </TouchableOpacity>
@@ -411,7 +450,7 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingTop: 30,
-    paddingBottom: 15,
+    paddingBottom: 5,
     backgroundColor: COLORS.orange50,
   },
   wrapText: {
@@ -560,6 +599,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   sectionText: {
+    flexWrap: 'wrap',
     display: "flex",
     flexDirection: "column",
   },

@@ -24,11 +24,14 @@ export const AuthProvider = ({ children }) => {
   const [bookingAfterCreating, setBookingAfterCreating] = useState([]);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [packageShooting, setPackageShooting] = useState(null);
+  const [packageShootingId, setPackageShootingId] = useState("");
+  const [voucherList, setVoucherList] = useState([]);
+  const [voucher, setVoucher] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [errorMessageLogin, setErrorMessageLogin] = useState("");
-
+  const [errorMessageBooking, setErrorMessageBooking] = useState("");
   useEffect(() => {
     checkLoggedIn();
     // getUserInfo();
@@ -88,9 +91,27 @@ export const AuthProvider = ({ children }) => {
       saveDataToStorage("userTokenRegister", JSON.stringify(userTokenRegister));
       setIsLoading(false);
       console.log(userTokenRegister);
-    } catch (error) {
-      console.log(error);
+      setErrorMessageLogin("");
+    } catch (error) {     
       setIsLoading(false);
+      if (error.response) {
+        // Khi phản hồi HTTP có mã lỗi
+        if (error.response.status === 400) {
+          setErrorMessageLogin("Mật khẩu đăng nhập không chính xác.");
+        } else {
+          setErrorMessageLogin("");
+        }
+
+        console.log(error.response.data); // Thông báo lỗi từ server
+        console.log(error.response.status); // Mã lỗi HTTP
+      } else if (error.request) {
+        // Khi không nhận được phản hồi từ server
+        console.log(error.request);
+      } else {
+        // Khi có lỗi xảy ra trong quá trình gửi yêu cầu
+        console.log("Error", error.message);
+      }
+      console.log(error);
     }
   };
 
@@ -108,18 +129,18 @@ export const AuthProvider = ({ children }) => {
       setIsLoggedIn(true);
       getUserInfo();
       setIsLoading(false);
+      setErrorMessageLogin("")
       return res.data;
     } catch (error) {
       setIsLoading(false);
       if (error.response) {
         // Khi phản hồi HTTP có mã lỗi
-        if(error.response.status === 404) {
+        if (error.response.status === 404) {
           setErrorMessageLogin("Tài khoản này không tồn tại.");
         } else if (error.response.status === 400) {
           setErrorMessageLogin("Mật khẩu đăng nhập không chính xác.");
         }
-        
-        
+
         console.log(error.response.data); // Thông báo lỗi từ server
         console.log(error.response.status); // Mã lỗi HTTP
       } else if (error.request) {
@@ -177,6 +198,7 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false);
       saveDataToStorage("userInfo", JSON.stringify(res.data));
       console.log(res.data);
+      alert("Cập nhật thông tin thành công!")
     } catch (error) {
       console.log(error);
       setIsLoading(false);
@@ -241,7 +263,7 @@ export const AuthProvider = ({ children }) => {
       setBookingData(data);
       setCountAllBooking(res.data.count);
       setIsLoading(false);
-      console.log(JSON.stringify(data))
+      console.log(JSON.stringify(data));
       // console.log("[COUNT] " + res.data.count);
     } catch (error) {
       console.log(error);
@@ -340,7 +362,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const createBookingById = async (startTime, address, packageShootingId) => {
+  const createBookingById = async (startTime, address, packageShootingId, voucherId) => {
     setIsLoading(true);
     try {
       const userToken = await AsyncStorage.getItem("userToken");
@@ -350,6 +372,7 @@ export const AuthProvider = ({ children }) => {
           startTime,
           address,
           packageShootingId,
+          voucherId
         },
         {
           headers: {
@@ -364,6 +387,23 @@ export const AuthProvider = ({ children }) => {
       setBookingSuccess(true);
       return res.data;
     } catch (error) {
+      if (error.response) {
+        // Khi phản hồi HTTP có mã lỗi
+        if (error.response.status === 400) {
+          alert("Số dư trong tài khoản PoBo không đủ!");
+        } else {
+          setErrorMessageLogin("");
+        }
+
+        console.log(error.response.data); // Thông báo lỗi từ server
+        console.log(error.response.status); // Mã lỗi HTTP
+      } else if (error.request) {
+        // Khi không nhận được phản hồi từ server
+        console.log(error.request);
+      } else {
+        // Khi có lỗi xảy ra trong quá trình gửi yêu cầu
+        console.log("Error", error.message);
+      }
       console.log(error);
       console.log("Tạo lịch thất bại!");
       setIsLoading(false);
@@ -476,7 +516,32 @@ export const AuthProvider = ({ children }) => {
       );
       console.log(JSON.stringify(res.data));
       return res.data;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUserVoucher = async () => {
+    const userToken = await AsyncStorage.getItem("userToken");
+    try {
+      const res = await ApiService.getUserVoucher(
+        JSON.parse(userToken).accessToken
+      );
+      console.log(JSON.stringify(res.data));
+      setVoucherList(res.data.row);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSetVoucherId = (voucher) => {
+    setVoucher(voucher);
+    return voucher;
+  };
+
+  const handleSetPackageShootingId = (packageShootingId) => {
+    setPackageShootingId(packageShootingId);
   };
 
   return (
@@ -503,6 +568,9 @@ export const AuthProvider = ({ children }) => {
         bookingDoneData,
         bookingCancelData,
         errorMessageLogin,
+        voucherList,
+        voucher,
+        packageShootingId,
         register,
         login,
         logout,
@@ -520,6 +588,9 @@ export const AuthProvider = ({ children }) => {
         getAllListPackageShootingByPhotographerId,
         buyCoinRequest,
         updateBookingStatus,
+        getUserVoucher,
+        handleSetVoucherId,
+        handleSetPackageShootingId,
       }}
     >
       {children}

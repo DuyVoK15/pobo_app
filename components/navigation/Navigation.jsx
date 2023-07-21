@@ -26,6 +26,7 @@ import Detail from "../home/justview/Detail";
 import BookingSuccess from "../booking/create/BookingSuccess";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DetailProcess from "../booking/process/DetailProcess";
+import VoucherScreen from "../voucher/VoucherScreen";
 
 const IntroStack = createStackNavigator();
 const IntroStackScreen = () => {
@@ -94,10 +95,7 @@ const HomeStackScreen = () => {
         name="SettingsAccountPersonal"
         component={SettingsAccountPersonal}
         options={{
-          headerTitle: "Trang cá nhân",
-          headerTitleStyle: {
-            fontSize: SIZES.xLarge,
-          },
+          headerShown: false
         }}
       />
 
@@ -145,6 +143,11 @@ const HomeStackScreen = () => {
         options={{ headerShown: false }}
         name="DetailProcess"
         component={DetailProcess}
+      />
+      <HomeStack.Screen
+        options={{ headerShown: false }}
+        name="VoucherScreen"
+        component={VoucherScreen}
       />
     </HomeStack.Navigator>
   );

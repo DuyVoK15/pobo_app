@@ -44,19 +44,25 @@ const JustView = ({ navigation }) => {
         contentContainerStyle={styles.cardsContainer}
         showsHorizontalScrollIndicator={false}
       >
-        {listPackageShooting.map((packageShooting) => (
-          <TouchableOpacity
-            key={packageShooting.id}
-            onPress={() => handle(packageShooting.id)} // Handle the click event
-          >
-            <JustViewer
-              // key={item.id}
-              imageSource={{ uri: packageShooting.images[0] }}
-              title={packageShooting?.title}
-              name={packageShooting?.photographerData?.name}
-            />
-          </TouchableOpacity>
-        ))}
+        {listPackageShooting ? (
+          listPackageShooting.map((packageShooting) => (
+            <TouchableOpacity
+              key={packageShooting.id}
+              onPress={() => handle(packageShooting.id)} // Handle the click event
+            >
+              <JustViewer
+                // key={item.id}
+                imageSource={{ uri: packageShooting.images[0] }}
+                title={packageShooting?.title}
+                name={packageShooting?.photographerData?.name}
+              />
+            </TouchableOpacity>
+          ))
+        ) : (
+          <View>
+            <Text>Không có gì ở đây</Text>
+          </View>
+        )}
       </ScrollView>
     </View>
   );
@@ -85,7 +91,7 @@ const styles = StyleSheet.create({
   text: {
     width: 231,
     height: 28,
-    fontFamily: 'SVN-Gilroy-XBold',
+    fontFamily: "SVN-Gilroy-XBold",
     // fontStyle: "normal",
     // fontWeight: "800",
     fontSize: 20,

@@ -13,7 +13,8 @@ import {
   formatDateToVN,
 } from "../../../utils/FormatDate";
 import { AntDesign, Entypo, Foundation, Ionicons } from "@expo/vector-icons";
-import { Modal } from "react-native";import {
+import { Modal } from "react-native";
+import {
   ButtonConfirmCategory,
   ButtonConfuseCategory,
 } from "../../../styles/ButtonStyle";
@@ -22,7 +23,8 @@ const DoneProcess = () => {
     getListBookingByStatus,
     countDoneBooking,
     bookingDoneData,
-    isLoading,updateBookingStatus
+    isLoading,
+    updateBookingStatus,
   } = useContext(AuthContext);
 
   const [expandedBookings, setExpandedBookings] = useState([]);
@@ -30,9 +32,7 @@ const DoneProcess = () => {
     return expandedBookings.includes(id);
   };
 
-  // const [bookingData, setBookingData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [bookingData, setBookingData] = useState([]);
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchData();
@@ -42,21 +42,13 @@ const DoneProcess = () => {
   });
 
   const fetchData = async () => {
-    const data = await getListBookingByStatus("DONE");
-    setBookingData(data);
+    await getListBookingByStatus("DONE");
   };
-
-  useEffect(() => {
-    const interval = setInterval(fetchData, 10000000000); // Gọi fetchData mỗi 5 giây
-
-    return () => {
-      clearInterval(interval); // Hủy bỏ interval khi component bị unmount
-    };
-  }, []);
 
   useEffect(() => {
     fetchData(); // Lấy dữ liệu ban đầu khi component được render
   }, []);
+
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleOpenModal = () => {
@@ -68,9 +60,8 @@ const DoneProcess = () => {
   };
 
   const handleUpdateStatus = async (id, bookingStatus) => {
-    const data = await updateBookingStatus(id, bookingStatus);
+    await updateBookingStatus(id, bookingStatus);
     handleCloseModal();
-    setBookingAfterUpdate(data);
     fetchData();
   };
   return (
@@ -363,7 +354,48 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    
+  },
+  containerRoww: {
+    flexDirection: "row",
+    marginBottom: 10,
+    justifyContent: "space-between",
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 0,
+  },
+  textQuestion: {
+    fontSize: SIZES.large,
+    marginBottom: 20,
+    fontWeight: "bold",
+
+    textAlign: "center",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    paddingVertical: 50,
+    paddingHorizontal: 30,
+    marginHorizontal: 5,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  closeButton: {
+    position: "absolute",
+    top: 5,
+    right: 15,
+  },
+  closeButtonText: {
+    fontSize: 30,
+    fontWeight: 500,
+    color: "black",
   },
   column: {
     flex: 1,
@@ -381,6 +413,22 @@ const styles = StyleSheet.create({
     fontSize: SIZES.small,
   },
   status: {
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: "green",
+    backgroundColor: "green",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 6,
+    marginBottom: 10,
+  },
+  textStatus: {
+    color: "white",
+    fontSize: SIZES.small,
+    fontWeight: 700,
+  },
+
+  button: {
     backgroundColor: "white",
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -388,7 +436,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.orange40,
     borderWidth: 2,
   },
-  textStatus: {
+  buttonText: {
     color: COLORS.orange40,
     alignSelf: "center",
     fontWeight: "bold",
