@@ -9,7 +9,13 @@ import { COLORS, FONT, SIZES } from "../../constants";
 import { AuthContext } from "../../../context/AuthContext";
 
 const Cate = ({ navigation }) => {
-  const { getAllListPackageShooting, getUserInfo } = useContext(AuthContext);
+  const {
+    getAllListPackageShooting,
+    getAllListPackageShootingByTitle,
+    getUserInfo,
+    packageShootingListByTitle,
+    handleSetPackageShootingId,
+  } = useContext(AuthContext);
   const [listPackageShooting, getListPackageShooting] = useState([]);
 
   const fetchData = async () => {
@@ -19,6 +25,7 @@ const Cate = ({ navigation }) => {
     //   "1c52af5a-315e-453a-b1cd-929d958aa167"
     // );
     getListPackageShooting(data);
+    await getAllListPackageShootingByTitle("");
   };
 
   useEffect(() => {
@@ -26,8 +33,9 @@ const Cate = ({ navigation }) => {
     // console.log(JSON.stringify(listPackageShooting) + "HAHAHAHA");
   }, []);
 
-  const handle = (packageShootingId) => {
-    navigation.push("Detail", { packageShootingId: packageShootingId });
+  const handleNavigate = (packageShootingId) => {
+    handleSetPackageShootingId(packageShootingId);
+    navigation.push("Detail");
   };
 
   return (
@@ -50,21 +58,27 @@ const Cate = ({ navigation }) => {
         contentContainerStyle={styles.cardsContainer}
         showsHorizontalScrollIndicator={false}
       >
-        {listPackageShooting ? listPackageShooting.map((packageShooting) => (
-          <TouchableOpacity
-            key={packageShooting.id}
-            onPress={() => handle(packageShooting.id)}
-          >
-            <Card
-              image={{ uri: packageShooting?.images[0] }}
-              rating={"4.5"}
-              title={packageShooting.title}
-              authorAvatar={{ uri: packageShooting.photographerData.avatarUrl }}
-              authorName={packageShooting.photographerData.name}
-              navigation={navigation}
-            />
-          </TouchableOpacity>
-        )) : <View><Text>Không có gì ở đây</Text></View>}
+        {packageShootingListByTitle ? (
+          packageShootingListByTitle.map((packageShooting) => (
+            <TouchableOpacity
+              key={packageShooting.id}
+              onPress={() => handleNavigate(packageShooting.id)}
+            >
+              <Card
+                image={{ uri: packageShooting?.images[0] }}
+                rating={"4.5"}
+                title={packageShooting.title}
+                authorAvatar={{
+                  uri: packageShooting.photographerData.avatarUrl,
+                }}
+                authorName={packageShooting.photographerData.name}
+                navigation={navigation}
+              />
+            </TouchableOpacity>
+          ))
+        ) : (
+          <Text>Không có gì ở đây</Text>
+        )}
         {/* </TouchableOpacity> */}
       </ScrollView>
     </View>

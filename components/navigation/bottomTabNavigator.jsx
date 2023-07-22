@@ -1,7 +1,7 @@
-import React  from "react";
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from '../home/HomeScreen'
-import {COLORS, ROUTES} from '../constants'
+import HomeScreen from "../home/HomeScreen";
+import { COLORS, ROUTES } from "../constants";
 // import { MaterialIcons } from "@expo/vector-icons";
 import { Platform, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -9,62 +9,87 @@ import { NavigationContainer } from "@react-navigation/native";
 // import Icon from 'react-native-ionicons'
 // import Icon from 'react-native-vector-icons/MaterialIcons'
 // import { MaterialIcons } from "@expo/vector-icons";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 import UserProfile from "../profile/UserProfile";
 import BookingManagement from "../booking/BookingManagement";
 import Map from "../map/Map";
 import MapFake from "../map/MapFake";
+import Chat from "../chat/Chat";
 
 export default function BottomNavigator() {
-    
   const Tab = createBottomTabNavigator();
   return (
     // <NavigationContainer>
     <Tab.Navigator
-        screenOptions={({route}) => ({
-          tabBarStyle: { backgroundColor: "white", height: Platform.OS === "ios" ? 100 : 60, borderTopLeftRadius: 35, borderTopRightRadius: 35, shadowColor: 'black',
+      screenOptions={({ route }) => ({
+        tabBarStyle: {
+          backgroundColor: "white",
+          height: Platform.OS === "ios" ? 90 : 60,
+          borderTopLeftRadius: 33,
+          borderTopRightRadius: 33,
+          shadowColor: "black",
           shadowOpacity: 0.2,
           shadowOffset: { width: 0, height: -4 },
           shadowRadius: 6,
-          elevation: 4, },
-          
-            headerShown : false,
-            tabBarIcon: ({color, size, focused})=> {
-                let iconName;
-                if(route.name === ROUTES.HOME_TAB ){
-                    iconName = focused ? 'home' : 'home-outline';
-                }
-                 else if (route.name === 'Map' ){
-                    iconName = focused ? 'map' : 'map-outline';
-                }
-                else if (route.name === 'BookingManagement' ){
-                    iconName = focused ? 'reader' : 'reader-outline';
-                }
-                else if (route.name === 'Chat' ){
-                    iconName = focused ? 'chatbubble' : 'chatbubble-outline';
-                }
-                else if (route.name === 'UserProfile' ){
-                    iconName = focused ? 'person' : 'person-outline';
-                }
+          elevation: 3,
+        },
+        headerShown: false,
+        tabBarIcon: ({ color, size, focused }) => {
+          let iconName;
+          let iconColor;
+          if (route.name === ROUTES.HOME_TAB) {
+            iconName = focused ? "home" : "home-outline";
+          } else if (route.name === "Map") {
+            iconName = focused ? "map" : "map-outline";
+          } else if (route.name === "BookingManagement") {
+            iconName = focused ? "reader" : "reader-outline";
+          } else if (route.name === "Chat") {
+            iconName = focused ? "chatbubble" : "chatbubble-outline";
+          } else if (route.name === "UserProfile") {
+            iconName = focused ? "person" : "person-outline";
+          }
+          iconColor = focused ? COLORS.orange50 : "gray";
 
-
-                return <Ionicons name={iconName} size ={20} color={COLORS.orange50} />
-            },
-            })}
-            // tabBarOptions={{
-            //     showLabel: false,
-            //     style: {
-            //       // borderTopLeftRadius: 40,
-            //       // borderTopRightRadius: 40,
-            //     },
-            //   }}
-            >
-      <Tab.Screen name={ROUTES.HOME_TAB} component={HomeScreen} options={{tabBarLabel: "Trang chủ"}}/>
-      <Tab.Screen name="Map" component={MapFake}  options={{tabBarLabel: "Bản đồ"}}/>
-      <Tab.Screen name="BookingManagement" component={BookingManagement}  options={{tabBarLabel: "Quản lý"}}/>
-      <Tab.Screen name="Chat" component={HomeScreen} options={{tabBarLabel: "Nhắn tin"}} />
-      <Tab.Screen name="UserProfile" component={UserProfile}  options={{tabBarLabel: "Thông tin"}}/>
-
+          return <Ionicons name={iconName} size={20} color={iconColor} />;
+        },
+        tabBarLabelStyle: {
+          // Chỉnh màu chữ khi tab được focus và không focus
+          color: ({ focused }) => (focused ? COLORS.orange50 : "gray"),
+        },
+      })}
+      // tabBarOptions={{
+      //     showLabel: false,
+      //     style: {
+      //       // borderTopLeftRadius: 40,
+      //       // borderTopRightRadius: 40,
+      //     },
+      //   }}
+    >
+      <Tab.Screen
+        name={ROUTES.HOME_TAB}
+        component={HomeScreen}
+        options={{ tabBarLabel: "Trang chủ" }}
+      />
+      <Tab.Screen
+        name="Map"
+        component={MapFake}
+        options={{ tabBarLabel: "Bản đồ" }}
+      />
+      <Tab.Screen
+        name="BookingManagement"
+        component={BookingManagement}
+        options={{ tabBarLabel: "Quản lý" }}
+      />
+      <Tab.Screen
+        name="Chat"
+        component={Chat}
+        options={{ tabBarLabel: "Nhắn tin" }}
+      />
+      <Tab.Screen
+        name="UserProfile"
+        component={UserProfile}
+        options={{ tabBarLabel: "Thông tin" }}
+      />
     </Tab.Navigator>
     // </NavigationContainer>
   );

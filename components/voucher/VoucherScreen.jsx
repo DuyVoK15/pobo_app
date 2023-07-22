@@ -26,16 +26,16 @@ const VoucherScreen = ({ navigation }) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.wrapText}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <View style={styles.bg_icon}>
-              <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
-            </View>
-          </TouchableOpacity>
-          <Text style={styles.headerText}>Chọn mã giảm giá</Text>
+        <View style={styles.header}>
+          <View style={styles.wrapText}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <View style={styles.bg_icon}>
+                <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+              </View>
+            </TouchableOpacity>
+            <Text style={styles.headerText}>Chọn mã giảm giá</Text>
+          </View>
         </View>
-      </View>
         <View style={styles.containerRow}>
           <View style={styles.containerSearchBar}>
             <TextInput
@@ -51,40 +51,45 @@ const VoucherScreen = ({ navigation }) => {
 
         {/* item voucher */}
         {voucherList ? (
-          voucherList.map((item) => (
-            <TouchableOpacity key={item?.id} style={styles.containerRowVoucher}>
-              <View style={styles.containerImage}>
-                <Ionicons name="gift" color={COLORS.orange50} size={80} />
-              </View>
-              <View style={{}}>
-                <View style={styles.containerTitle}>
-                  <Text style={styles.title}>
-                    {item?.voucher?.title.slice(0, 25)}
-                  </Text>
-                </View>
-                <View style={styles.containerDescription}>
-                  <Text style={styles.description}>
-                    {item?.voucher?.description.slice(0, 25)}
-                  </Text>
-                </View>
-              </View>
-              {item.id === voucher?.id ? (
-                <TouchableOpacity
-                onPress={() => handleNavigate(null)}
-                style={styles.buttonUse}
+          voucherList
+            .filter((voucher) => voucher.isUsed === false)
+            .map((item) => (
+              <TouchableOpacity
+                key={item?.id}
+                style={styles.containerRowVoucher}
               >
-                <Text style={styles.textButtonUse}>Đang dùng</Text>
+                <View style={styles.containerImage}>
+                  <Ionicons name="gift" color={COLORS.orange50} size={80} />
+                </View>
+                <View style={{}}>
+                  <View style={styles.containerTitle}>
+                    <Text style={styles.title}>
+                      {item?.voucher?.title.slice(0, 25)}
+                    </Text>
+                  </View>
+                  <View style={styles.containerDescription}>
+                    <Text style={styles.description}>
+                      {item?.voucher?.description.slice(0, 25)}
+                    </Text>
+                  </View>
+                </View>
+                {item.id === voucher?.id ? (
+                  <TouchableOpacity
+                    onPress={() => handleNavigate(null)}
+                    style={styles.buttonUse}
+                  >
+                    <Text style={styles.textButtonUse}>Đang dùng</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => handleNavigate(item)}
+                    style={styles.buttonUse}
+                  >
+                    <Text style={styles.textButtonUse}>Dùng</Text>
+                  </TouchableOpacity>
+                )}
               </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  onPress={() => handleNavigate(item)}
-                  style={styles.buttonUse}
-                >
-                  <Text style={styles.textButtonUse}>Dùng</Text>
-                </TouchableOpacity>
-              )}
-            </TouchableOpacity>
-          ))
+            ))
         ) : (
           <View>
             <Text>Không có gì ở đây.</Text>
@@ -98,7 +103,7 @@ const VoucherScreen = ({ navigation }) => {
 export default VoucherScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1},
+  container: { flex: 1 },
   header: {
     paddingTop: 30,
     paddingBottom: 5,

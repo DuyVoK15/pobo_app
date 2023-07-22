@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [countDoneBooking, setCountDoneBooking] = useState("");
   const [countCancelBooking, setCountCancelBooking] = useState("");
   const [photographerList, setPhotographerList] = useState([]);
+  const [photographerListByName, setPhotographerListByName] = useState([]);
   const [bookingData, setBookingData] = useState([]);
   const [bookingPendingData, setBookingPendingData] = useState([]);
   const [bookingAcceptData, setBookingAcceptData] = useState([]);
@@ -25,6 +26,10 @@ export const AuthProvider = ({ children }) => {
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [packageShooting, setPackageShooting] = useState(null);
   const [packageShootingId, setPackageShootingId] = useState("");
+  const [packageShootingList, setPackageShootingList] = useState([]);
+  const [packageShootingListByTitle, setPackageShootingListByTitle] = useState(
+    []
+  );
   const [voucherList, setVoucherList] = useState([]);
   const [voucher, setVoucher] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
@@ -92,7 +97,7 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false);
       console.log(userTokenRegister);
       setErrorMessageLogin("");
-    } catch (error) {     
+    } catch (error) {
       setIsLoading(false);
       if (error.response) {
         // Khi phản hồi HTTP có mã lỗi
@@ -129,7 +134,7 @@ export const AuthProvider = ({ children }) => {
       setIsLoggedIn(true);
       getUserInfo();
       setIsLoading(false);
-      setErrorMessageLogin("")
+      setErrorMessageLogin("");
       return res.data;
     } catch (error) {
       setIsLoading(false);
@@ -198,7 +203,7 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false);
       saveDataToStorage("userInfo", JSON.stringify(res.data));
       console.log(res.data);
-      alert("Cập nhật thông tin thành công!")
+      alert("Cập nhật thông tin thành công!");
     } catch (error) {
       console.log(error);
       setIsLoading(false);
@@ -343,26 +348,31 @@ export const AuthProvider = ({ children }) => {
   };
 
   const getAllPhotographer = async () => {
-    const params = {
-      hl: "en",
-      select: '["$all"]',
-      where: "{}",
-      limit: "unlimited",
-      page: 1,
-      order: "[]",
-    };
     try {
-      const res = await axios.get(`http://${IPv4}:8448/api/v1/photographer`, {
-        params,
-      });
+      const res = await ApiService.getAllPhotographer();
       console.log("Whats: " + res.data);
       setPhotographerList(res.data.row);
     } catch (error) {
       console.log(error);
     }
   };
-
-  const createBookingById = async (startTime, address, packageShootingId, voucherId) => {
+  const getAllPhotographerByName = async (name) => {
+    try {
+      const res = await ApiService.getAllPhotographerByName(name);
+      console.log(">>> PhotographerList");
+      console.log(JSON.stringify(res.data.row));
+      console.log("PhotographerList <<<");
+      setPhotographerListByName(res.data.row);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const createBookingById = async (
+    startTime,
+    address,
+    packageShootingId,
+    voucherId
+  ) => {
     setIsLoading(true);
     try {
       const userToken = await AsyncStorage.getItem("userToken");
@@ -372,7 +382,7 @@ export const AuthProvider = ({ children }) => {
           startTime,
           address,
           packageShootingId,
-          voucherId
+          voucherId,
         },
         {
           headers: {
@@ -427,7 +437,33 @@ export const AuthProvider = ({ children }) => {
           };
         })
       );
+      setPackageShootingList(data);
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  const getAllListPackageShootingByTitle = async (title) => {
+    try {
+      const res = await ApiService.getAllListPackageShootingByTitle(title);
+      // console.log("Dữ liệu gói chụp tổng: \n" + JSON.stringify(res.data));
+
+      const data = await Promise.all(
+        res.data.row.map(async (packageShooting) => {
+          const photographerData = await getPhotographerById(
+            packageShooting.photographerId
+          );
+          return {
+            ...packageShooting,
+            photographerData,
+          };
+        })
+      );
+      setPackageShootingListByTitle(data);
+      console.log(">>> PackageShootingList");
+      console.log(JSON.stringify(data));
+      console.log("PackageShootingList <<<");
       return data;
     } catch (error) {
       console.log(error);
@@ -451,6 +487,7 @@ export const AuthProvider = ({ children }) => {
           };
         })
       );
+
       // console.log(
       //   JSON.stringify(data) + "getAllListPackageShootingByPhotographerId"
       // );
@@ -571,6 +608,9 @@ export const AuthProvider = ({ children }) => {
         voucherList,
         voucher,
         packageShootingId,
+        packageShootingList,
+        packageShootingListByTitle,
+        photographerListByName,
         register,
         login,
         logout,
@@ -591,6 +631,8 @@ export const AuthProvider = ({ children }) => {
         getUserVoucher,
         handleSetVoucherId,
         handleSetPackageShootingId,
+        getAllListPackageShootingByTitle,
+        getAllPhotographerByName,
       }}
     >
       {children}

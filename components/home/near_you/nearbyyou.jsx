@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,16 +11,22 @@ import {
 import { COLORS, FONT, SIZES } from "../../constants";
 import PhotographercCard from "./photographer.card";
 import data from "./data_near_you";
+import { AuthContext } from "../../../context/AuthContext";
 const NearYou = ({ photographerList, navigation }) => {
+  const { photographerListByName, getAllPhotographerByName } =
+    useContext(AuthContext);
   const handleNavigate = (id) => {
     navigation.navigate("PhotographerProfile", { paramValue: id });
     console.log("handleNavigate called with ID:", id); // Add this line
-    
   };
 
-  useEffect(()=> {
-    
-  })
+  const fetchData = async () => {
+    await getAllPhotographerByName("");
+  };
+
+  useEffect(() => {
+    fetchData();
+  },[]);
 
   return (
     <View style={styles.wrap}>
@@ -30,17 +36,26 @@ const NearYou = ({ photographerList, navigation }) => {
         contentContainerStyle={styles.cardsContainer}
         showsHorizontalScrollIndicator={false}
       >
-        {photographerList.map((item) => (
-          <TouchableOpacity key={item.id} onPress={() => handleNavigate(item.id)}>
-            <PhotographercCard
-              //  key={item.id}
-              imageSource={{ uri: item.avatarUrl }}
-              photographerName={item.name}
-              location="TP. HCM"
-              navigation={navigation}
-            />
-          </TouchableOpacity>
-        ))}
+        {photographerListByName ? (
+          photographerListByName.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              onPress={() => handleNavigate(item.id)}
+            >
+              <PhotographercCard
+                //  key={item.id}
+                imageSource={{ uri: item.avatarUrl }}
+                photographerName={item.name}
+                location="TP. HCM"
+                navigation={navigation}
+              />
+            </TouchableOpacity>
+          ))
+        ) : (
+          <View>
+            <Text>Không có gì ở đây</Text>
+          </View>
+        )}
       </ScrollView>
     </View>
   );
@@ -68,7 +83,7 @@ const styles = StyleSheet.create({
   text: {
     width: 231,
     height: 28,
-    fontFamily: 'SVN-Gilroy-XBold',
+    fontFamily: "SVN-Gilroy-XBold",
     // fontStyle: "normal",
     // fontWeight: "800",
     fontSize: 20,

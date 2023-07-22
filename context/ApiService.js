@@ -14,6 +14,32 @@ class ApiService {
       newPassword,
     });
   }
+  getAllPhotographer() {
+    const params = {
+      hl: "en",
+      select: '["$all"]',
+      where: "{}",
+      limit: "unlimited",
+      page: 1,
+      order: "[]",
+    };
+    return axios.get(`http://${IPv4}:8448/api/v1/photographer`, {
+      params,
+    });
+  }
+  getAllPhotographerByName(name) {
+    const params = {
+      hl: "en",
+      select: '["$all"]',
+      where: `{"name":{"contains":"${name}"}}`,
+      limit: "unlimited",
+      page: 1,
+      order: "[]",
+    };
+    return axios.get(`http://${IPv4}:8448/api/v1/photographer`, {
+      params,
+    });
+  }
   getAllListPackageShooting() {
     const params = {
       hl: "en",
@@ -90,6 +116,17 @@ class ApiService {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+  }
+  getAllListPackageShootingByTitle(title) {
+    const params = {
+      hl: "en",
+      select: '["$all"]',
+      where: `{"title":{"contains": "${title}"}}`,
+      limit: "unlimited",
+      page: 1,
+      order: "[]",
+    };
+    return axios.get(`http://${IPv4}:8448/api/v1/package-shooting`, { params });
   }
 }
 export default new ApiService();

@@ -19,7 +19,7 @@ import { BASE_URL, IPv4 } from "../../utils/config";
 import { AuthContext } from "../../context/AuthContext";
 import { RefreshControl } from "react-native";
 const HomeScreen = ({ navigation }) => {
-  const { photographerList, getAllPhotographer } = useContext(AuthContext);
+  const { photographerList, getAllPhotographer, getAllListPackageShootingByTitle } = useContext(AuthContext);
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(() => {
@@ -32,6 +32,7 @@ const HomeScreen = ({ navigation }) => {
 
   const fetchData = async () => {
     await getAllPhotographer();
+    await getAllListPackageShootingByTitle("");
   };
   useEffect(() => {
     fetchData();
@@ -42,6 +43,7 @@ const HomeScreen = ({ navigation }) => {
   //     clearInterval(interval);
   //   };
   // }, []);
+
 
   const listPackageShooting = [
     {
@@ -150,6 +152,8 @@ const HomeScreen = ({ navigation }) => {
       },
     },
   ];
+
+
 
   return (
     <ScrollView

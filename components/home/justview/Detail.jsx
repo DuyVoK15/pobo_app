@@ -18,9 +18,13 @@ const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
 const Detail = ({ route, navigation }) => {
-  const {packageShootingId} = route.params
-  const { getPackageShootingById, getUserInfo, isLoading,handleSetPackageShootingId } =
-    useContext(AuthContext);
+  const {
+    getPackageShootingById,
+    getUserInfo,
+    isLoading,
+    handleSetPackageShootingId,
+    packageShootingId
+  } = useContext(AuthContext);
   const [packageShooting, setPackageShooting] = useState(null);
   const [userInfo, setUserInfo] = useState({});
 
@@ -41,7 +45,7 @@ const Detail = ({ route, navigation }) => {
 
   useEffect(() => {
     fetchData();
-    
+
     // console.log(JSON.stringify(packageShootingId) + " VÃI Ò");
     // console.log(JSON.stringify(packageShooting) + " HUHUHUHUHUHUHUHUHUHUHU");
   }, []);
@@ -64,7 +68,7 @@ const Detail = ({ route, navigation }) => {
     "Những năm tháng học sinh kết thúc cũng là lúc chúng ta phải từng bước trở thành người lớn, vì vậy một bộ ảnh tốt nghiệp đánh dấu cột mốc đáng nhớ này sẽ là một kỉ niệm đáng giá cho bạn, để sau này khi nhìn lại bạn sẽ mỉm cười nhớ lại về một thời đã qua";
 
   return (
-    <View style={{flex: 1, alignItems: "center",}}>
+    <View style={{ flex: 1, alignItems: "center" }}>
       <ScrollView>
         <ImageBackground
           source={{ uri: image ? image : packageShooting?.images[0] }}
@@ -291,7 +295,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     gap: 4,
-   
   },
   titleDetail: {
     fontFamily: "SVN-Gilroy-Bold",
@@ -304,7 +307,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    gap: 10, marginTop: 10
+    gap: 10,
+    marginTop: 10,
   },
 
   imgAvatar: {
@@ -442,7 +446,7 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     paddingTop: 10,
     marginTop: 10,
-    marginBottom: 100
+    marginBottom: 100,
   },
   ratingTitle: {
     fontFamily: "SVN-Gilroy-Medium",
@@ -451,8 +455,8 @@ const styles = StyleSheet.create({
     color: "#021934",
   },
   ratingContent: {
-   fontWeight: 700,
+    fontWeight: 700,
     fontSize: 18,
-    alignSelf: "center"
-  }
+    alignSelf: "center",
+  },
 });

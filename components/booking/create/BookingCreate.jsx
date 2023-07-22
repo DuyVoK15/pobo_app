@@ -54,7 +54,7 @@ const BookingCreate = ({ navigation, route }) => {
   useEffect(() => {
     fetchData();
     // console.log(voucher.id);
-  }, []);
+  }, [packageShootingId]);
 
   const [open, setOpen] = useState(false);
   const [location, setLocation] = useState("");
@@ -249,7 +249,7 @@ const BookingCreate = ({ navigation, route }) => {
                   </View>
                 </View>
 
-                <TouchableOpacity onPress={() => setIsModalPackageVisible(true)} style={[styles.listitem]}>
+                <TouchableOpacity onPress={() => navigation.navigate("PackageShootingModal")} style={[styles.listitem]}>
                   <Ionicons
                     name="school-sharp"
                     size={24}
@@ -258,11 +258,10 @@ const BookingCreate = ({ navigation, route }) => {
                   <View style={styles.sectionText}>
                     <Text style={styles.sectionTitle}>Gói Chụp</Text>
                     <Text style={styles.sectionContent}>
-                      {packageShooting?.title.slice(0, 20)}
+                      {packageShooting?.title.slice(0, 19)}
                     </Text>
                   </View>
                 </TouchableOpacity>
-                <PackageShootingModal isModalPackageVisible={isModalPackageVisible} toggleModal={() => setIsModalPackageVisible(false)}/>
               </View>
             </View>
           </View>

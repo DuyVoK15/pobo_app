@@ -27,6 +27,7 @@ import BookingSuccess from "../booking/create/BookingSuccess";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DetailProcess from "../booking/process/DetailProcess";
 import VoucherScreen from "../voucher/VoucherScreen";
+import PackageShootingModal from "../booking/create/PackageShootingModal";
 
 const IntroStack = createStackNavigator();
 const IntroStackScreen = () => {
@@ -83,6 +84,7 @@ const HomeStackScreen = () => {
           // borderTopLeftRadius: 35,
           // borderTopRightRadius: 35,
         },
+      
       }}
     >
       <HomeStack.Screen
@@ -99,11 +101,11 @@ const HomeStackScreen = () => {
         }}
       />
 
-      <HomeStack.Screen
+      {/* <HomeStack.Screen
         options={{ headerShown: false }}
         name="UserProfile"
         component={BottomNavigator}
-      />
+      /> */}
       <HomeStack.Screen
         // options={{ headerShown: false }}
         name="RechargeScreen"
@@ -148,6 +150,11 @@ const HomeStackScreen = () => {
         options={{ headerShown: false }}
         name="VoucherScreen"
         component={VoucherScreen}
+      />
+      <HomeStack.Screen
+        options={{ headerShown: false }}
+        name="PackageShootingModal"
+        component={PackageShootingModal}
       />
     </HomeStack.Navigator>
   );

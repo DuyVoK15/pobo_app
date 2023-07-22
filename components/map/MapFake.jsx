@@ -3,12 +3,18 @@ import React from 'react'
 
 const MapFake = () => {
   return (
-    <View>
-      <Text>MapFake</Text>
+    <View style={styles.container}>
+      <Text>Đây là màn hình Map</Text>
     </View>
   )
 }
 
 export default MapFake
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  }
+})
