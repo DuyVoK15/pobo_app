@@ -22,9 +22,9 @@ const Avatar = ({ image, photographerName }) => {
   };
   return (
     <View>
-      <View style={{ alignItems: "center", width: 150 }} onPress={toggleModal}>
+      <View style={styles.wrap_ava_name} onPress={toggleModal}>
         <Image source={image} style={styles.avatar} />
-        <Text style={styles.name}>{photographerName}</Text>
+        <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">{photographerName}</Text>
       </View>
       {/* <Modal
         isVisible={isModalVisible}
@@ -80,6 +80,12 @@ const Avatar = ({ image, photographerName }) => {
 export default Avatar;
 
 const styles = StyleSheet.create({
+  wrap_ava_name: {
+    display: "flex",
+    flexDirection: "column",
+    // justifyContent:'center',
+    // alignItems:'center'
+  },
   avatar: {
     width: 75,
     height: 75,
@@ -94,6 +100,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 15,
     color: "#797979",
+    overflow: "hidden",
+    width: 68,
+    alignSelf:'center'
   },
   modal: {
     flex: 1,

@@ -13,7 +13,7 @@ export default function PhotographercCard( {imageSource, photographerName, locat
     <View style={styles.container}>
       <View style={styles.wrap}>
         <Image source={imageSource} style={styles.image} />
-        <View style={styles.containerName}><Text style={styles.name}>{photographerName}</Text></View>
+        <View style={styles.containerName}><Text style={styles.name}numberOfLines={2} ellipsizeMode="tail">{photographerName}</Text></View>
         
         <View style={styles.locationContainer}>
           <MaterialIcons name="location-on" size={18} color={COLORS.orange50} />
@@ -100,6 +100,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 19.6,
     color: '#181818',
+    alignSelf:"flex-start",
+    overflow:'hidden'
     
   },
   locationContainer: {

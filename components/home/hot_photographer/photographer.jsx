@@ -163,7 +163,8 @@ const styles = StyleSheet.create({
     // height: 98,
     flexDirection: "row",
     alignItems: "center",
-    // padding: 10,
+    paddingTop: 10,
+    gap: 30
   },
   rowContainer: {
     alignItems: "center",

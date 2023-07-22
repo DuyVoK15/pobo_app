@@ -347,7 +347,8 @@ const styles = StyleSheet.create({
   fontSize: 20,
   lineHeight: 28,
   color: '#FFFFFF',
-  textAlign: 'center',
+  textAlign: 'left',
+  width: 147,
     },
     wrap_plan_follow_rate:{
       display:'flex',

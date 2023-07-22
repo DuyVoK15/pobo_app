@@ -82,11 +82,17 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end"
   },
   sentMessage: {
-    backgroundColor: "lightblue",
+    backgroundColor: "orange",
     alignSelf: "flex-end",
     padding: 8,
-    borderRadius: 8,
+    borderRadius: 100,
     marginVertical: 4,
+    paddingTop : 10 ,
+    paddingLeft:20,
+    paddingBottom:10,
+    paddingRight:20,
+    backgroundColor: 'rgba(255, 137, 51, 0.25)'
+
   },
   receivedMessage: {
     backgroundColor: "lightgreen",
@@ -94,9 +100,19 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 8,
     marginVertical: 4,
+    paddingTop : 10 ,
+    paddingLeft:20,
+    paddingBottom:10,
+    paddingRight:20,
+    borderRadius: 100,
+    backgroundColor: 'rgba(255, 199, 0, 0.25)'
+   
+
   },
   messageText: {
+    color:'#000',
     fontSize: 16,
+    // fontFamily:'SVN-Gilroy;'
   },
   inputContainer: {
     flexDirection: "row",
@@ -104,6 +120,8 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "gray",
     paddingVertical: 8,
+    
+
   },
   input: {
     flex: 1,
@@ -113,6 +131,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 8,
     marginRight: 8,
+    borderRadius: 164,
+    height:48
+    
   },
   sendButton: {
     backgroundColor: "blue",
